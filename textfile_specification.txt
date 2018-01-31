@@ -1,0 +1,25 @@
+The text file has the following structure:
+------------------------------------------
+
+# Number of loci
+Integer positive number
+--- White line ---
+# Sampling Vector
+Vector of size "n" with integer numbers, each must be greater or equal to zero. Numbers are separated by space. 
+--- White line ---
+# Initial deme sizes
+Vector of positive real numbers. Numbers are separated by space. Should be of size n
+--- White line ---
+# Initial migration matrix
+n lines having each a vector of non-negative real numbers of size n, separated by spaces
+--- White line ---
+(The following part is optional and consists on zero or more blocks as follows):
+# Time of change
+non negative real number
+--- White line ---
+# Deme sizes
+Vector of positive real numbers. Numbers are separated by space. Should be of size n
+--- White line ---
+# Migration matrix
+n lines having each a vector of non-negative numbers of size n, separated by spaces
+--- White line ---
