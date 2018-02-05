@@ -3,14 +3,14 @@ from PyQt4 import QtCore, QtGui
 
 
 class Dialog(QtGui.QDialog):
-    NumGridRows = 3
+    NumGridRows = 6
     NumButtons = 4
 
     def __init__(self):
         super(Dialog, self).__init__()
 
-        self.createMenu()
         self.createHorizontalGroupBox()
+        self.createGridGroupBox()
       
 
         buttonBox = QtGui.QDialogButtonBox(QtGui.QDialogButtonBox.Ok | QtGui.QDialogButtonBox.Cancel)
@@ -19,19 +19,14 @@ class Dialog(QtGui.QDialog):
         buttonBox.rejected.connect(self.reject)
 
         mainLayout = QtGui.QVBoxLayout()
-        mainLayout.setMenuBar(self.menuBar)
+        
         mainLayout.addWidget(self.horizontalGroupBox)
-   
+        mainLayout.addWidget(self.gridGroupBox)
         mainLayout.addWidget(buttonBox)
+
         self.setLayout(mainLayout)
         self.setWindowTitle("SPAms alternative")
 
-    def createMenu(self):
-        self.menuBar = QtGui.QMenuBar()
-        self.fileMenu = QtGui.QMenu("&File", self)
-        self.exitAction = self.fileMenu.addAction("E&xit")
-        self.menuBar.addMenu(self.fileMenu)
-        self.exitAction.triggered.connect(self.accept)
 
     def createHorizontalGroupBox(self):
         self.horizontalGroupBox = QtGui.QGroupBox("Population dynamics")
@@ -43,7 +38,21 @@ class Dialog(QtGui.QDialog):
 
         self.horizontalGroupBox.setLayout(layout)
 
-   
+
+    def createGridGroupBox(self):
+        self.gridGroupBox = QtGui.QGroupBox("Options")
+        layout = QtGui.QGridLayout()
+        sections = ("Number of loci", "Sampling vector", "Initial deme sizes", "Initial migration matrix", "Time of change", "Deme sizes")
+        for i in sections:
+            label = QtGui.QLabel()
+	    label.setText(i)
+            lineEdit = QtGui.QLineEdit()
+            layout.addWidget(label)
+            layout.addWidget(lineEdit)
+
+        
+        self.gridGroupBox.setLayout(layout)
+
 
 
 if __name__ == '__main__':
