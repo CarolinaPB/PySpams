@@ -1,7 +1,7 @@
-#To use this first you need to install and configure PyQt4
+#First you need to install and configure PyQt4
+
 from PyQt4 import QtCore, QtGui
 import sys
-
 
 class Dialog(QtGui.QDialog):
     
@@ -31,8 +31,13 @@ class Dialog(QtGui.QDialog):
         
     def new_window(self):
         self.wind.show()
+    def new_gwindow(self):
+        self.gwindow.show()
   
 
+   
+        
+#creates the buttons for the models and opens a window when you click them
     def createHorizontalGroupBox(self):
         self.horizontalGroupBox = QtGui.QGroupBox("Population dynamics")
         layout = QtGui.QHBoxLayout()
@@ -45,7 +50,7 @@ class Dialog(QtGui.QDialog):
 
         self.horizontalGroupBox.setLayout(layout)
 
-
+#creates grid layout with several fields to fill | creates a file with the field's headers 
     def createGridGroupBox(self):
         self.gridGroupBox = QtGui.QGroupBox("Options")
         layout = QtGui.QGridLayout()
@@ -70,8 +75,15 @@ class Dialog(QtGui.QDialog):
             output_file.write("# "+sections[n]+"\n")
             output_file.write(self.line.text())
             output_file.write("\n")
-
-           
+            
+            
+        self.button_matr = QtGui.QPushButton("Matrix input")
+        self.button_matr.clicked.connect(self.new_gwindow)
+        self.gwindow = grid_window(self)
+        layout.addWidget(self.button_matr,3,1)
+        
+        
+        
         self.gridGroupBox.setLayout(layout)
 
 
@@ -79,7 +91,45 @@ class Second_W(QtGui.QMainWindow):
     def __init__(self, parent=None):
         super(Second_W, self).__init__(parent)
         self.setGeometry(300, 300, 350, 300)
-       
+        
+
+class grid_window(QtGui.QMainWindow):
+    def __init__(self, parent):
+        super(grid_window, self).__init__(parent)
+        self.setGeometry(600, 300, 600, 630)
+        
+        glayout=QtGui.QGridLayout()
+        self.setWindowTitle("Matrix input")
+      
+
+#table inside the new window created with the button_matr
+        matrix = QtGui.QTableWidget(self)
+        matrix.resize(600,600)
+        matrix.setRowCount(100)
+        matrix.setColumnCount(100)
+        
+        matrix.resizeColumnsToContents()
+        matrix.resizeRowsToContents()
+        glayout.addWidget(matrix, 0,0)
+        for i in range (0,100):
+            for j in range( 0, 100):
+                matrix.setItem(i,j,QtGui.QTableWidgetItem("0."))
+            
+        self.buttonSave = QtGui.QPushButton('Save', self)
+       #self.buttonSave.clicked.connect(save_file)
+        self.buttonSave.move(500,600)
+        glayout.addWidget(self.buttonSave)
+
+
+# def save_file(self):
+#still missing
+
+
+        
+    
+        
+            
+
       	
 
 def main():
