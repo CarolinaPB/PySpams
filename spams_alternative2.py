@@ -4,7 +4,7 @@ from PyQt4 import QtCore, QtGui
 import sys
 
 class Dialog(QtGui.QDialog):
-    
+
     def __init__(self):
         super(Dialog, self).__init__()
 
@@ -15,26 +15,67 @@ class Dialog(QtGui.QDialog):
         buttonBox = QtGui.QDialogButtonBox(QtGui.QDialogButtonBox.Ok | QtGui.QDialogButtonBox.Cancel)
         buttonBox.accepted.connect(self.accept)
         buttonBox.rejected.connect(self.reject)
+        create_docBtn = QtGui.QPushButton("Create .txt")
+        #create_docBtn.clicked.connect(self.create_txt)
+        create_docBtn.clicked.connect(self.create_txt2)
+        
       
      
         mainLayout = QtGui.QVBoxLayout()
         
         mainLayout.addWidget(self.horizontalGroupBox)
         mainLayout.addWidget(self.gridGroupBox)
+        mainLayout.addWidget(create_docBtn)       
         mainLayout.addWidget(buttonBox)
+       
    
 	self.setGeometry(300, 300, 350, 300)
 
         self.setLayout(mainLayout)
         self.setWindowTitle("SPAms alternative")
-  
+
+    def create_txt2(self):
+        sections = ("Number of loci", "Sampling Vector", "Initial deme sizes", "Initial migration matrix")
+        sections2 =( "Time of change", "Deme sizes")
+        ninput = ("numinput0", "numinput1", "numinput2", "numinput3", "numinput4")
+        numinput0 = self.line0.text()
+        numinput1 = self.line1.text()
+        numinput2 = self.line2.text()
+        numinput3 = self.line3.text()
+        numinput4 = self.line4.text()
+        
+        filepath = QtGui.QFileDialog.getSaveFileName(self, 'Save file',"", '*.txt')
+        fileHandle = open(filepath, "w")
+        
+        fileHandle.write(" #"+sections[0]+"\n")
+        fileHandle.write(numinput0+"\n\n")
+        fileHandle.write(" #"+sections[1]+"\n")
+        fileHandle.write(numinput1+"\n\n")
+        fileHandle.write(" #"+sections[2]+"\n")
+        fileHandle.write(numinput2+"\n\n")
+        fileHandle.write(" #"+sections[3]+"\n\n")
+        #fileHandle.write( --> save matrix)
+        fileHandle.write(" #"+sections2[0]+"\n")
+        fileHandle.write(numinput3+"\n\n")
+        fileHandle.write(" #"+sections2[1]+"\n")
+        fileHandle.write(numinput4+"\n\n")
+        
+        
+        fileHandle.close()
+
+
+
+    #def create_txt (self):
+     #   numinput = self.line0.text()
+      #  outfile = open("sample.txt", "w")
+       # outfile.write(numinput)
+        #outfile.close()
         
     def new_window(self):
         self.wind.show()
     def new_gwindow(self):
         self.gwindow.show()
-  
-
+    
    
         
 #creates the buttons for the models and opens a window when you click them
@@ -50,33 +91,41 @@ class Dialog(QtGui.QDialog):
 
         self.horizontalGroupBox.setLayout(layout)
 
-#creates grid layout with several fields to fill | creates a file with the field's headers 
+#creates grid layout with several fields to fill | creates a file with the fields' headers 
     def createGridGroupBox(self):
         self.gridGroupBox = QtGui.QGroupBox("Options")
         layout = QtGui.QGridLayout()
-        sections = ("Number of loci", "Sampling Vector", "Initial deme sizes", "Initial migration matrix", "Time of change", "Deme sizes")
+       
 	
-        output_file = open("alternative2_result.txt","w")
-   
+        
+        
+            
+        sections = ("Number of loci", "Sampling Vector", "Initial deme sizes","Initial migration matrix", "Time of change", "Deme sizes")   
         for n in range(len(sections)): 
             layout.addWidget(QtGui.QLabel(sections[n]),n,0)
-            self.line = QtGui.QLineEdit()
-            layout.addWidget(self.line, n,1)
-            for i in range(2,5):
-                self.line2 = QtGui.QLineEdit()
-                self.line3 = QtGui.QLineEdit()
-                self.line4 = QtGui.QLineEdit()
-                layout.addWidget(self.line2, 1, i )
-                layout.addWidget(self.line3, 2, i )
-                layout.addWidget(self.line4, 5, i )
+        
+        self.line0 = QtGui.QLineEdit()   
+        layout.addWidget(self.line0, 0,1)
+        self.line1 = QtGui.QLineEdit()
+        layout.addWidget(self.line1, 1,1)
+        self.line2 = QtGui.QLineEdit()        
+        layout.addWidget(self.line2, 2,1)
+        self.line3 = QtGui.QLineEdit()        
+        layout.addWidget(self.line3, 4,1)
+        self.line4 = QtGui.QLineEdit()        
+        layout.addWidget(self.line4, 5,1)
 
+        
 
-            
-            output_file.write("# "+sections[n]+"\n")
-            output_file.write(self.line.text())
-            output_file.write("\n")
-            
-            
+            #for i in range(2,5):
+            #    self.line2 = QtGui.QLineEdit()
+             #   self.line3 = QtGui.QLineEdit()
+               # self.line4 = QtGui.QLineEdit()
+              #  layout.addWidget(self.line2, 1, i )
+                #layout.addWidget(self.line3, 2, i )
+                #layout.addWidget(self.line4, 5, i )
+        
+
         self.button_matr = QtGui.QPushButton("Matrix input")
         self.button_matr.clicked.connect(self.new_gwindow)
         self.gwindow = grid_window(self)
@@ -116,21 +165,11 @@ class grid_window(QtGui.QMainWindow):
                 matrix.setItem(i,j,QtGui.QTableWidgetItem("0."))
             
         self.buttonSave = QtGui.QPushButton('Save', self)
-       #self.buttonSave.clicked.connect(save_file)
+        #self.buttonSave.clicked.connect(save_file)
         self.buttonSave.move(500,600)
         glayout.addWidget(self.buttonSave)
-
-
-# def save_file(self):
-#still missing
-
-
-        
-    
-        
-            
-
-      	
+     
+          	
 
 def main():
     app = QtGui.QApplication(sys.argv)
@@ -140,5 +179,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-
-
