@@ -1,7 +1,7 @@
 #First you need to install and configure PyQt4
 
 from PyQt4 import QtCore, QtGui
-import sys
+import sys, csv
 
 class Dialog(QtGui.QDialog):
 
@@ -75,6 +75,11 @@ class Dialog(QtGui.QDialog):
         self.wind.show()
     def new_gwindow(self):
         self.gwindow.show()
+
+    def add_file(self):
+        path = QtGui.QFileDialog.getOpenFileName(
+                self, 'Upload File', '', 'CSV(*.csv)')
+
     
    
         
@@ -130,7 +135,9 @@ class Dialog(QtGui.QDialog):
         self.button_matr.clicked.connect(self.new_gwindow)
         self.gwindow = grid_window(self)
         layout.addWidget(self.button_matr,3,1)
-        
+        self.add_matr_btn = QtGui.QPushButton("Upload matrix")
+        self.add_matr_btn.clicked.connect(self.add_file)
+        layout.addWidget(self.add_matr_btn,3,2)
         
         
         self.gridGroupBox.setLayout(layout)
@@ -152,23 +159,59 @@ class grid_window(QtGui.QMainWindow):
       
 
 #table inside the new window created with the button_matr
-        matrix = QtGui.QTableWidget(self)
-        matrix.resize(600,600)
-        matrix.setRowCount(100)
-        matrix.setColumnCount(100)
+        self.matrix = QtGui.QTableWidget(self)
+        self.matrix.resize(600,600)
+        self.matrix.setRowCount(100)
+        self.matrix.setColumnCount(100)
         
-        matrix.resizeColumnsToContents()
-        matrix.resizeRowsToContents()
-        glayout.addWidget(matrix, 0,0)
+        self.matrix.resizeColumnsToContents()
+        self.matrix.resizeRowsToContents()
+        glayout.addWidget(self.matrix, 0,0)
         for i in range (0,100):
             for j in range( 0, 100):
-                matrix.setItem(i,j,QtGui.QTableWidgetItem("0."))
+                self.matrix.setItem(i,j,QtGui.QTableWidgetItem("0."))
             
         self.buttonSave = QtGui.QPushButton('Save', self)
-        #self.buttonSave.clicked.connect(save_file)
+        self.buttonSave.clicked.connect(self.matrix_save)
         self.buttonSave.move(500,600)
         glayout.addWidget(self.buttonSave)
-     
+
+        self.buttonOpen = QtGui.QPushButton('Open', self)
+        self.buttonOpen.clicked.connect(self.matrix_open)
+        self.buttonOpen.move(400,600)
+        glayout.addWidget(self.buttonOpen)
+
+#function to save matrix as new txt file
+    def matrix_save(self):
+        path = QtGui.QFileDialog.getSaveFileName(
+                self, 'Save File', '', '*.txt')
+        if not path.isEmpty():
+            with open(unicode(path), 'wb') as stream:
+                writer = csv.writer(stream)
+                for row in range(self.matrix.rowCount()):
+                    rowdata = []
+                    for column in range(self.matrix.columnCount()):
+                        item = self.matrix.item(row, column)
+                        if item is not None:
+                            rowdata.append(
+                                unicode(item.text()).encode('utf8'))
+                        else:
+                            rowdata.append('')
+                    writer.writerow(rowdata)
+    def matrix_open(self):
+        path = QtGui.QFileDialog.getOpenFileNames(
+                self, 'Open File', '', '*.txt')
+        if not path.isEmpty():
+            with open(unicode(path), 'rb') as infile:
+                self.matrix.setRowCount(0)
+                self.matrix.setColumnCount(0)
+                for rowdata in csv.reader(infile):
+                    row = self.matrix.rowCount()
+                    self.matrix.insertRow(row)
+                    self.matrix.setColumnCount(len(rowdata))
+                    for column, data in enumerate(rowdata):
+                        item = QtGui.QTableWidgetItem(data.decode('utf8'))
+                        self.matrix.setItem(row, column, item)
           	
 
 def main():
