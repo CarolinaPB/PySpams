@@ -47,17 +47,17 @@ class Dialog(QtGui.QDialog):
         filepath = QtGui.QFileDialog.getSaveFileName(self, 'Save file',"", '*.txt')
         fileHandle = open(filepath, "w")
         
-        fileHandle.write(" #"+sections[0]+"\n")
+        fileHandle.write("# "+sections[0]+"\n")
         fileHandle.write(numinput0+"\n\n")
-        fileHandle.write(" #"+sections[1]+"\n")
+        fileHandle.write("# "+sections[1]+"\n")
         fileHandle.write(numinput1+"\n\n")
-        fileHandle.write(" #"+sections[2]+"\n")
+        fileHandle.write("# "+sections[2]+"\n")
         fileHandle.write(numinput2+"\n\n")
-        fileHandle.write(" #"+sections[3]+"\n\n")
+        fileHandle.write("# "+sections[3]+"\n\n")
         #fileHandle.write( --> save matrix)
-        fileHandle.write(" #"+sections2[0]+"\n")
+        fileHandle.write("# "+sections2[0]+"\n")
         fileHandle.write(numinput3+"\n\n")
-        fileHandle.write(" #"+sections2[1]+"\n")
+        fileHandle.write("# "+sections2[1]+"\n")
         fileHandle.write(numinput4+"\n\n")
         
         
