@@ -41,11 +41,12 @@ class Dialog(QtGui.QDialog):
         numinput0 = self.line0.text()
         numinput1 = self.line1.text()
         numinput2 = self.line2.text()
-        numinput3 = self.line3.text()
-        numinput4 = self.line4.text()
+        numinput3 = self.line4.text()
+        numinput4 = self.line5.text()
         
         filepath = QtGui.QFileDialog.getSaveFileName(self, 'Save file',"", '*.txt')
         fileHandle = open(filepath, "w")
+        
         
         fileHandle.write("# "+sections[0]+"\n")
         fileHandle.write(numinput0+"\n\n")
@@ -78,7 +79,7 @@ class Dialog(QtGui.QDialog):
 
     def add_file(self):
         path = QtGui.QFileDialog.getOpenFileName(
-                self, 'Upload File', '', 'CSV(*.csv)')
+                self, 'Upload File', '', '*.txt')
 
     
    
@@ -100,44 +101,63 @@ class Dialog(QtGui.QDialog):
     def createGridGroupBox(self):
         self.gridGroupBox = QtGui.QGroupBox("Options")
         layout = QtGui.QGridLayout()
-       
-	
-        
-        
             
-        sections = ("Number of loci", "Sampling Vector", "Initial deme sizes","Initial migration matrix", "Time of change", "Deme sizes")   
-        for n in range(len(sections)): 
-            layout.addWidget(QtGui.QLabel(sections[n]),n,0)
-        
+        sections = ("Number of loci", "Sampling Vector", "Initial deme sizes","Initial migration matrix", "Time of change", "Deme sizes")       
+
+        layout.addWidget(QtGui.QLabel(sections[0]),0,0)
+        layout.addWidget(QtGui.QLabel(sections[1]),1,0)
+        layout.addWidget(QtGui.QLabel(sections[2]),2,0)
+        layout.addWidget(QtGui.QLabel(sections[3]),3,0) 
+        layout.addWidget(QtGui.QLabel(sections[4]),5,0)
+        layout.addWidget(QtGui.QLabel(sections[5]),6,0)
+
         self.line0 = QtGui.QLineEdit()   
         layout.addWidget(self.line0, 0,1)
         self.line1 = QtGui.QLineEdit()
         layout.addWidget(self.line1, 1,1)
         self.line2 = QtGui.QLineEdit()        
         layout.addWidget(self.line2, 2,1)
-        self.line3 = QtGui.QLineEdit()        
-        layout.addWidget(self.line3, 4,1)
         self.line4 = QtGui.QLineEdit()        
         layout.addWidget(self.line4, 5,1)
+        self.line5 = QtGui.QLineEdit()        
+        layout.addWidget(self.line5, 6,1)
 
-        
 
-            #for i in range(2,5):
-            #    self.line2 = QtGui.QLineEdit()
-             #   self.line3 = QtGui.QLineEdit()
-               # self.line4 = QtGui.QLineEdit()
-              #  layout.addWidget(self.line2, 1, i )
-                #layout.addWidget(self.line3, 2, i )
-                #layout.addWidget(self.line4, 5, i )
-        
-
-        self.button_matr = QtGui.QPushButton("Matrix input")
+        self.button_matr = QtGui.QPushButton("Create matrix")
         self.button_matr.clicked.connect(self.new_gwindow)
         self.gwindow = grid_window(self)
         layout.addWidget(self.button_matr,3,1)
-        self.add_matr_btn = QtGui.QPushButton("Upload matrix")
-        self.add_matr_btn.clicked.connect(self.add_file)
-        layout.addWidget(self.add_matr_btn,3,2)
+        
+
+
+        def new_matrix (checked):
+            if checked:             
+                doc = QtGui.QFileDialog.getOpenFileName(self, 'Upload File', '', '*.txt')
+                layout.addWidget(QtGui.QLabel(doc), 4,1)
+                infile=open(doc,"r")
+                ofile=open("intermediatefile.txt","w")
+                ofile.close()
+                outfile=open("intermediatefile.txt", "r+")
+                sections = ("Number of loci", "Sampling Vector", "Initial deme sizes", "Initial migration matrix")
+                sections2 =( "Time of change", "Deme sizes")
+            
+
+                for i in range(0,4):
+                    outfile.write("# "+sections[i]+"\n")
+                infile2= infile.read()
+                infile3 = infile2.replace(","," ")
+                for line in infile3:
+                    outfile.write(line)
+        
+                outfile.write("\n"+"# "+sections2[0]+"\n")
+                outfile.write("# "+sections2[1]+"\n")
+
+                outfile.close()
+
+
+        matr_checkbox = QtGui.QCheckBox("Add matrix", self)
+        matr_checkbox.stateChanged.connect(new_matrix)
+        layout.addWidget(matr_checkbox, 4,0)
         
         
         self.gridGroupBox.setLayout(layout)
@@ -161,14 +181,14 @@ class grid_window(QtGui.QMainWindow):
 #table inside the new window created with the button_matr
         self.matrix = QtGui.QTableWidget(self)
         self.matrix.resize(600,600)
-        self.matrix.setRowCount(100)
-        self.matrix.setColumnCount(100)
+        self.matrix.setRowCount(25)
+        self.matrix.setColumnCount(25)
         
         self.matrix.resizeColumnsToContents()
         self.matrix.resizeRowsToContents()
         glayout.addWidget(self.matrix, 0,0)
-        for i in range (0,100):
-            for j in range( 0, 100):
+        for i in range (0,25):
+            for j in range( 0, 25):
                 self.matrix.setItem(i,j,QtGui.QTableWidgetItem("0."))
             
         self.buttonSave = QtGui.QPushButton('Save', self)
@@ -176,10 +196,7 @@ class grid_window(QtGui.QMainWindow):
         self.buttonSave.move(500,600)
         glayout.addWidget(self.buttonSave)
 
-        self.buttonOpen = QtGui.QPushButton('Open', self)
-        self.buttonOpen.clicked.connect(self.matrix_open)
-        self.buttonOpen.move(400,600)
-        glayout.addWidget(self.buttonOpen)
+        
 
 #function to save matrix as new txt file
     def matrix_save(self):
@@ -198,20 +215,7 @@ class grid_window(QtGui.QMainWindow):
                         else:
                             rowdata.append('')
                     writer.writerow(rowdata)
-    def matrix_open(self):
-        path = QtGui.QFileDialog.getOpenFileNames(
-                self, 'Open File', '', '*.txt')
-        if not path.isEmpty():
-            with open(unicode(path), 'rb') as infile:
-                self.matrix.setRowCount(0)
-                self.matrix.setColumnCount(0)
-                for rowdata in csv.reader(infile):
-                    row = self.matrix.rowCount()
-                    self.matrix.insertRow(row)
-                    self.matrix.setColumnCount(len(rowdata))
-                    for column, data in enumerate(rowdata):
-                        item = QtGui.QTableWidgetItem(data.decode('utf8'))
-                        self.matrix.setItem(row, column, item)
+    
           	
 
 def main():
