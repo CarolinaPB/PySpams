@@ -46,7 +46,12 @@ class Dialog(QtGui.QDialog):
         
         filepath = QtGui.QFileDialog.getSaveFileName(self, 'Save file',"", '*.txt')
         fileHandle = open(filepath, "w")
-        
+        matrix_path = QtGui.QFileDialog.getOpenFileName(self, "Choose matrix","","*.txt")
+        matrix_file = open(matrix_path, "r")
+#check if needed
+        matrix_file2 = matrix_file.read()
+        matrix_file3 = matrix_file2.replace(","," ")
+##
         
         fileHandle.write("# "+sections[0]+"\n")
         fileHandle.write(numinput0+"\n\n")
@@ -55,7 +60,8 @@ class Dialog(QtGui.QDialog):
         fileHandle.write("# "+sections[2]+"\n")
         fileHandle.write(numinput2+"\n\n")
         fileHandle.write("# "+sections[3]+"\n\n")
-        #fileHandle.write( --> save matrix)
+        for line in matrix_file2:
+            fileHandle.write(line)
         fileHandle.write("# "+sections2[0]+"\n")
         fileHandle.write(numinput3+"\n\n")
         fileHandle.write("# "+sections2[1]+"\n")
@@ -65,12 +71,6 @@ class Dialog(QtGui.QDialog):
         fileHandle.close()
 
 
-
-    #def create_txt (self):
-     #   numinput = self.line0.text()
-      #  outfile = open("sample.txt", "w")
-       # outfile.write(numinput)
-        #outfile.close()
         
     def new_window(self):
         self.wind.show()
@@ -141,17 +141,18 @@ class Dialog(QtGui.QDialog):
                 sections = ("Number of loci", "Sampling Vector", "Initial deme sizes", "Initial migration matrix")
                 sections2 =( "Time of change", "Deme sizes")
             
-
+#check if needed
                 for i in range(0,4):
                     outfile.write("# "+sections[i]+"\n")
+##
                 infile2= infile.read()
                 infile3 = infile2.replace(","," ")
                 for line in infile3:
                     outfile.write(line)
-        
+#check
                 outfile.write("\n"+"# "+sections2[0]+"\n")
                 outfile.write("# "+sections2[1]+"\n")
-
+##
                 outfile.close()
 
 
