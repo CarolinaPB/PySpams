@@ -33,6 +33,17 @@ class Dialog(QtGui.QDialog):
         self.setLayout(mainLayout)
         self.setWindowTitle("SPAms alternative")
 
+    def new_matrix2(checked):
+        global path_open3
+        if checked:
+            path = QtGui.QFileDialog.getOpenFileName(None, 'Upload File', '', '*.txt')
+            path_open = open(path)
+            path_open2 = path_open.read()
+            path_open3 = path_open2.replace(","," ")
+
+            print "working"
+
+
     def create_txt2(self):
         sections = ("Number of loci", "Sampling Vector", "Initial deme sizes", "Initial migration matrix")
         sections2 =( "Time of change", "Deme sizes")
@@ -46,13 +57,6 @@ class Dialog(QtGui.QDialog):
         
         filepath = QtGui.QFileDialog.getSaveFileName(self, 'Save file',"", '*.txt')
         fileHandle = open(filepath, "w")
-
-        matrix_path = QtGui.QFileDialog.getOpenFileName(self, "Choose matrix","","*.txt")
-        matrix_file = open(matrix_path)
-#check if needed
-        matrix_file2 = matrix_file.read()
-        matrix_file3 = matrix_file2.replace(","," ")
-##
         
         fileHandle.write("# "+sections[0]+"\n")
         fileHandle.write(numinput0+"\n\n")
@@ -60,8 +64,8 @@ class Dialog(QtGui.QDialog):
         fileHandle.write(numinput1+"\n\n")
         fileHandle.write("# "+sections[2]+"\n")
         fileHandle.write(numinput2+"\n\n")
-        fileHandle.write("# "+sections[3]+"\n\n")
-        for line in matrix_file3:
+        fileHandle.write("# "+sections[3]+"\n")
+        for line in path_open3:
             fileHandle.write(line)
         fileHandle.write("\n")
         fileHandle.write("# "+sections2[0]+"\n")
@@ -82,9 +86,7 @@ class Dialog(QtGui.QDialog):
     def add_file(self):
         path = QtGui.QFileDialog.getOpenFileName(
                 self, 'Upload File', '', '*.txt')
-
     
-   
         
 #creates the buttons for the models and opens a window when you click them
     def createHorizontalGroupBox(self):
@@ -129,44 +131,15 @@ class Dialog(QtGui.QDialog):
         self.button_matr.clicked.connect(self.new_gwindow)
         self.gwindow = grid_window(self)
         layout.addWidget(self.button_matr,3,1)
-        
-
-
-        #def new_matrix (checked):
-         #   if checked:             
-          #      doc = QtGui.QFileDialog.getOpenFileName(self, 'Upload File', '', '*.txt')
-           #     layout.addWidget(QtGui.QLabel(doc), 4,1)
-                
-                #infile=open(doc,"r")
-                #ofile=open("intermediatefile.txt","w")
-                #ofile.close()
-                #outfile=open("intermediatefile.txt", "r+")
-                #sections = ("Number of loci", "Sampling Vector", "Initial deme sizes", "Initial migration matrix")
-                #sections2 =( "Time of change", "Deme sizes")
-            
-#check if needed
-                #for i in range(0,4):
-                 #   outfile.write("# "+sections[i]+"\n")
-##
-                #infile2= infile.read()
-                #infile3 = infile2.replace(","," ")
-                #for line in infile3:
-                    #outfile.write(line)
-#check
-                #outfile.write("\n"+"# "+sections2[0]+"\n")
-                #outfile.write("# "+sections2[1]+"\n")
-##
-                #outfile.close()
-
+ 
 
         matr_checkbox = QtGui.QCheckBox("Add matrix", self)
-       # matr_checkbox.stateChanged.connect(new_matrix)
+        matr_checkbox.stateChanged.connect(self.new_matrix2)
         layout.addWidget(matr_checkbox, 4,0)
-        
+                
         
         self.gridGroupBox.setLayout(layout)
-
-
+      
 class Second_W(QtGui.QMainWindow):
     def __init__(self, parent=None):
         super(Second_W, self).__init__(parent)
