@@ -16,7 +16,6 @@ class Dialog(QtGui.QDialog):
         buttonBox.accepted.connect(self.accept)
         buttonBox.rejected.connect(self.reject)
         create_docBtn = QtGui.QPushButton("Create .txt")
-        #create_docBtn.clicked.connect(self.create_txt)
         create_docBtn.clicked.connect(self.create_txt2)
         
       
@@ -38,6 +37,7 @@ class Dialog(QtGui.QDialog):
         sections = ("Number of loci", "Sampling Vector", "Initial deme sizes", "Initial migration matrix")
         sections2 =( "Time of change", "Deme sizes")
         ninput = ("numinput0", "numinput1", "numinput2", "numinput3", "numinput4")
+
         numinput0 = self.line0.text()
         numinput1 = self.line1.text()
         numinput2 = self.line2.text()
@@ -46,8 +46,9 @@ class Dialog(QtGui.QDialog):
         
         filepath = QtGui.QFileDialog.getSaveFileName(self, 'Save file',"", '*.txt')
         fileHandle = open(filepath, "w")
+
         matrix_path = QtGui.QFileDialog.getOpenFileName(self, "Choose matrix","","*.txt")
-        matrix_file = open(matrix_path, "r")
+        matrix_file = open(matrix_path)
 #check if needed
         matrix_file2 = matrix_file.read()
         matrix_file3 = matrix_file2.replace(","," ")
@@ -60,8 +61,9 @@ class Dialog(QtGui.QDialog):
         fileHandle.write("# "+sections[2]+"\n")
         fileHandle.write(numinput2+"\n\n")
         fileHandle.write("# "+sections[3]+"\n\n")
-        for line in matrix_file2:
+        for line in matrix_file3:
             fileHandle.write(line)
+        fileHandle.write("\n")
         fileHandle.write("# "+sections2[0]+"\n")
         fileHandle.write(numinput3+"\n\n")
         fileHandle.write("# "+sections2[1]+"\n")
@@ -130,34 +132,35 @@ class Dialog(QtGui.QDialog):
         
 
 
-        def new_matrix (checked):
-            if checked:             
-                doc = QtGui.QFileDialog.getOpenFileName(self, 'Upload File', '', '*.txt')
-                layout.addWidget(QtGui.QLabel(doc), 4,1)
-                infile=open(doc,"r")
-                ofile=open("intermediatefile.txt","w")
-                ofile.close()
-                outfile=open("intermediatefile.txt", "r+")
-                sections = ("Number of loci", "Sampling Vector", "Initial deme sizes", "Initial migration matrix")
-                sections2 =( "Time of change", "Deme sizes")
+        #def new_matrix (checked):
+         #   if checked:             
+          #      doc = QtGui.QFileDialog.getOpenFileName(self, 'Upload File', '', '*.txt')
+           #     layout.addWidget(QtGui.QLabel(doc), 4,1)
+                
+                #infile=open(doc,"r")
+                #ofile=open("intermediatefile.txt","w")
+                #ofile.close()
+                #outfile=open("intermediatefile.txt", "r+")
+                #sections = ("Number of loci", "Sampling Vector", "Initial deme sizes", "Initial migration matrix")
+                #sections2 =( "Time of change", "Deme sizes")
             
 #check if needed
-                for i in range(0,4):
-                    outfile.write("# "+sections[i]+"\n")
+                #for i in range(0,4):
+                 #   outfile.write("# "+sections[i]+"\n")
 ##
-                infile2= infile.read()
-                infile3 = infile2.replace(","," ")
-                for line in infile3:
-                    outfile.write(line)
+                #infile2= infile.read()
+                #infile3 = infile2.replace(","," ")
+                #for line in infile3:
+                    #outfile.write(line)
 #check
-                outfile.write("\n"+"# "+sections2[0]+"\n")
-                outfile.write("# "+sections2[1]+"\n")
+                #outfile.write("\n"+"# "+sections2[0]+"\n")
+                #outfile.write("# "+sections2[1]+"\n")
 ##
-                outfile.close()
+                #outfile.close()
 
 
         matr_checkbox = QtGui.QCheckBox("Add matrix", self)
-        matr_checkbox.stateChanged.connect(new_matrix)
+       # matr_checkbox.stateChanged.connect(new_matrix)
         layout.addWidget(matr_checkbox, 4,0)
         
         
