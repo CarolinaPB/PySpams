@@ -2,6 +2,8 @@
 
 from PyQt4 import QtCore, QtGui
 import sys, csv
+import numpy as np
+from teste import save_file
 
 class Dialog(QtGui.QDialog):
 
@@ -17,6 +19,7 @@ class Dialog(QtGui.QDialog):
         buttonBox.rejected.connect(self.reject)
         create_docBtn = QtGui.QPushButton("Create .txt")
         create_docBtn.clicked.connect(self.create_txt2)
+        create_docBtn.clicked.connect(self.save_file2)
         
       
      
@@ -33,6 +36,32 @@ class Dialog(QtGui.QDialog):
         self.setLayout(mainLayout)
         self.setWindowTitle("SPAms alternative")
 
+
+       
+
+    def save_file2(self):
+
+        numinput0 = self.line0.text()
+        numinput1 = self.line1.text()
+        numinput2 = self.line2.text()
+        numinput3 = self.line4.text()
+        numinput4 = self.line5.text()
+        m_array = np.zeros((5,3))
+        m_array[0,0] = numinput0
+        m_array[1,0] = numinput1
+        m_array[2,0] = numinput2
+        m_array[3,0] = numinput3
+        m_array[4,0] = numinput4
+        
+        #pre = np.fromstring(path_open3, sep='')
+        
+        print m_array
+        #print pre
+        #print type(path_open3)
+        save_file(m_array)
+        
+
+    
     def new_matrix2(checked):
         global path_open3
         if checked:
@@ -54,6 +83,9 @@ class Dialog(QtGui.QDialog):
         numinput2 = self.line2.text()
         numinput3 = self.line4.text()
         numinput4 = self.line5.text()
+
+        
+        
         
         filepath = QtGui.QFileDialog.getSaveFileName(self, 'Save file',"", '*.txt')
         fileHandle = open(filepath, "w")
@@ -75,7 +107,7 @@ class Dialog(QtGui.QDialog):
         
         
         fileHandle.close()
-
+       
 
         
     def new_window(self):
