@@ -46,19 +46,18 @@ class Dialog(QtGui.QDialog):
         numinput2 = self.line2.text()
         numinput3 = self.line4.text()
         numinput4 = self.line5.text()
-        m_array = np.zeros((5,3))
+        m_array = np.zeros((3,3))
         m_array[0,0] = numinput0
         m_array[1,0] = numinput1
         m_array[2,0] = numinput2
-        m_array[3,0] = numinput3
-        m_array[4,0] = numinput4
-        
-        #pre = np.fromstring(path_open3, sep='')
-        
-        print m_array
-        #print pre
-        #print type(path_open3)
-        save_file(m_array)
+        matr_array = np.genfromtxt("matrix.txt",delimiter = ",")
+        m_array2 = np.zeros((2,3))
+        m_array2[0,0] = numinput3
+        m_array2[1,0] = numinput4
+        #final_array = np.vstack((m_array, matr_array, m_array2))
+        final_array = np.vstack((m_array, m_array2))
+        save_file(final_array)
+  
         
 
     
