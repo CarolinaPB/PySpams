@@ -1,7 +1,7 @@
 from PyQt4 import QtCore, QtGui
 import sys
 import numpy as np
-from teste import save_file
+#from teste import save_file
 np.set_printoptions(suppress=True)
 
 class Dialog(QtGui.QDialog):
@@ -19,11 +19,15 @@ class Dialog(QtGui.QDialog):
         buttonBox.rejected.connect(self.reject)
         
 
-        self.create_docBtn = QtGui.QPushButton("Save input")
-        self.create_docBtn.clicked.connect(self.store_input)
-        mainLayout.addWidget(self.create_docBtn)
+        self.input_btn = QtGui.QPushButton("Save input")
+        self.input_btn.clicked.connect(self.store_input)
+        self.file_input = QtGui.QPushButton("Save doc")
+        self.file_input.clicked.connect(self.save_files)
+        mainLayout.addWidget(self.input_btn)
+        mainLayout.addWidget(self.file_input)
         mainLayout.addWidget(buttonBox)
         self.setLayout(mainLayout)
+        
 
     def createGridGroupBox(self):
         self.gridGroupBox = QtGui.QGroupBox("Options")
@@ -49,26 +53,66 @@ class Dialog(QtGui.QDialog):
         layout.addWidget(self.line5, 6,1)
   
         self.gridGroupBox.setLayout(layout)
+    
+
+    
+        
 
     def store_input(self):
+        
+        #m_array = np.zeros((6, 1),dtype=object)
+        narray0 = np.zeros((6,1),dtype=object)
+
         numinput0 = self.line0.text()
         numinput1 = self.line1.text()
         numinput2 = self.line2.text()
         numinput3 = self.line4.text()
         numinput4 = self.line5.text()
+  
 
-     
-        m_array = np.zeros((5, 1),dtype=float)
-        m_array2=np.zeros((5,1),dtype=float)
+        m = open("matrix.txt","r")
+        m2 = m.read()
+        m3 = m2.replace(","," ")
+        matrix = np.asarray(m3)
+        m_array2 = np.array([[numinput0],[numinput1],[numinput2],[matrix],[numinput3],[numinput4]])
+        print m_array2
+        #m_array[0,0] = numinput0
+        #m_array[1,0] = numinput1
+        #m_array[2,0] = numinput2
+        #m_array[3,0] = matrix
+        #m_array[4,0] = numinput3
+        #m_array[5,0] = numinput4
+
+        num_rows, num_cols = m_array2.shape
+        ## wrong because num_cols of m_array2 is always = 1
+        print num_cols
         
-      
-        m_array[0,0] = numinput0
-        m_array[1,0] = numinput1
-        m_array[2,0] = numinput2
-        m_array[3,0] = numinput3
-        m_array[4,0] = numinput4
-        array = np.hstack((m_array2,m_array))
-        print array
+        if num_cols == 1:
+            narray = np.hstack((narray0,m_array2))
+            narray=np.hstack((narray,m_array2))
+            narray = narray[:,1:]
+            print "empty"
+        else:
+            narray=np.hstack((narray,m_array2)) 
+            print "working"
+        	
+        return narray
+       
+        
+        
+    def save_files(self):
+        num_rows, num_cols = self.store_input().shape
+        files_names=[]
+        for i in range(0,num_cols):
+            files_names.append("input"+str(i)+".txt")
+            
+            with open(files_names[0],"w") as f:
+                for n in range(0,6):
+                    f.write("# " + "teste")
+                    f.write("\n")
+                    f.write(self.store_input()[n,0])
+                    f.write("\n\n")
+        
 
         
         
