@@ -27,6 +27,8 @@ class Dialog(QtGui.QDialog):
         mainLayout.addWidget(self.file_input)
         mainLayout.addWidget(buttonBox)
         self.setLayout(mainLayout)
+
+        
         
 
     def createGridGroupBox(self):
@@ -54,14 +56,17 @@ class Dialog(QtGui.QDialog):
   
         self.gridGroupBox.setLayout(layout)
     
-
-    
-        
-
     def store_input(self):
         
         #m_array = np.zeros((6, 1),dtype=object)
-        narray0 = np.zeros((6,1),dtype=object)
+        #narray0 = np.zeros((6,1),dtype=object)
+        
+
+        init_array = np.zeros((6,10),dtype=object)
+        sect_array = np.array([["Number of loci"],["Sampling vector"],["Initial deme sizes"],["Initial migration matrix"],["Time of change"],["Deme sizes"]])
+        sect_array = np.vstack(sect_array)
+        total_array = np.hstack((sect_array,init_array))
+        #print total_array
 
         numinput0 = self.line0.text()
         numinput1 = self.line1.text()
@@ -74,43 +79,51 @@ class Dialog(QtGui.QDialog):
         m2 = m.read()
         m3 = m2.replace(","," ")
         matrix = np.asarray(m3)
-        m_array2 = np.array([[numinput0],[numinput1],[numinput2],[matrix],[numinput3],[numinput4]])
-        print m_array2
-        #m_array[0,0] = numinput0
-        #m_array[1,0] = numinput1
-        #m_array[2,0] = numinput2
-        #m_array[3,0] = matrix
-        #m_array[4,0] = numinput3
-        #m_array[5,0] = numinput4
-
-        num_rows, num_cols = m_array2.shape
-        ## wrong because num_cols of m_array2 is always = 1
-        print num_cols
         
-        if num_cols == 1:
-            narray = np.hstack((narray0,m_array2))
-            narray=np.hstack((narray,m_array2))
-            narray = narray[:,1:]
-            print "empty"
-        else:
-            narray=np.hstack((narray,m_array2)) 
-            print "working"
+        ncols = 0
+        ncols = ncols +1
+        #while loop
+        total_array[0,ncols+1] = numinput0
+        total_array[1,ncols+1] = numinput1  
+        total_array[2,ncols+1] = numinput2
+        total_array[3,ncols+1] = matrix
+        total_array[4,ncols+1] = numinput3
+        total_array[5,ncols+1] = numinput4
+        print total_array     
+        return total_array
+            
+
+        m_array2 = np.array([[numinput0],[numinput1],[numinput2],[matrix],[numinput3],[numinput4]])
+      
+        #num_rows, num_cols = m_array2.shape
+        ## wrong because num_cols of m_array2 is always = 1
+        #print num_cols
+        
+        #if num_cols == 1:
+         #   narray = np.hstack((narray0,m_array2))
+          #  narray=np.hstack((narray,m_array2))
+           # narray = narray[:,1:]
+            #print "empty"
+       # else:
+        #    narray=np.hstack((narray,m_array2)) 
+         #   print "working"
         	
-        return narray
+        #return narray
        
         
         
     def save_files(self):
-        num_rows, num_cols = self.store_input().shape
+        #num_rows, num_cols = self.store_input().shape
+
         files_names=[]
-        for i in range(0,num_cols):
+        for i in range(0,10):
             files_names.append("input"+str(i)+".txt")
             
             with open(files_names[0],"w") as f:
                 for n in range(0,6):
-                    f.write("# " + "teste")
+                    f.write("# " + self.store_input()[n,0])
                     f.write("\n")
-                    f.write(self.store_input()[n,0])
+                    f.write(self.store_input()[n,1])
                     f.write("\n\n")
         
 
