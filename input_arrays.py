@@ -68,6 +68,7 @@ class Dialog(QtGui.QDialog):
         sect_array = np.array([["Number of loci"],["Sampling vector"],["Initial deme sizes"],["Initial migration matrix"],["Time of change"],["Deme sizes"]])
         sect_array = np.vstack(sect_array)
         total_array = np.hstack((sect_array,init_array))
+        #print total_array
         return total_array
     
 
@@ -83,7 +84,7 @@ class Dialog(QtGui.QDialog):
         m2 = m.read()
         m3 = m2.replace(","," ")
         matrix = np.asarray(m3)
-
+        global nonzeros
         nonzeros = np.count_nonzero(self.create_arrays()[:,1])
         print nonzeros
 
@@ -99,37 +100,39 @@ class Dialog(QtGui.QDialog):
                 
             print "working"
             ncols = ncols +1
-     
-            return self.create_arrays()
+            global final_array
+            final_array = self.create_arrays()
+            #print final_array
+            return final_array
  
         else:
             print "ok"
         
-            self.create_arrays()[0,ncols+1] = numinput0
-            self.create_arrays()[1,ncols+1] = numinput1  
-            self.create_arrays()[2,ncols+1] = numinput2
-            self.create_arrays()[3,ncols+1] = matrix
-            self.create_arrays()[4,ncols+1] = numinput3
-            self.create_arrays()[5,ncols+1] = numinput4
+            final_array[0,ncols+1] = numinput0
+            final_array[1,ncols+1] = numinput1  
+            final_array[2,ncols+1] = numinput2
+            final_array[3,ncols+1] = matrix
+            final_array[4,ncols+1] = numinput3
+            final_array[5,ncols+1] = numinput4
             ncols = ncols +1
             
-            
-            return self.create_arrays()  
+            #print final_array
+            return final_array 
         
     def save_files(self):
 
         files_names=[]
-        for i in range(0,10):
+        for i in range(0, ncols):
             files_names.append("input"+str(i)+".txt")
 
             with open(files_names[i], "w") as f:
-                for cols in range(0,ncols+1):          
-                    for n in range(0,6):    
-                        f.write("# " + self.store_input()[n,0])
-                        f.write("\n")
-                        f.write(self.store_input()[n,cols])
-                        f.write("\n\n")
-          
+                #for cols in range(1,ncols+1):
+                for row in range(0,6):
+                    f.write("# " + final_array[row,0])
+                    f.write("\n")
+                    f.write(final_array[row,i+1])
+                    f.write("\n\n")
+                               
         
 
         
