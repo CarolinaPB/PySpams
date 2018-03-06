@@ -75,14 +75,16 @@ class Dialog(QtGui.QDialog):
         self.gridGroupBox = QtGui.QGroupBox("Options")
         layout = QtGui.QGridLayout()
             
-        sections = ("Number of loci", "Sampling Vector", "Initial deme sizes","Initial migration matrix", "Time of change", "Deme sizes")       
+        sections = ("File name","Number of loci", "Sampling Vector", "Initial deme sizes","Initial migration matrix", "Time of change", "Deme sizes")       
 
-        layout.addWidget(QtGui.QLabel(sections[0]),0,0)
-        layout.addWidget(QtGui.QLabel(sections[1]),1,0)
-        layout.addWidget(QtGui.QLabel(sections[2]),2,0)
-        layout.addWidget(QtGui.QLabel(sections[3]),3,0) 
-        layout.addWidget(QtGui.QLabel(sections[4]),5,0)
-        layout.addWidget(QtGui.QLabel(sections[5]),6,0)
+        layout.addWidget(QtGui.QLabel(sections[1]),0,0)
+        layout.addWidget(QtGui.QLabel(sections[2]),1,0)
+        layout.addWidget(QtGui.QLabel(sections[3]),2,0)
+        layout.addWidget(QtGui.QLabel(sections[4]),3,0) 
+        layout.addWidget(QtGui.QLabel(sections[5]),5,0)
+        layout.addWidget(QtGui.QLabel(sections[6]),6,0)
+        layout.addWidget(QtGui.QLabel(""),7,0)
+        layout.addWidget(QtGui.QLabel(sections[0]),8,0)
 
         self.line0 = QtGui.QLineEdit()   
         layout.addWidget(self.line0, 0,1)
@@ -94,6 +96,9 @@ class Dialog(QtGui.QDialog):
         layout.addWidget(self.line4, 5,1)
         self.line5 = QtGui.QLineEdit()        
         layout.addWidget(self.line5, 6,1)
+        self.fileline = QtGui.QLineEdit()
+        layout.addWidget(self.fileline,8,1)
+  
         
 
 
@@ -123,11 +128,12 @@ class Dialog(QtGui.QDialog):
 
     @run_once
     def create_arrays(self):
-        init_array = np.zeros((6,10),dtype=object)
-        sect_array = np.array([["Number of loci"],["Sampling vector"],["Initial deme sizes"],["Initial migration matrix"],["Time of change"],["Deme sizes"]])
+        init_array = np.zeros((7,10),dtype=object)
+        sect_array = np.zeros((7,10),dtype=object)
+        sect_array = np.array([["File name"],["Number of loci"],["Sampling vector"],["Initial deme sizes"],["Initial migration matrix"],["Time of change"],["Deme sizes"]])
         sect_array = np.vstack(sect_array)
         total_array = np.hstack((sect_array,init_array))
-        #print total_array
+        print total_array
         return total_array
     
 
@@ -137,6 +143,7 @@ class Dialog(QtGui.QDialog):
         numinput2 = self.line2.text()
         numinput3 = self.line4.text()
         numinput4 = self.line5.text()
+        file_name = self.fileline.text()
   
         global nonzeros
         nonzeros = np.count_nonzero(self.create_arrays()[:,1])
@@ -145,29 +152,30 @@ class Dialog(QtGui.QDialog):
         if nonzeros == 0:
             global ncols
             ncols = 0
-            self.create_arrays()[0,ncols+1] = numinput0
-            self.create_arrays()[1,ncols+1] = numinput1  
-            self.create_arrays()[2,ncols+1] = numinput2
-            self.create_arrays()[3,ncols+1] = path_open3
-            self.create_arrays()[4,ncols+1] = numinput3
-            self.create_arrays()[5,ncols+1] = numinput4
+            self.create_arrays()[0,ncols+1] = file_name
+            self.create_arrays()[1,ncols+1] = numinput0
+            self.create_arrays()[2,ncols+1] = numinput1  
+            self.create_arrays()[3,ncols+1] = numinput2
+            self.create_arrays()[4,ncols+1] = path_open3
+            self.create_arrays()[5,ncols+1] = numinput3
+            self.create_arrays()[6,ncols+1] = numinput4
                 
-            print "working"
+            
             ncols = ncols +1
             global final_array
             final_array = self.create_arrays()
-            #print final_array
+            
             return final_array
  
         else:
-            print "ok"
-        
-            final_array[0,ncols+1] = numinput0
-            final_array[1,ncols+1] = numinput1  
-            final_array[2,ncols+1] = numinput2
-            final_array[3,ncols+1] = path_open3
-            final_array[4,ncols+1] = numinput3
-            final_array[5,ncols+1] = numinput4
+                    
+            final_array[0,ncols+1] = file_name
+            final_array[1,ncols+1] = numinput0
+            final_array[2,ncols+1] = numinput1  
+            final_array[3,ncols+1] = numinput2
+            final_array[4,ncols+1] = path_open3
+            final_array[5,ncols+1] = numinput3
+            final_array[6,ncols+1] = numinput4
             ncols = ncols +1
             
             #print final_array
@@ -175,13 +183,13 @@ class Dialog(QtGui.QDialog):
         
     def save_files(self):
 
-        files_names=[]
+        #files_names=[]
         for i in range(0, ncols):
-            files_names.append("input"+str(i)+".txt")
+            #files_names.append("input"+str(i)+".txt")
 
-            with open(files_names[i], "w") as f:
+            with open(final_array[0,i+1], "w") as f:
                 #for cols in range(1,ncols+1):
-                for row in range(0,6):
+                for row in range(1,7):
                     f.write("# " + final_array[row,0])
                     f.write("\n")
                     f.write(final_array[row,i+1])
