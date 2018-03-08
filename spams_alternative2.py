@@ -52,7 +52,7 @@ class Dialog(QtGui.QDialog):
     def new_gwindow(self):
         self.gwindow.show()
         
-#creates the buttons for the models and opens a window when you click them
+#creates the buttons for the models
     def createHorizontalGroupBox(self):
         self.horizontalGroupBox = QtGui.QGroupBox("Population dynamics")
         layout = QtGui.QHBoxLayout()
@@ -63,7 +63,7 @@ class Dialog(QtGui.QDialog):
 
         self.horizontalGroupBox.setLayout(layout)
 
-#creates grid layout with several fields to fill | creates a file with the fields' headers 
+#creates grid layout with several fields to fill 
     def createGridGroupBox(self):
         self.gridGroupBox = QtGui.QGroupBox("Options")
         layout = QtGui.QGridLayout()
@@ -124,12 +124,12 @@ class Dialog(QtGui.QDialog):
         sect_array = np.array([["File name"],["Number of loci"],["Sampling vector"],["Initial deme sizes"],["Initial migration matrix"],["Time of change"],["Deme sizes"],["Initial migration matrix"],["Time of change"],["Deme sizes"],["Initial migration matrix"],["Time of change"],["Deme sizes"],["Initial migration matrix"],["Time of change"],["Deme sizes"],["Initial migration matrix"],["Time of change"],["Deme sizes"]])
         sect_array = np.vstack(sect_array)
         total_array = np.hstack((sect_array,init_array))
-        
+        #print total_array
         return total_array
 
     @run_once
     def create_interarray(self):
-        inter_array = np.zeros((15,1),dtype=object)
+        inter_array = np.zeros((15,10),dtype=object)
         inter_array = np.vstack(inter_array)
         return inter_array
     
@@ -224,15 +224,16 @@ class Dialog(QtGui.QDialog):
                       
                 else:
                     print "empty"
-            print final_array
+            #print final_array
             ncols = ncols +1
 
             return final_array 
         
     def save_files(self):
+        
         for i in range(0, ncols):
             with open(final_array[0,i+1], "w") as f:
-                for row in range(1,21):
+                for row in range(1,20):
                     f.write("# " + final_array[row,0])
                     f.write("\n")
                     f.write(final_array[row,i+1])
