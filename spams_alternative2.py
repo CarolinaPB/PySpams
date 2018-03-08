@@ -51,11 +51,7 @@ class Dialog(QtGui.QDialog):
 
     def new_gwindow(self):
         self.gwindow.show()
-    def teste (self):
-            self.matr_btn.setChecked(False)
-    
-
-    
+        
 #creates the buttons for the models and opens a window when you click them
     def createHorizontalGroupBox(self):
         self.horizontalGroupBox = QtGui.QGroupBox("Population dynamics")
@@ -105,23 +101,13 @@ class Dialog(QtGui.QDialog):
         matr_checkbox = QtGui.QCheckBox("Add matrix", self)
         matr_checkbox.stateChanged.connect(self.new_matrix2)
         layout.addWidget(matr_checkbox, 4,0)
-
-        
-           
-                
+    
         self.matr_btn = QtGui.QPushButton("Add another matrix")
         self.matr_btn.setCheckable(True)
-        #self.matr_btn.toggle() 
-        self.matr_btn.clicked.connect(self.teste)
+        self.matr_btn.clicked.connect(self.matr_input)
         layout.addWidget(self.matr_btn,7,0)   
         
-       
-        
         self.gridGroupBox.setLayout(layout)
-       
-
-        
-    
 
     def run_once(func):
         def decorated(*args, **kwargs):
@@ -140,31 +126,33 @@ class Dialog(QtGui.QDialog):
         total_array = np.hstack((sect_array,init_array))
         
         return total_array
+
+    @run_once
+    def create_interarray(self):
+        inter_array = np.zeros((15,1),dtype=object)
+        inter_array = np.vstack(inter_array)
+        return inter_array
     
-    def teste (self):
+    
+    def matr_input (self):
             
         numinput3 = self.line4.text()
         numinput4 = self.line5.text()   
-            
-        global inter_array
-        inter_array = np.zeros((15,1),dtype=object)
-        inter_array = np.vstack(inter_array)
+                
         global no_zeros
-        no_zeros = np.count_nonzero(inter_array[:,0])
-        print inter_array
-        print no_zeros
-            
+        no_zeros = np.count_nonzero(self.create_interarray()[:,0])     
            
         if no_zeros == 0:
             global nrows
             nrows = 0
                 
-            inter_array[nrows,0] = path_open3
-            inter_array[nrows+1,0] = numinput3
-            inter_array[nrows+2,0] = numinput4
-                    
+            self.create_interarray()[nrows,0] = path_open3
+            self.create_interarray()[nrows+1,0] = numinput3
+            self.create_interarray()[nrows+2,0] = numinput4
+          
             nrows = nrows +3
-            inter_array2=inter_array
+            global inter_array2
+            inter_array2=self.create_interarray()
             return inter_array2
      
         else:
@@ -173,9 +161,8 @@ class Dialog(QtGui.QDialog):
             inter_array2[nrows+1,0] = numinput3
             inter_array2[nrows+2,0] = numinput4
             nrows = nrows+3
-            print inter_array2
             return inter_array2
-            #print inter_array
+            
     
 
     def store_input(self):
@@ -189,8 +176,8 @@ class Dialog(QtGui.QDialog):
         global nonzeros
         nonzeros = np.count_nonzero(self.create_arrays()[:,1])
         
-       
-        nrows = 4
+        
+        
         if nonzeros == 0:
             global ncols
             ncols = 0
@@ -199,15 +186,24 @@ class Dialog(QtGui.QDialog):
             self.create_arrays()[1,ncols+1] = numinput0
             self.create_arrays()[2,ncols+1] = numinput1  
             self.create_arrays()[3,ncols+1] = numinput2
-           
             
-                
+            for i in range (0,15,3):
+                n_zeros = np.count_nonzero(inter_array2[i,0])
+                if n_zeros != 0:
+                    print str(i)+"  ok"
+                       
+                    self.create_arrays()[i+4,ncols+1] = inter_array2[i,0]
+                    self.create_arrays()[i+5,ncols+1] = inter_array2[i+1,0]
+                    self.create_arrays()[i+6,ncols+1] = inter_array2[i+2,0]
+                      
+                else:
+                    print "empty"
+ 
             
             ncols = ncols +1
             global final_array
             final_array = self.create_arrays()
-            print final_array
-            
+           
             return final_array
  
         else:
@@ -216,18 +212,27 @@ class Dialog(QtGui.QDialog):
             final_array[1,ncols+1] = numinput0
             final_array[2,ncols+1] = numinput1  
             final_array[3,ncols+1] = numinput2
-            final_array[4,ncols+1] = path_open3
-            final_array[5,ncols+1] = numinput3
-            final_array[6,ncols+1] = numinput4
+
+            for i in range (0,15,3):
+                n_zeros = np.count_nonzero(inter_array2[i,0])
+                if n_zeros != 0:
+                    print str(i)+"  ok"
+                       
+                    final_array[i+4,ncols+1] = inter_array2[i,0]
+                    final_array[i+5,ncols+1] = inter_array2[i+1,0]
+                    final_array[i+6,ncols+1] = inter_array2[i+2,0]
+                      
+                else:
+                    print "empty"
+            print final_array
             ncols = ncols +1
-            
-           
+
             return final_array 
         
     def save_files(self):
         for i in range(0, ncols):
             with open(final_array[0,i+1], "w") as f:
-                for row in range(1,7):
+                for row in range(1,21):
                     f.write("# " + final_array[row,0])
                     f.write("\n")
                     f.write(final_array[row,i+1])
