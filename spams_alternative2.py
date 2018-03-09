@@ -255,15 +255,7 @@ class Dialog(QtGui.QDialog):
                         f.write("# " + final_array[row,0])
                         f.write("\n")
                         f.write(final_array[row,i+1])
-                        f.write("\n\n")
-
-      
-class Second_W(QtGui.QMainWindow):
-    def __init__(self, parent=None):
-        super(Second_W, self).__init__(parent)
-        self.setGeometry(300, 300, 350, 300)
-
-        
+                        f.write("\n\n")     
 
 class grid_window(QtGui.QMainWindow):
     def __init__(self, parent):
@@ -272,7 +264,7 @@ class grid_window(QtGui.QMainWindow):
         
         glayout=QtGui.QGridLayout()
         self.setWindowTitle("Matrix input")
-      
+        
 
 #table inside the new window created with the button_matr
         self.matrix = QtGui.QTableWidget(self)
@@ -286,11 +278,21 @@ class grid_window(QtGui.QMainWindow):
         for i in range (0,25):
             for j in range( 0, 25):
                 self.matrix.setItem(i,j,QtGui.QTableWidgetItem("0."))
-            
+        self.buttonClose = QtGui.QPushButton("Close",self)
+        self.buttonClose.clicked.connect(self.close_window)
+        self.buttonClose.move(500,600)
+
+
         self.buttonSave = QtGui.QPushButton('Save', self)
         self.buttonSave.clicked.connect(self.matrix_save)
-        self.buttonSave.move(500,600)
+        self.buttonSave.move(0,600)
+        self.buttonSave.resize(500,30)
+        
         glayout.addWidget(self.buttonSave)
+        glayout.addWidget(self.buttonClose)
+
+    def close_window(self):
+        self.close()
 
         
 
