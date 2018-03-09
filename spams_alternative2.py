@@ -1,5 +1,7 @@
 #First you need to install and configure PyQt4
-
+#To install PyQt4 on linux:
+#   >>> apt-cache search pyqt
+#   >>> sudo apt-get install python-qt4
 from PyQt4 import QtCore, QtGui
 import sys, csv
 import numpy as np
@@ -124,13 +126,16 @@ class Dialog(QtGui.QDialog):
         sect_array = np.array([["File name"],["Number of loci"],["Sampling vector"],["Initial deme sizes"],["Initial migration matrix"],["Time of change"],["Deme sizes"],["Initial migration matrix"],["Time of change"],["Deme sizes"],["Initial migration matrix"],["Time of change"],["Deme sizes"],["Initial migration matrix"],["Time of change"],["Deme sizes"],["Initial migration matrix"],["Time of change"],["Deme sizes"]])
         sect_array = np.vstack(sect_array)
         total_array = np.hstack((sect_array,init_array))
-        #print total_array
+       
         return total_array
 
     @run_once
     def create_interarray(self):
         inter_array = np.zeros((15,10),dtype=object)
         inter_array = np.vstack(inter_array)
+        global ncols2 
+        ncols2 = 0
+       
         return inter_array
     
     
@@ -141,31 +146,39 @@ class Dialog(QtGui.QDialog):
                 
         global no_zeros
         no_zeros = np.count_nonzero(self.create_interarray()[:,0])     
-           
+        
         if no_zeros == 0:
             global nrows
             nrows = 0
+            global ncols2
+            
                 
-            self.create_interarray()[nrows,0] = path_open3
-            self.create_interarray()[nrows+1,0] = numinput3
-            self.create_interarray()[nrows+2,0] = numinput4
+            self.create_interarray()[nrows,ncols2] = path_open3
+            self.create_interarray()[nrows+1,ncols2] = numinput3
+            self.create_interarray()[nrows+2,ncols2] = numinput4
           
-            nrows = nrows +3
+            nrows = nrows+3
+            
             global inter_array2
             inter_array2=self.create_interarray()
+            
             return inter_array2
      
         else:
-                        
-            inter_array2[nrows,0] = path_open3
-            inter_array2[nrows+1,0] = numinput3
-            inter_array2[nrows+2,0] = numinput4
+               
+            inter_array2[nrows,ncols2] = path_open3
+            inter_array2[nrows+1,ncols2] = numinput3
+            inter_array2[nrows+2,ncols2] = numinput4
             nrows = nrows+3
-            return inter_array2
+            
+            return inter_array2;
+      
             
     
 
     def store_input(self):
+        global ncols2
+        global nrows
         numinput0 = self.line0.text()
         numinput1 = self.line1.text()
         numinput2 = self.line2.text()
@@ -175,11 +188,10 @@ class Dialog(QtGui.QDialog):
   
         global nonzeros
         nonzeros = np.count_nonzero(self.create_arrays()[:,1])
-        
-        
-        
+
         if nonzeros == 0:
             global ncols
+            
             ncols = 0
             
             self.create_arrays()[0,ncols+1] = file_name
@@ -188,19 +200,20 @@ class Dialog(QtGui.QDialog):
             self.create_arrays()[3,ncols+1] = numinput2
             
             for i in range (0,15,3):
-                n_zeros = np.count_nonzero(inter_array2[i,0])
-                if n_zeros != 0:
-                    print str(i)+"  ok"
-                       
-                    self.create_arrays()[i+4,ncols+1] = inter_array2[i,0]
-                    self.create_arrays()[i+5,ncols+1] = inter_array2[i+1,0]
-                    self.create_arrays()[i+6,ncols+1] = inter_array2[i+2,0]
-                      
-                else:
-                    print "empty"
- 
+                for n in range (0,ncols2+1):
+                    n_zeros = np.count_nonzero(inter_array2[i,n])
+                    
+                    if n_zeros != 0:
+
+                        self.create_arrays()[i+4,ncols+1] = inter_array2[i,ncols2]
+                        self.create_arrays()[i+5,ncols+1] = inter_array2[i+1,ncols2]
+                        self.create_arrays()[i+6,ncols+1] = inter_array2[i+2,ncols2]
+
             
             ncols = ncols +1
+            ncols2 = ncols2+1
+            nrows = 0
+        
             global final_array
             final_array = self.create_arrays()
            
@@ -214,30 +227,35 @@ class Dialog(QtGui.QDialog):
             final_array[3,ncols+1] = numinput2
 
             for i in range (0,15,3):
-                n_zeros = np.count_nonzero(inter_array2[i,0])
-                if n_zeros != 0:
-                    print str(i)+"  ok"
-                       
-                    final_array[i+4,ncols+1] = inter_array2[i,0]
-                    final_array[i+5,ncols+1] = inter_array2[i+1,0]
-                    final_array[i+6,ncols+1] = inter_array2[i+2,0]
-                      
-                else:
-                    print "empty"
-            #print final_array
+                for n in range(0,ncols2+1):
+                    n_zeros = np.count_nonzero(inter_array2[i,n])
+                    
+                    if n_zeros != 0:
+                        
+                        final_array[i+4,ncols+1] = inter_array2[i,ncols2]
+                        final_array[i+5,ncols+1] = inter_array2[i+1,ncols2]
+                        final_array[i+6,ncols+1] = inter_array2[i+2,ncols2]
+
+            
             ncols = ncols +1
+            ncols2 = ncols2+1
+            nrows=0
+            
+
 
             return final_array 
         
     def save_files(self):
-        
-        for i in range(0, ncols):
-            with open(final_array[0,i+1], "w") as f:
-                for row in range(1,20):
-                    f.write("# " + final_array[row,0])
-                    f.write("\n")
-                    f.write(final_array[row,i+1])
-                    f.write("\n\n")
+        for i in range(0, ncols+1):
+            nozero_count = np.count_nonzero(final_array[:,i+1])
+            print nozero_count
+            if nozero_count != 0:
+                with open(final_array[0,i+1], "w") as f:
+                    for row in range(1,nozero_count):
+                        f.write("# " + final_array[row,0])
+                        f.write("\n")
+                        f.write(final_array[row,i+1])
+                        f.write("\n\n")
 
       
 class Second_W(QtGui.QMainWindow):
