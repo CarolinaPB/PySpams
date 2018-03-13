@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>Spams Alternative</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+  <style>
+  </style>
+	
+</head>
+
+<body>
+  <div class="container">
+
+
+    <div id="content">
+      <ul id="tabs" class="nav nav-tabs" data-tabs="tabs">
+        <li class="active"><a href="#Model1" data-toggle="tab">Admixture model</a>
+        </li>
+        <li><a href="#Model2" data-toggle="tab">One pop. size change</a>
+        </li>
+        <li><a href="#Model3" data-toggle="tab">Population structure</a>
+        </li>
+      </ul>
+    </div>
+
+    <div id="my-tab-content" class="tab-content">
+      <div class="tab-pane active" id="Model1">
+        <h1>Admixture Model</h1>
+        <p>Add fields to receive input model1</p>
+        <form action = "{{ url_for("handle_input")}}"method = "post">
+            Number of loci:
+            <input type="text" name="numloci" autofocus><br>
+            Sampling vector:
+            <input type="text" name="sampvector"><br>
+            Initial deme sizes
+            <input type="text" name="inideme"><br>
+            Initial migration matrix:
+            <input type="text" name="inimatr"><br>
+            Time of change
+            <input type="text" name="timechange"><br>
+            Deme sizes:
+            <input type="text" name="demesizes"><br>
+            <br>
+            File Name:
+            <input type = "text" name = "filename"><br><br>
+            <input type="submit" value="Save to file">
+            <input type="reset">
+        </form> 
+      </div>
+      <div class="tab-pane" id="Model2">
+        <h1>Model2</h1>
+        <p>Add fields to receive input model2</p>
+      </div>
+      <div class="tab-pane" id="Model3">
+        <h1>Model3</h1>
+        <p>Add fields to receive input model3</p>
+      </div>
+    </div>
+  </div>
+
+
+
+
+  <script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+</body>
+
+
+
+
+</html>	
