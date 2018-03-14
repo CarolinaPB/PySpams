@@ -9,16 +9,17 @@ def homepage():
     return render_template("main.html")
     
 
-@app.route('/receive_input', methods=['POST'])
+@app.route('/receive_input', methods=['POST',"GET"])
 def handle_input():
     sections = ("numloci","sampvector", "inideme","inimatr", "timechange","demesizes", "filename")
     sections_names = ("Number of loci", "Sampling Vector", "Initial deme sizes","Initial migration matrix", "Time of change", "Deme sizes")        
     data =[]
+    value = request.form[sections[3]]
+    print "value==" + str(value)
     if request.method =="POST":
         for i in range (0,7):
             data.append(request.form[sections[i]])
         print data
-    
     
     with open(request.form[sections[6]],"w") as f:
         for i in range (0,6):
