@@ -30,7 +30,7 @@
     <div id="my-tab-content" class="tab-content">
         <div class="tab-pane active" id="Model1">
             <h1>Admixture Model</h1>
-            <p>Add fields to receive input model1</p>
+            <br>
             <form action = "{{ url_for("handle_input")}}"method = "POST">
                 <div class="input-form">
                     <p>Number of loci</p>
@@ -55,7 +55,13 @@
            
                 <input class="btn btn-default"type="submit" value="Save to file">
                 <input class="btn btn-default"type="reset">
-            </form> 
+            </form> <br><br>
+            <form action="{{url_for("upload")}}" method="POST" enctype="multipart/form-data">
+                <p>Initial migration matrix<p>
+                <input type = "file" name = "file"><br>
+                <input class="btn btn-default"type="submit" value ="choose matrix">
+            </form>
+
         </div>
 
         <div class="tab-pane" id="Model2">

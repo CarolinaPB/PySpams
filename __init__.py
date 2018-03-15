@@ -1,5 +1,7 @@
 from flask import Flask, render_template, request
 import numpy as np
+from werkzeug import secure_filename
+import os
 
 
 app = Flask(__name__)
@@ -7,6 +9,17 @@ app = Flask(__name__)
 @app.route('/')
 def homepage():
     return render_template("main.html")
+UPLOAD_FOLDER = 'uploads/'
+app.config["UPLOADFOLDER"] = UPLOAD_FOLDER
+
+@app.route("/", methods = ["GET", "POST"])
+def upload():
+    if request.method =="POST":
+        file = request.files["file"]
+        if file:
+            filename = secure_filename(file.filename)
+            file.save(os.path.join(UPLOAD_FOLDER, filename))
+    return "matrix saved"
     
 
 @app.route('/receive_input', methods=['POST',"GET"])
