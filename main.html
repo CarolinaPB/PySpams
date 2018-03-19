@@ -7,77 +7,43 @@
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
 </head>
 
+
 <body>
-    <div class="container-fluid">
+	<div class="container-fluid">
 
 
-    <div id="content">
-        <ul id="tabs" class="nav nav-tabs" data-tabs="tabs">
-            <li class="active"><a href="#Model1" data-toggle="tab">Admixture model</a>
-            </li>
-            <li><a href="#Model2" data-toggle="tab">One pop. size change</a>
-            </li>
-            <li><a href="#Model3" data-toggle="tab">Population structure</a>
-            </li>
-        </ul>
+		 <div id="content">
+				 <ul id="tabs" class="nav nav-tabs" data-tabs="tabs">
+						 <li class="active"><a href="#Model1" data-toggle="tab">Admixture model</a>
+						 </li>
+						 <li><a href="#Model2" data-toggle="tab">One pop. size change</a>
+						 </li>
+						 <li><a href="#Model3" data-toggle="tab">Population structure</a>
+						 </li>
+				 </ul>
+		 </div>
+
+ 	 	 <div id="my-tab-content" class="tab-content">
+		 		<div class="tab-pane active" id="Model1">
+				    {% include "/model1_form.html" %}
+						{% block body %} {% endblock %}
+				</div>
+
+		<div class="tab-pane" id="Model2">
+              <h1>Model2</h1>
+              <p>Add fields to receive input model2</p>
     </div>
-
-    <div id="my-tab-content" class="tab-content">
-        <div class="tab-pane active" id="Model1">
-            <h1>Admixture Model</h1>
-            <br>
-            <form action = "{{ url_for("handle_input")}}"method = "POST">
-                <div class="input-form">
-                    <p>Number of loci</p>
-                    <input type="text" class="form-control" name="numloci" focus><br>
-                    <p>Sampling vector</p>
-                    <input type="text" class="form-control" name="sampvector"><br>
-                    <p>Initial deme sizes</p>
-                    <input type="text" class="form-control" name="inideme"><br>
-                    <p>Initial migration matrix</p>
-                    <input type=file name="file"><br>
-                    <p>Time of change</p>
-                    <input type="text" class="form-control" name="timechange"><br>
-                    <p>Deme sizes</p>
-                    <input type="text" class="form-control" name="demesizes">
-                    <br><br>
-                    <p><b>File Name</b></p>
-                    <input type="text" class="form-control" name="filename2">
-                    <br><br>
-                    
-                    
-                </div>
-           
-                <input class="btn btn-default"type="submit" value="Save to file">
-                <input class="btn btn-default"type="reset">
-            </form> <br><br>
-            <form action="{{url_for("upload")}}" method="POST" enctype="multipart/form-data">
-                <p>Initial migration matrix<p>
-                <input type = "file" name = "file"><br>
-                <input class="btn btn-default"type="submit" value ="choose matrix">
-            </form>
-
-        </div>
-
-        <div class="tab-pane" id="Model2">
-            <h1>Model2</h1>
-            <p>Add fields to receive input model2</p>
-        </div>
-        <div class="tab-pane" id="Model3">
-            <h1>Model3</h1>
-            <p>Add fields to receive input model3</p>
-        </div>
+    <div class="tab-pane" id="Model3">
+              <h1>Model3</h1>
+              <p>Add fields to receive input model3</p>
     </div>
-    </div>
+  </div>
+</div>
 
-
-
-    
-    <script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 </body>
 
 
 
 
-</html>	
+</html>
