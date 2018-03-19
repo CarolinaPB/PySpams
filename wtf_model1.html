@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+</head>
+
+<body>
+	<div class="container-fluid">
+<h1>Admixture Model</h1>
+  <br>
+    <form method = "post" action ="{{url_for("test_funct")}}">
+      {{form.csrf_token}}
+      {{form.numloci.label}}<br>
+      {{form.numloci}}<br>
+      {{form.sampvector.label}}<br>
+      {{form.sampvector}}<br>
+      {{form.inideme.label}}<br>
+      {{form.inideme}}<br>
+      {{form.inimatr.label}}<br>
+      {{form.inimatr}}<br>
+      {{form.timechange.label}}<br>
+      {{form.timechange}}<br>
+      {{form.demesizes.label}}<br>
+      {{form.demesizes}}<br>
+      <input type="submit" value="submit">
+    </form>
+
+    <script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+  </body>
+</div>

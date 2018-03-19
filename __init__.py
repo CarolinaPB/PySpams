@@ -2,6 +2,8 @@ from flask import Flask, render_template, request
 import numpy as np
 from werkzeug import secure_filename
 import os, sys, tempfile
+from flask_wtf import FlaskForm
+from wtforms import StringField, BooleanField
 
 
 reload(sys)
@@ -9,23 +11,40 @@ sys.setdefaultencoding('utf-8')
 
 
 app = Flask(__name__)
+app.config["SECRET_KEY"] = "verysecret"
+
+class form1(FlaskForm):
+    #checkbox = BooleanField("checkbox")
+    numloci = StringField("Number of loci")
+    sampvector =StringField("Sampling vector")
+    inideme = StringField("Initial deme sizes")
+    inimatr = StringField("Initial migration matrix")
+    timechange = StringField("Time of change")
+    demesizes = StringField("Deme sizes")
+
 
 @app.route('/')
 def homepage():
     return render_template("main.html")
 
-
-
 UPLOAD_FOLDER = 'uploads/'
 app.config["UPLOADFOLDER"] = UPLOAD_FOLDER
 
+@app.route("/test/", methods=["GET", "POST"])
+def test_funct():
+    form = form1()
 
-@app.route('/receive_input', methods=['POST',"GET"])
+    if form.validate_on_submit():
+        return "<h1> Number of loci is {} and sampling vector is {}.".format(form.numloci.data, form.sampvector.data)
+    return render_template("wtf_model1.html", form=form)
+
+
+
+@app.route('/', methods=['POST',"GET"])
 def handle_input():
     if request.method =="POST":
         file = request.files["file"]
         if file:
-            #global filename
             filename = secure_filename(file.filename)
             print filename
             file.save(os.path.join(UPLOAD_FOLDER, filename))
@@ -53,7 +72,7 @@ def handle_input():
         for i in range(0,6):
             f.write("# " + total_array[i,0])
             f.write("\n")
-            f.write("# " + str(total_array[i,1])+"\n")
+            f.write(str(total_array[i,1])+"\n")
             f.write("\n")
 
     os.remove(file_path)
