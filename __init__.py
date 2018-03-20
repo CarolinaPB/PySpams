@@ -3,25 +3,26 @@ import numpy as np
 from werkzeug import secure_filename
 import os, sys, tempfile
 from flask_wtf import FlaskForm
-from wtforms import StringField, BooleanField
+from wtforms import StringField, SubmitField
 
 
 reload(sys)
 sys.setdefaultencoding('utf-8')
 
-
 app = Flask(__name__)
 app.config["SECRET_KEY"] = "verysecret"
 
+#for wtform#
 class form1(FlaskForm):
-    #checkbox = BooleanField("checkbox")
     numloci = StringField("Number of loci")
     sampvector =StringField("Sampling vector")
     inideme = StringField("Initial deme sizes")
     inimatr = StringField("Initial migration matrix")
     timechange = StringField("Time of change")
     demesizes = StringField("Deme sizes")
-
+    filename2 = StringField("File name")
+    submit = SubmitField("Submit")
+####
 
 @app.route('/')
 def homepage():
@@ -30,14 +31,16 @@ def homepage():
 UPLOAD_FOLDER = 'uploads/'
 app.config["UPLOADFOLDER"] = UPLOAD_FOLDER
 
+
+#for wtform#
 @app.route("/test/", methods=["GET", "POST"])
 def test_funct():
     form = form1()
 
     if form.validate_on_submit():
-        return "<h1> Number of loci is {} and sampling vector is {}.".format(form.numloci.data, form.sampvector.data)
+        return "Your input was saved in {}".format(form.filename2.data)
     return render_template("wtf_model1.html", form=form)
-
+####
 
 
 @app.route('/', methods=['POST',"GET"])
