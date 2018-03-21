@@ -1,31 +1,69 @@
 <div>
 <h1>Admixture Model</h1>
   <br>
-  <form action = "{{ url_for("handle_input") }}"method = "POST" enctype="multipart/form-data">
-    <div class="input-form", id="items">
-      <p>Number of loci</p>
-      <input type="text" class="form-control" name="numloci" focus><br>
-      <p>Sampling vector</p>
-      <input type="text" class="form-control" name="sampvector"><br>
-      <p>Initial deme sizes</p>
-      <input type="text" class="form-control" name="inideme"><br>
-      <p>Initial migration matrix</p>
-      <input type=file name="file"><br>
-      <p>Time of change</p>
-      <input type="text" class="form-control" name="timechange"><br>
-      <p>Deme sizes</p>
-      <input type="text" class="form-control" name="demesizes">
-      <br><br>
-      <p><b>File Name</b></p>
-      <input type="text" class="form-control" name="filename2">
-      <br><br>
+  <form class = "input-form__form" action = "{{ url_for("handle_input") }}"method = "POST" enctype="multipart/form-data">
+    <div class="input-form__form-wrapper">
+      <fieldset class="input-form__fs">
+        <div class="input-form__control-wrapper">
+          <label class="input-form__label">
+              <span class="input-form__label-text">Number of loci</span><br>
+              <input class="input-form__input" name="numloci" type="text"/> <br>
+          </label><br>
+          <label class="input-form__label">
+              <span class="input-form__label-text">Sampling vector</span><br>
+              <input class="input-form__input" name="sampvector" type="text"/><br>
+          </label><br>
+          <label class="input-form__label">
+              <span class="input-form__label-text">Initial deme sizes</span><br>
+              <input class="input-form__input" name="inideme" type="text"/><br>
+          </label><br>
+        </div>
+      </fieldset>
+      <hr>
+      <fieldset class="input-form__fs">
+        <div class="input-form__control-wrapper"data-ac-repeater data-ac-repeater-text="Add matr">
+          <label class="input-form__label">
+              <span class="input-form__label-text">Initial migration matrix</span>
+              <input class="input-form__input" type=file name="file"/><br>
+          </label><br>
+          <label class="input-form__label">
+              <span class="input-form__label-text">Time of change</span><br>
+              <input class="input-form__input" name="timechange" type="text"/>
+          </label><br>
+          <label class="input-form__label">
+              <span class="input-form__label-text">Deme sizes</span><br>
+              <input class="input-form__input" name="demesizes" type="text"/>
+          </label><br>
+        </div>
+      </fieldset>
+      <hr>
+      <fieldset class="input-form__fs">
+        <div class="input-form__control-wrapper">
+          <label class="input-form__label">
+              <span class="input-form__label-text">File name</span>
+              <input class="input-form__input" type="text" name="filename2"/><br>
+          </label><br>
+        </div>
+      </fieldset>
+
+      <input class="input-form__submit" name="submit" type="submit" value="Save to file" />
     </div>
-    <input type="button" value = "Add matrix" id="newmatr">
-    <input class="btn btn-default"type="submit" value="Save to file">
-    <input class="btn btn-default"type="reset">
-  </form> <br><br>
+
+  </form>
 
 </div>
-      <script scr="js/custom.js"></script>
+
+      <script scr= "{{url_for("static", filename="js/jquery.ac-form-field-repeater.js")}}"></script>
       <script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
-      <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+      <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js" ></script>
+
+
+
+      <script src="https://code.jquery.com/jquery-1.12.0.min.js"></script>
+      <script>window.jQuery || document.write('<script src="js/vendor/jquery-1.12.0.min.js"><\/script>')</script>
+
+      <script type='text/javascript' src='http://formfieldrepeater.com/wp-content/plugins/contact-form-7/includes/js/scripts.js?ver=4.9.1'></script>
+      <script type='text/javascript' src='http://formfieldrepeater.com/wp-content/themes/ac_timber/assets/js/jquery.ac-form-field-repeater.js?ver=1.1'></script>
+      <script type='text/javascript' src='http://formfieldrepeater.com/cms/wp-includes/js/wp-embed.min.js?ver=4.8.5'></script>
+
+      <script src="http://formfieldrepeater.com/wp-content/themes/ac_timber/dist/js/main.js?v=20160315"></script>

@@ -12,6 +12,8 @@ sys.setdefaultencoding('utf-8')
 app = Flask(__name__)
 app.config["SECRET_KEY"] = "verysecret"
 
+
+
 #for wtform#
 class form1(FlaskForm):
     numloci = StringField("Number of loci")
@@ -44,7 +46,6 @@ def test_funct():
 
 
 @app.route('/', methods=['POST',"GET"])
-def handle_input():
     if request.method =="POST":
         file = request.files["file"]
         if file:
@@ -52,16 +53,16 @@ def handle_input():
             print filename
             file.save(os.path.join(UPLOAD_FOLDER, filename))
 
-    sections = ("numloci","sampvector", "inideme","inideme", "timechange","demesizes", "filename2")
-    sections_array =np.array([["Number of loci"],["Sampling vector"],["Initial deme sizes"],["Initial migration matrix"],["Time of change"],["Deme sizes"], ["File name"]])
+    sections = ("filename2","numloci","sampvector", "inideme","inideme", "timechange","demesizes")
+    sections_array =np.array([["File name"],["Number of loci"],["Sampling vector"],["Initial deme sizes"],["Initial migration matrix"],["Time of change"],["Deme sizes"],["Initial migration matrix"],["Time of change"],["Deme sizes"],["Initial migration matrix"],["Time of change"],["Deme sizes"],["Initial migration matrix"],["Time of change"],["Deme sizes"]])
 
-    init_array = np.zeros((7,1), dtype=object)
+    init_array = np.zeros((16,1), dtype=object)
     total_array = np.hstack((sections_array,init_array))
 
 
-    for i in range (0,3):
+    for i in range (0,4):
         total_array[i,1]=request.form[sections[i]]
-    for i in range (4,6):
+    for i in range (5,7):
         total_array[i,1]=request.form[sections[i]]
 
     file_path = ("/home/carolina/flask_app/flask_app/uploads/" + str(filename))
@@ -69,10 +70,11 @@ def handle_input():
     filehandle=filehandle.read()
     filehandle=filehandle.replace(","," ")
 
-    total_array[3,1] = filehandle
+    total_array[4,1] = filehandle
+    print total_array
 
-    with open(request.form[sections[6]],"w") as f:
-        for i in range(0,6):
+    with open(request.form[sections[0]],"w") as f:
+        for i in range(1,7):
             f.write("# " + total_array[i,0])
             f.write("\n")
             f.write(str(total_array[i,1])+"\n")
