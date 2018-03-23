@@ -1,6 +1,7 @@
 <head lang="en">
   <meta charset="UTF-8">
   <link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/1.0.14/vue.js"></script>
   <style>
 
     form{
@@ -35,97 +36,65 @@
 
 </head>
 
-<h1>Admixture Model</h1>
-  <br>
-  <form class = "input-form__form" action = "{{ url_for("handle_input2") }}"method = "POST" enctype="multipart/form-data">
-    <div class="input-form__form-wrapper">
-      <fieldset class="input-form__fs">
-        <div class="input-form__control-wrapper">
-          <label class="input-form__label">
-              <span class="input-form__label-text">Number of loci</span><br>
-              <input class="input-form__input" name="numloci" type="text"/> <br>
-          </label><br>
-          <label class="input-form__label">
-              <span class="input-form__label-text">Sampling vector</span><br>
-              <input class="input-form__input" name="sampvector" type="text"/><br>
-          </label><br>
-          <label class="input-form__label">
-              <span class="input-form__label-text">Initial deme sizes</span><br>
-              <input class="input-form__input" name="inideme" type="text"/><br>
-          </label><br>
-        </div>
-      </fieldset>
-      <hr>
-      <fieldset class="input-form__fs">
-        <div id="repeatfields>"
-        <div class="input-form__control-wrapper" v-for="field in fields">
-          <label class="input-form__label">
-              <span class="input-form__label-text">Initial migration matrix</span>
-              <input class="input-form__input" type="file" name="file" v-model="field.file"/><br>
-          </label><br>
-          <label class="input-form__label">
-              <span class="input-form__label-text">Time of change</span><br>
-              <input class="input-form__input" name="timechange" type="text" v-model="field.timechange"/>
-          </label><br>
-          <label class="input-form__label">
-              <span class="input-form__label-text">Deme sizes</span><br>
-              <input class="input-form__input" name="demesizes" type="text"/>
-          </label><br>
-
-        </div>
-        <button @click="AddField">
-          New Field
-        </button>
-        <pre>{{ $data | json }}</pre>
-      </div>
-
-
-      </fieldset>
-      <hr>
-      <fieldset class="input-form__fs">
-        <div class="input-form__control-wrapper">
-          <label class="input-form__label">
-              <span class="input-form__label-text">File name</span>
-              <input class="input-form__input" type="text" name="filename2"/><br>
-          </label><br>
-        </div>
-      </fieldset>
-
-      <input class="input-form__submit" name="submit" type="submit" value="Save to file" />
+<div id="repeatfields">
+  <h1>Admixture model</h1>
+  <form action="{{url_for("handle_input2")}}" method="POST" enctype="multipart/form-data">
+    <div class="border">
+      <label>
+          <span >Number of loci</span><br>
+          <input name="field.numloci"/> <br>
+      </label><br>
+      <label>
+          <span >Sampling vector</span><br>
+          <input name="field.sampvector"/> <br>
+      </label><br>
+      <label>
+          <span >Initial deme sizes</span><br>
+          <input name="field.demesizes"/> <br>
+      </label><br>
     </div>
 
+    </form>
+    <form>
+    <div class="border" v-for="field in fields">
+      <label>
+          <span >Initial migration matrix</span><br>
+          <input name="file" type="file"/> <br>
+      </label><br>
+      <label>
+          <span >Time of change</span><br>
+          <input v-model="field.timechange"/> <br>
+      </label><br>
+      <label>
+          <span >Deme sizes</span><br>
+          <input v-model="field.demesizes"/> <br>
+      </label><br>
+    </div>
   </form>
 
-<script>
- new Vue({
- el: '#repeatfields',
- data: {
-   fields: [{ file: '',timechange: '' }],
- },
- created: function() {
- },
- methods: {
-   AddField: function () {
-     this.fields.push({ file: '',timechange: '' });
-   }
- }
- });
- </script>
+  <button @click="AddField">
+    New matrix
+  </button>
+
 </div>
+   
 
+<script>
+new Vue({
+  el: '#repeatfields',
+  data: {
+    fields: [{ timechange:'', demesizes:'' }],
+  },
+  created: function() {
+  },
+  methods: {
+    AddField: function () {
+      this.fields.push({ timechange: '',demesizes: ''});
+    }
+  }
+});
+</script>
 
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/vue/1.0.14/vue.js"></script>
-
-      <!--<script scr= "{{url_for("static", filename="js/jquery.ac-form-field-repeater.js")}}"></script>-->
       <script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
-      <!--<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js" ></script>-->
 
-
-     <!-- <script>window.jQuery || document.write('<script src="js/vendor/jquery-1.12.0.min.js"><\/script>')</script>-->
-
-      <!--<script type='text/javascript' src='http://formfieldrepeater.com/wp-content/plugins/contact-form-7/includes/js/scripts.js?ver=4.9.1'></script>-->
       <script type='text/javascript' src='http://formfieldrepeater.com/wp-content/themes/ac_timber/assets/js/jquery.ac-form-field-repeater.js?ver=1.1'></script>
-      <!--<script type='text/javascript' src='http://formfieldrepeater.com/cms/wp-includes/js/wp-embed.min.js?ver=4.8.5'></script>-->
-
-    <!--<script src="http://formfieldrepeater.com/wp-content/themes/ac_timber/dist/js/main.js?v=20160315"></script>-->
