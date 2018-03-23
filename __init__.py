@@ -44,9 +44,18 @@ def test_funct():
     return render_template("wtf_model1.html", form=form)
 ####
 
+@app.route('/',methods=['POST',"GET"])
+def handle_input3():
+    form_1=np.zeros((4,1), dtype="object")
+    form_1[0,0]=request.form["filename"]
+    form_1[1,0]=request.form["numloci"]
+    form_1[2,0]=request.form["sampvector"]
+    form_1[3,0]=request.form["inideme"]
+    print form_1
+    return "ok"
+
 @app.route('/tes', methods=['POST',"GET"])
 def handle_input2():
-    #return "ok"
     if request.method =="POST":
         file = request.files["file"]
         if file:
