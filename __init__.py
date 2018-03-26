@@ -13,19 +13,6 @@ app = Flask(__name__)
 app.config["SECRET_KEY"] = "verysecret"
 
 
-
-#for wtform#
-class form1(FlaskForm):
-    numloci = StringField("Number of loci")
-    sampvector =StringField("Sampling vector")
-    inideme = StringField("Initial deme sizes")
-    inimatr = StringField("Initial migration matrix")
-    timechange = StringField("Time of change")
-    demesizes = StringField("Deme sizes")
-    filename2 = StringField("File name")
-    submit = SubmitField("Submit")
-####
-
 @app.route('/')
 def homepage():
     return render_template("main.html")
@@ -34,24 +21,14 @@ UPLOAD_FOLDER = 'uploads/'
 app.config["UPLOADFOLDER"] = UPLOAD_FOLDER
 
 
-#for wtform#
-@app.route("/test/", methods=["GET", "POST"])
-def test_funct():
-    form = form1()
-
-    if form.validate_on_submit():
-        return "Your input was saved in {}".format(form.filename2.data)
-    return render_template("wtf_model1.html", form=form)
-####
-
 @app.route('/',methods=['POST',"GET"])
 def handle_input3():
-    form_1=np.zeros((4,1), dtype="object")
-    form_1[0,0]=request.form["filename"]
-    form_1[1,0]=request.form["numloci"]
-    form_1[2,0]=request.form["sampvector"]
-    form_1[3,0]=request.form["inideme"]
-    print form_1
+ #   form_1=np.zeros((4,1), dtype="object")
+  #  form_1[0,0]=request.form["filename"]
+   # form_1[1,0]=request.form["numloci"]
+    #form_1[2,0]=request.form["sampvector"]
+    #form_1[3,0]=request.form["inideme"]
+    #print form_1
     return "ok"
 
 @app.route('/tes', methods=['POST',"GET"])

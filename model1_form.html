@@ -1,6 +1,7 @@
 <head lang="en">
   <meta charset="UTF-8">
   <link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/1.0.14/vue.js"></script>
   <style>
 
@@ -35,6 +36,7 @@
 
 <div id="repeatfields">
   <h1>Admixture model</h1>
+
   <form action="{{url_for("handle_input3")}}" method="POST" enctype="multipart/form-data">
     <div class="border">
       <label id="filename_field">
@@ -55,54 +57,48 @@
           <input name="inideme" type="text"/> <br>
       </label><br>
 
-    </div>
-
-    </form>
-    <form method="POST" enctype="multipart/form-data">
-    <div class="border" v-for="field in fields">
+      <div class="fields_to_repeat">
       <label>
           <span >Initial migration matrix</span><br>
           <input name="file" type="file"/> <br>
       </label><br>
       <label>
           <span >Time of change</span><br>
-          <input v-model="field.timechange"/> <br>
+          <input name="timechange" type="text"/> <br>
       </label><br>
       <label>
           <span >Deme sizes</span><br>
-          <input v-model="field.demesizes"/> <br>
+          <input name="demesizes" type="text"/> <br>
       </label><br>
+      <button type="button"class="btn_repeat" id="btn_repeat">Add matrix</button>
+    </div>
 
+
+
+      <div class="hidden_fields1">
+        <br><br>
+        <label>
+            <span >Initial migration matrix</span><br>
+            <input name="file2" type="file"/> <br>
+        </label><br>
+        <label>
+            <span >Time of change</span><br>
+            <input name="timechange2" type="text"/> <br>
+        </label><br>
+        <label>
+            <span >Deme sizes</span><br>
+            <input name="demesizes2" type="text"/> <br>
+        </label><br>
+        <button type="button"class="btn_repeat" id="btn_repeat">Add matrix</button>
+      </div>
 
     </div>
   </form>
-  <button @click="AddField">
-    New matrix
-  </button>
-
-  <br><br>
-  <!--<form action="{{url_for("handle_input3")}}" method="POST">
-    <button id="btn">Save to file</button>
-  </form>-->
 </div>
+<footer>
+  <br><br>
+</footer>
 
 
-<script>
-new Vue({
-  el: '#repeatfields',
-  data: {
-    fields: [{ timechange:'', demesizes:'' }],
-  },
-  created: function() {
-  },
-  methods: {
-    AddField: function () {
-      this.fields.push({ timechange: '',demesizes: ''});
-    }
-  }
-});
-</script>
 
-      <script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
-
-      <script type='text/javascript' src='http://formfieldrepeater.com/wp-content/themes/ac_timber/assets/js/jquery.ac-form-field-repeater.js?ver=1.1'></script>
+<script type="text/javascript" src="static/js/new_matrjs.js"></script>
