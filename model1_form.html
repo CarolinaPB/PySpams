@@ -2,10 +2,8 @@
   <meta charset="UTF-8">
   <link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/1.0.14/vue.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/vue/1.0.14/vue.js"></script>
   <style>
-
-
     span {
       display: block;
       margin: 3px 0;
@@ -27,9 +25,6 @@
       margin: 10px 0;
       padding: 10px 40px;
     }
-
-
-
   </style>
 
 </head>
@@ -57,7 +52,7 @@
           <input name="inideme" type="text"/> <br>
       </label><br>
 
-      <div class="fields_to_repeat">
+      <div class="fields_to_repeat" id="fields_to_repeat">
       <label>
           <span >Initial migration matrix</span><br>
           <input name="file" type="file"/> <br>
@@ -70,35 +65,16 @@
           <span >Deme sizes</span><br>
           <input name="demesizes" type="text"/> <br>
       </label><br>
-      <button type="button"class="btn_repeat" id="btn_repeat">Add matrix</button>
-    </div>
+      <button type="button"class="btn_repeat" id="btn_repeat">Add matrix</button> <br><br>
 
-
-
-      <div class="hidden_fields1">
-        <br><br>
-        <label>
-            <span >Initial migration matrix</span><br>
-            <input name="file2" type="file"/> <br>
-        </label><br>
-        <label>
-            <span >Time of change</span><br>
-            <input name="timechange2" type="text"/> <br>
-        </label><br>
-        <label>
-            <span >Deme sizes</span><br>
-            <input name="demesizes2" type="text"/> <br>
-        </label><br>
-        <button type="button"class="btn_repeat" id="btn_repeat">Add matrix</button>
       </div>
 
-    </div>
+     </div>
   </form>
 </div>
 <footer>
   <br><br>
 </footer>
 
-
-
+<script src="static/js/jquery-3.3.1.min.js"></script>
 <script type="text/javascript" src="static/js/new_matrjs.js"></script>
