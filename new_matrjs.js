@@ -1,13 +1,20 @@
 section_names=["file", "timechange", "demesizes"]
 sections_label=["Initial migration matrix","Time of change","Deme sizes"]
-var nmatr=0;
+
 $(document).ready(function(){
   $("#btn_repeat").click(function(){
 
-    function nmatr_counter(){
-      nmatr=nmatr+1;
-      alert(nmatr);
-    }
+    //function clickCounter() {
+      //  if(typeof(Storage) !== "undefined") {
+        //    if (localStorage.clickcount) {
+          //      localStorage.clickcount = Number(localStorage.clickcount)+1;
+           // } else {
+             //   localStorage.clickcount = 1;
+            //}
+        //}
+    //}
+    //console.log(localStorage.clickcount);
+
     for (i=0;i<section_names.length; i++) {
 
       //create labels
