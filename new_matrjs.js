@@ -12,10 +12,6 @@ $(document).ready(function(){
   $("#btn_repeat").click(function(){
     console.log("count is "+count)
 
-    //for (var i in count){
-      //console.log("count  "+i);
-   // }
-
     //create labels
     var makelabel = document.createElement("label");
 
@@ -34,15 +30,15 @@ $(document).ready(function(){
     var makeinput_file = document.createElement("input");
     makeinput_file.className="fields_to_repeat";
     makeinput_file.setAttribute("class", "fields_to_repeat")
-    makeinput_file.setAttribute("id", section_names[0])+count;
-    makeinput_file.setAttribute("name", section_names[0])+count;
+    makeinput_file.setAttribute("id", section_names[0]+count);
+    makeinput_file.setAttribute("name", section_names[0]+count);
     makeinput_file.setAttribute("type", "file");
 
     //create input elements type="text"
     var makeinput1 = document.createElement("input");
     makeinput1.className="fields_to_repeat";
     makeinput1.setAttribute("class", "fields_to_repeat");
-    makeinput1.setAttribute("id", section_names[1])+count;
+    makeinput1.setAttribute("id", section_names[1]+count);
     makeinput1.setAttribute("name", section_names[1]+count);
     makeinput1.setAttribute("type", "text");
     makeinput1.setAttribute("placeholder", section_names[1]+count);

@@ -36,39 +36,37 @@
     <div class="border">
       <label>
           <span >Number of loci</span><br>
-          <input name="numloci" type="text"/> <br>
+          <input id="numloci0" name="numloci" type="text"/> <br>
       </label><br>
       <label>
           <span >Sampling vector</span><br>
-          <input name="sampvector" type="text"/> <br>
+          <input id="sampvector0" name="sampvector" type="text"/> <br>
       </label><br>
       <label>
           <span >Initial deme sizes</span><br>
-          <input name="inideme" type="text"/> <br>
+          <input id="inideme0" name="inideme" type="text"/> <br>
       </label><br>
 
       <div class="fields_to_repeat" id="fields_to_repeat">
-      <label>
-          <span >Initial migration matrix</span><br>
-          <input name="file" type="file"/> <br>
-      </label><br>
-      <label>
-          <span >Time of change</span><br>
-          <input name="timechange" type="text"/> <br>
-      </label><br>
-      <label>
-          <span >Deme sizes</span><br>
-          <input name="demesizes" type="text"/> <br>
-      </label><br>
-
-
+        <label>
+            <span >Initial migration matrix</span><br>
+            <input id="file0"name="file" type="file"/> <br>
+        </label><br>
+        <label>
+            <span >Time of change</span><br>
+            <input id="timechange0"name="timechange" type="text"/> <br>
+        </label><br>
+        <label>
+            <span >Deme sizes</span><br>
+            <input id="demesizes0"name="demesizes" type="text"/> <br>
+        </label><br>
 
       </div>
       <br><br>
       <button type="button"class="btn_repeat" id="btn_repeat">Add matrix</button> <br><br>
       <label id="filename_field">
           <span >File name</span>
-          <input name="filename" type="text"/> <br>
+          <input id="filename" name="filename" type="text"/> <br>
       </label><br>
       <button id="btn">Save to file</button><br><br><br>
 
