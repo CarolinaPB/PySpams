@@ -63,12 +63,14 @@
 
       </div>
       <br><br>
-      <button type="button"class="btn_repeat" id="btn_repeat">Add matrix</button> <br><br>
+      <button action="{{url_for("my_counter")}}type="button"class="btn_repeat" id="btn_repeat" value="btn_repeat" name ="btn_repeat">Add matrix</button> <br><br>
+
       <label id="filename_field">
           <span >File name</span>
           <input id="filename" name="filename" type="text"/> <br>
       </label><br>
-      <button id="btn">Save to file</button><br><br><br>
+
+      <input type="button" id="btn" value="Save to file" name="submit button"><br><br><br>
 
      </div>
   </form>

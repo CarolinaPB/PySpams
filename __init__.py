@@ -2,6 +2,7 @@ from flask import Flask, render_template, request
 import numpy as np
 from werkzeug import secure_filename
 import os, sys, tempfile
+
 #from flask_wtf import FlaskForm
 #from wtforms import StringField, SubmitField
 
@@ -20,10 +21,38 @@ def homepage():
 UPLOAD_FOLDER = 'uploads/'
 app.config["UPLOADFOLDER"] = UPLOAD_FOLDER
 
+global count
+count = 0
 
+
+def counter ():
+    global count
+    count += 1
+    print "count is " + str(count)
+    return ('', 204)
+    #return str(count)
+
+@app.route("/", methods=["POST", "GET"])
+def my_counter():
+    #for key in request.form:
+     #   if key.startswith('btn_'):
+      #      id_ = key.partition('_')[-1]
+       #     value = request.form[key]
+            #print value
+    #if value == "btn_repeat":
+     #   counter()
+      #  test="my_counter = " + str(count)
+       # counter_num=str(count)
+        #print test
+        counter()
+        test = str(count)
+        print test
+        return ('', 204)
+        #return test
+    #else:
+     #   return "not working"
 @app.route('/',methods=['POST',"GET"])
 def handle_input3():
-
     # if count = number of clicks ont the add matrix button
     #for i in range(0,count):
         #if request.method =="POST":
