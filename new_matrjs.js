@@ -44,7 +44,7 @@ $(document).ready(function(){
     makeinput1.setAttribute("id", section_names[1]+count);
     makeinput1.setAttribute("name", section_names[1]+count);
     makeinput1.setAttribute("type", "text");
-    makeinput1.setAttribute("placeholder", section_names[1]+count);
+    //makeinput1.setAttribute("placeholder", section_names[1]+count);
 
     var makeinput2 = document.createElement("input");
     makeinput2.className="fields_to_repeat";
@@ -52,7 +52,7 @@ $(document).ready(function(){
     makeinput2.setAttribute("id", section_names[2]+count);
     makeinput2.setAttribute("name", section_names[2]+count);
     makeinput2.setAttribute("type", "text");
-    makeinput2.setAttribute("placeholder", section_names[2]+count);
+    //makeinput2.setAttribute("placeholder", section_names[2]+count);
 
     //create line break
     var br = document.createElement("br");
@@ -68,14 +68,6 @@ $(document).ready(function(){
     makelabel.appendChild(makeinput2);
 
     $("#fields_to_repeat").append(makelabel);
-
-
-    var counter = document.createElement("input");
-    counter.setAttribute("type", "hidden");
-    counter.setAttribute("name", "count");
-    counter.setAttribute("id", "count");
-    counter.setAttribute("value", count)
-    $("#btn").append(counter);
 
   });
 

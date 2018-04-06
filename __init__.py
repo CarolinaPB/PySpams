@@ -32,49 +32,73 @@ def counter ():
     return ('', 204)
     #return str(count)
 
-@app.route("/", methods=["POST", "GET"])
-def my_counter():
-    #for key in request.form:
-     #   if key.startswith('btn_'):
-      #      id_ = key.partition('_')[-1]
-       #     value = request.form[key]
-            #print value
-    #if value == "btn_repeat":
-     #   counter()
-      #  test="my_counter = " + str(count)
-       # counter_num=str(count)
-        #print test
+@app.route("/", methods=["POST"])
+def handle_input():
+    if request.form["button"] == "Add matrix":
+    #creates a counter for the "add matrix" button
         counter()
-        test = str(count)
-        print test
-        return ('', 204)
-        #return test
-    #else:
-     #   return "not working"
-@app.route('/',methods=['POST',"GET"])
-def handle_input3():
-    # if count = number of clicks ont the add matrix button
-    #for i in range(0,count):
-        #if request.method =="POST":
-         #   file = request.files["file"+i]
-          #  if file:
-           #     filename = secure_filename(file.filename)
-            #    print filename
-             #   file.save(os.path.join(UPLOAD_FOLDER, filename))
-    sections = ("filename","numloci","sampvector", "inideme","file", "timechange","demesizes")
-    part_sections_arr=("Initial migration matrix", "Time of change", "Deme sizes")
-    sections_array = np.array([["File name"],["Number of loci"],["Sampling vector"],["Initial deme sizes"],["Initial migration matrix"],["Time of change"],["Deme sizes"]])
-    #sections_array2= np.append(sections_array,count*part_sections_arr)
-    #print sections_array2
+        print count
+        return (str(count), 204)
+    elif request.form["button"] == "Save to file":
+    #will save info to a file
+        #print "test "+str(count)
+        files_to_open = []
+        #print count
+        for i in range(count+1):
+            files_to_open.append("file" + str(i))
+            #print files_to_open[i]
+            if request.method =="POST":
+                #file = request.files["file" +str(i)]
+                print "need to add the save matrix process"
 
-    #init_array = np.zeros((6+3*count), dtype=object)
-    #total_array = np.hstack((sections_array, init_array))
+             #   if i == 0:
+              #      print type(files_to_open)
+               #     file = request.files[files_to_open[i]]
+                #else:
+                 #   print "not"
+                    #if file:
+                     #   filename = secure_filename(file.filename)
+                      #  print filename
+                       # file.save(os.path.join(UPLOAD_FOLDER, filename))
+                    #else:
+                     #   return "please choose matrix"
+                #else:
+                 #   print files_to_open[i]
+                  #  file = request.files[files_to_open[i]]
+                    #if file:
+                     #   filename = secure_filename(file.filename)
+                      #  print filename
+                       # file.save(os.path.join(UPLOAD_FOLDER, filename))
+                    #else:
+                     #   return "please choose matrix"
+        sections = ("filename","numloci","sampvector", "inideme","file", "timechange","demesizes")
 
-    #for i in range(0,4):
-     #   total_array[i,1]=request.form[sections[i]+count]
+        part_sections_arr=("Initial migration matrix", "Time of change", "Deme sizes")
+        part_sections_arr = np.vstack(part_sections_arr)
 
+        if count == 0:
+            part_sections_arr = part_sections_arr
+        else:
+            for i in range(count-1):
+                part_sections_arr = np.vstack((part_sections_arr,part_sections_arr))
 
-    return "ok"
+        sections_array = np.array([["File name"],["Number of loci"],["Sampling vector"],["Initial deme sizes"],["Initial migration matrix"],["Time of change"],["Deme sizes"]])
+
+        print "\n\n"
+        sections_array2=np.vstack((sections_array,part_sections_arr))
+        print sections_array2
+
+        init_array = np.zeros((6+3*count+1), dtype=object)
+        init_array = np.vstack(init_array)
+        total_array = np.hstack((sections_array2, init_array))
+        print "\n\n\n"
+        #print init_array
+        print total_array
+
+        return "this will be to save doc"
+    else:
+        return "not working"
+
 
 
 if __name__ == "__main__":
