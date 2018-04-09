@@ -28,50 +28,53 @@ count = 0
 def counter ():
     global count
     count += 1
-    print "count is " + str(count)
     return ('', 204)
-    #return str(count)
 
 @app.route("/", methods=["POST"])
 def handle_input():
     if request.form["button"] == "Add matrix":
     #creates a counter for the "add matrix" button
         counter()
-        print count
         return (str(count), 204)
     elif request.form["button"] == "Save to file":
     #will save info to a file
-        #print "test "+str(count)
-        files_to_open = []
-        #print count
-        for i in range(count+1):
-            files_to_open.append("file" + str(i))
-            #print files_to_open[i]
-            if request.method =="POST":
-                #file = request.files["file" +str(i)]
-                print "need to add the save matrix process"
 
-             #   if i == 0:
-              #      print type(files_to_open)
-               #     file = request.files[files_to_open[i]]
-                #else:
-                 #   print "not"
-                    #if file:
-                     #   filename = secure_filename(file.filename)
-                      #  print filename
-                       # file.save(os.path.join(UPLOAD_FOLDER, filename))
-                    #else:
-                     #   return "please choose matrix"
-                #else:
-                 #   print files_to_open[i]
-                  #  file = request.files[files_to_open[i]]
-                    #if file:
-                     #   filename = secure_filename(file.filename)
-                      #  print filename
-                       # file.save(os.path.join(UPLOAD_FOLDER, filename))
-                    #else:
-                     #   return "please choose matrix"
-        sections = ("filename","numloci","sampvector", "inideme","file", "timechange","demesizes")
+######## not working properly
+        sections = np.array([["filename"],["numloci0"], ["sampvector0"], ["inideme0"]])
+        part_sections=np.array([["file"], ["timechange"],["demesizes"]])
+        sections = np.hstack(sections)
+        part_sections = np.hstack(part_sections)
+
+        if count == 0:
+            part_sections[0] = part_sections[0]+str(0)
+            part_sections[1]= part_sections[1] + str(0)
+            part_sections[2]= part_sections[2] + str(0)
+
+            sections = np.hstack((sections, part_sections))
+
+        else:
+            part_sections = np.tile(part_sections,(count+1,1))
+            part_sections = np.hstack(part_sections)
+
+            sections = np.hstack((sections,part_sections))
+
+
+        print sections
+
+
+        for i in range(4,len(sections),3):
+            for n in range(0,count+1):
+                sections[i] = sections[i]+str(count)
+                sections[i+1] = sections[i+1]+str(count)
+                sections[i+1] = sections[i+1]+str(count)
+
+            print sections[i]
+            print sections[i+1]
+            print sections[i+2]
+
+########
+
+        sections_array = np.array([["File name"],["Number of loci"],["Sampling vector"],["Initial deme sizes"]])
 
         part_sections_arr=("Initial migration matrix", "Time of change", "Deme sizes")
         part_sections_arr = np.vstack(part_sections_arr)
@@ -79,21 +82,42 @@ def handle_input():
         if count == 0:
             part_sections_arr = part_sections_arr
         else:
-            for i in range(count-1):
-                part_sections_arr = np.vstack((part_sections_arr,part_sections_arr))
+            part_sections_arr = np.tile(part_sections_arr,(count+1,1))
 
-        sections_array = np.array([["File name"],["Number of loci"],["Sampling vector"],["Initial deme sizes"],["Initial migration matrix"],["Time of change"],["Deme sizes"]])
-
-        print "\n\n"
         sections_array2=np.vstack((sections_array,part_sections_arr))
+        print "\n\n\n"
         print sections_array2
 
         init_array = np.zeros((6+3*count+1), dtype=object)
         init_array = np.vstack(init_array)
         total_array = np.hstack((sections_array2, init_array))
         print "\n\n\n"
-        #print init_array
+
+        #saves the first matrix to the computer
+        if request.method =="POST":
+            file = request.files["file0"]
+            if file:
+                filename = secure_filename(file.filename)
+                #print filename
+                file.save(os.path.join(UPLOAD_FOLDER, filename))
+
+        for i in range(4):
+            total_array[i,1] = request.form[sections[i]]
+
+        total_array[5,1] = request.form["timechange0"]
+        total_array[6,1] = request.form["demesizes0"]
+        #print total_array
+
+        #adds the matrix to total_array
+        file_path = ("/home/carolina/flask_app/flask_app/uploads/" + str(filename))
+        filehandle = open(file_path,"r")
+        filehandle=filehandle.read()
+        filehandle=filehandle.replace(","," ")
+
+        total_array[4,1] = filehandle
         print total_array
+
+        os.remove(file_path)
 
         return "this will be to save doc"
     else:
