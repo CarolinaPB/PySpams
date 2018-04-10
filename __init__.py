@@ -49,56 +49,70 @@ def handle_input():
                 sections = np.append([sections], [part_sections])
                 sections = np.vstack(sections)
 
-########
+
+######## Creates an array with the section names which will be in the final doc
 
         sections_array = np.array([["File name"],["Number of loci"],["Sampling vector"],["Initial deme sizes"]])
         part_sections_arr=np.array([["Initial migration matrix"], ["Time of change"], ["Deme sizes"]])
 
         part_sections_arr = np.vstack(part_sections_arr)
 
-        if count == 0:
+        if count == 1:
             part_sections_arr = part_sections_arr
-        else:
-            part_sections_arr = np.tile(part_sections_arr,(count+1,1))
+        elif count >= 2:
+            part_sections_arr = np.tile(part_sections_arr,(count,1))
 
         sections_array2=np.vstack((sections_array,part_sections_arr))
-        #print "\n\n\n"
-        #print sections_array2
 
-        init_array = np.zeros((6+3*count+1), dtype=object)
+######## Creates and array with the same size as the sections_array2 but each field is "0"
+
+        init_array = np.zeros((7+3*(count-1)), dtype=object)
         init_array = np.vstack(init_array)
+
+######## Joins sections_array2 and init_array to form an array where the input will be stored
+
         total_array = np.hstack((sections_array2, init_array))
-        #print "\n\n\n"
+
+########
+        #total_array[0,1] = request.form[sections[0]] ##not allowing this
+
+        total_array[0,1] = request.form["filename"]
+        total_array[1,1] = request.form["numloci0"]
+        total_array[2,1] = request.form["sampvector0"]
+        total_array[3,1] = request.form["inideme0"]
+        print total_array
+        print "\n"
+        print "sections 0 = "+sections[0]
 
         #saves the first matrix to the computer
-        if request.method =="POST":
-            file = request.files["file0"]
-            if file:
-                filename = secure_filename(file.filename)
+       # if request.method =="POST":
+        #    file = request.files["file0"]
+         #   if file:
+          #      filename = secure_filename(file.filename)
                 #print filename
-                file.save(os.path.join(UPLOAD_FOLDER, filename))
+           #     file.save(os.path.join(UPLOAD_FOLDER, filename))
 
         #for i in range(4):
          #   total_array[i,1] = request.form[sections[i]]
 
-        total_array[5,1] = request.form["timechange0"]
-        total_array[6,1] = request.form["demesizes0"]
+        #total_array[5,1] = request.form["timechange0"]
+        #total_array[6,1] = request.form["demesizes0"]
         #print total_array
 
         #adds the matrix to total_array
-        file_path = ("/home/carolina/flask_app/flask_app/uploads/" + str(filename))
-        filehandle = open(file_path,"r")
-        filehandle=filehandle.read()
-        filehandle=filehandle.replace(","," ")
+        #file_path = ("/home/carolina/flask_app/flaart_sections = part_sections +nsk_app/uploads/" + str(filename))
+        #filehandle = open(file_path,"r")
+        #filehandle=filehandle.read()
+        #filehandle=filehandle.replace(","," ")
 
-        total_array[4,1] = filehandle
+        #total_array[4,1] = filehandle
         #print total_array
 
-        #to reset the count variable to 1
+########to reset the count variable to 1
         global count
         count = 1
 
-        os.remove(file_path)
+       #os.remove(file_path)
 
         return "this will be to save doc"
     else:
