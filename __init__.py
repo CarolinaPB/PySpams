@@ -93,11 +93,24 @@ def handle_input():
 
             file_path = ("/home/carolina/flask_app/flask_app/uploads/" + str(filename))
             filehandle = open(file_path,"r")
-            filehandle=filehandle.read()
+            filehandle = filehandle.read()
             filehandle=filehandle.replace(","," ")
-
-            total_array[i,1] = filehandle
+            print type(filehandle)
             print filehandle
+
+
+            #matrix =[]
+            #for line in filehandle:
+            #    line = line.replace(",", " ")
+            #    matrix.append(line)
+            #matr_array = np.asarray(matrix)
+
+            #total_array[i,1] = matrix
+            total_array[i,1] = filehandle
+            print total_array
+
+
+
             os.remove(file_path)
 
 ######## Saves info from array to file
