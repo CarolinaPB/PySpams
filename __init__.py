@@ -1,7 +1,7 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, flash
 import numpy as np
 from werkzeug import secure_filename
-import os, sys, tempfile
+import os, sys
 
 reload(sys)
 sys.setdefaultencoding('utf-8')
@@ -38,17 +38,19 @@ def handle_input():
 ######## Creates an array ("sections") with the names/id from each field. For each new matr it adds a new group of unique names for the new fields.
 
         if count == 1:
-            sections = np.array([["filename"],["numloci0"], ["sampvector0"], ["inideme0"],["file0"], ["timechange0"],["demesizes0"]],dtype=object)
-        elif count >= 2:
-            sections = np.array([["filename"],["numloci0"], ["sampvector0"], ["inideme0"],["file0"], ["timechange0"],["demesizes0"]],dtype=object)
-            for n in range(1,count):
-                part_sections=np.array([["file"], ["timechange"],["demesizes"]],dtype=object)
-                part_sections[0] = part_sections[0]+str(n)
-                part_sections[1] = part_sections[1]+str(n)
-                part_sections[2] = part_sections[2]+str(n)
-                sections = np.append([sections], [part_sections])
-                sections = np.vstack(sections)
+            sections = ("filename", "numloci0", "sampvector0", "inideme0", "file0", "timechange0", "demesizes0")
+        if count >= 2:
+            sections = ("filename", "numloci0", "sampvector0", "inideme0", "file0", "timechange0", "demesizes0")
+            new_sections=[]
 
+            for i in range(1,count):
+                new_sections.append("file"+str(i))
+                new_sections.append("timechange"+str(i))
+                new_sections.append("demesizes"+str(i))
+
+            for name in new_sections:
+                name=(name,)
+                sections = sections + name
 
 ######## Creates an array with the section names which will be in the final doc
 
@@ -73,52 +75,51 @@ def handle_input():
 
         total_array = np.hstack((sections_array2, init_array))
 
-########
-        #total_array[0,1] = request.form[sections[0]] ##not allowing this
+######## Saves the fields input (except matrices) to the array
 
-        total_array[0,1] = request.form["filename"]
-        total_array[1,1] = request.form["numloci0"]
-        total_array[2,1] = request.form["sampvector0"]
-        total_array[3,1] = request.form["inideme0"]
-        print total_array
-        print "\n"
-        print "sections 0 = "+sections[0]
+        for i in range (4):
+            total_array[i,1] = request.form[sections[i]]
+        for i in range(5,len(total_array),3):
+            total_array[i,1] = request.form[sections[i]]
+            total_array[i+1,1] = request.form[sections[i+1]]
 
-        #saves the first matrix to the computer
-       # if request.method =="POST":
-        #    file = request.files["file0"]
-         #   if file:
-          #      filename = secure_filename(file.filename)
-                #print filename
-           #     file.save(os.path.join(UPLOAD_FOLDER, filename))
+######## Saves the matrices to the array
+        for i in range(4,len(total_array),3):
+            if request.method =="POST":
+                file = request.files[sections[i]]
+                if file:
+                    filename = secure_filename(file.filename)
+                    file.save(os.path.join(UPLOAD_FOLDER, filename))
 
-        #for i in range(4):
-         #   total_array[i,1] = request.form[sections[i]]
+            file_path = ("/home/carolina/flask_app/flask_app/uploads/" + str(filename))
+            filehandle = open(file_path,"r")
+            filehandle=filehandle.read()
+            filehandle=filehandle.replace(","," ")
 
-        #total_array[5,1] = request.form["timechange0"]
-        #total_array[6,1] = request.form["demesizes0"]
-        #print total_array
+            total_array[i,1] = filehandle
+            print filehandle
+            os.remove(file_path)
 
-        #adds the matrix to total_array
-        #file_path = ("/home/carolina/flask_app/flaart_sections = part_sections +nsk_app/uploads/" + str(filename))
-        #filehandle = open(file_path,"r")
-        #filehandle=filehandle.read()
-        #filehandle=filehandle.replace(","," ")
+######## Saves info from matrix to file
 
-        #total_array[4,1] = filehandle
-        #print total_array
+        with open (total_array[0,1], "w") as f:
+            for n in range(1,len(total_array)):
+                f.write("# " + total_array[n,0])
+                f.write("\n")
+                f.write(total_array[n,1])
+                f.write("\n\n")
 
-########to reset the count variable to 1
+######## To reset the count variable to 1
         global count
         count = 1
 
-       #os.remove(file_path)
 
-        return "this will be to save doc"
+######## Message to let the user know the info has been saved
+        flash ("File saved!")
+
+        return render_template("main.html")
     else:
         return "not working"
-
-
 
 if __name__ == "__main__":
     app.run(debug=True)
