@@ -100,7 +100,7 @@ def handle_input():
             print filehandle
             os.remove(file_path)
 
-######## Saves info from matrix to file
+######## Saves info from array to file
 
         with open (total_array[0,1], "w") as f:
             for n in range(1,len(total_array)):
