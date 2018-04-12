@@ -35,97 +35,62 @@ def handle_input():
         return (str(count), 204)
     elif request.form["button"] == "Save to file":
 
-######## Creates an array ("sections") with the names/id from each field. For each new matr it adds a new group of unique names for the new fields.
+######## Creates a list ("sections") with the names/id from each field. For each new matr it adds a new group of unique names for the new fields.
+######## Creates a list with the section names which will be in the final doc
 
         if count == 1:
-            sections = ("filename", "numloci0", "sampvector0", "inideme0", "file0", "timechange0", "demesizes0")
+            sections = ["filename", "numloci0", "sampvector0", "inideme0", "file0", "timechange0", "demesizes0"]
+            sections_list = ["File name", "Number of loci", "Sampling Vector", "Initial deme sizes", "Initial migration matrix", "Time of change", "Deme sizes"]
+
         if count >= 2:
-            sections = ("filename", "numloci0", "sampvector0", "inideme0", "file0", "timechange0", "demesizes0")
-            new_sections=[]
+            sections = ["filename", "numloci0", "sampvector0", "inideme0", "file0", "timechange0", "demesizes0"]
+            sections_list = ["File name", "Number of loci", "Sampling Vector", "Initial deme sizes", "Initial migration matrix", "Time of change", "Deme sizes"]
+            part_sections_list=[]
 
             for i in range(1,count):
-                new_sections.append("file"+str(i))
-                new_sections.append("timechange"+str(i))
-                new_sections.append("demesizes"+str(i))
+                sections.append("file"+str(i))
+                sections.append("timechange"+str(i))
+                sections.append("demesizes"+str(i))
 
-            for name in new_sections:
-                name=(name,)
-                sections = sections + name
+                sections_list.append("Initial migration matrix")
+                sections_list.append("Time of change")
+                sections_list.append("Deme sizes")
 
-######## Creates an array with the section names which will be in the final doc
+######## Creates a list with the input from the web form
+        input_data = []
+        for i in range(4):
+            input_data.append(request.form[sections[i]])
 
-        sections_array = np.array([["File name"],["Number of loci"],["Sampling vector"],["Initial deme sizes"]])
-        part_sections_arr=np.array([["Initial migration matrix"], ["Time of change"], ["Deme sizes"]])
+        for n in range(5,len(sections),3):
+            for i in range(4,len(sections),3):
+                if request.method =="POST":
+                    file = request.files[sections[i]]
+                    if file:
+                        filename = secure_filename(file.filename)
+                        file.save(os.path.join(UPLOAD_FOLDER, filename))
+                file_path = ("/home/carolina/flask_app/flask_app/uploads/" + str(filename))
+                filehandle = open(file_path,"r")
+                filehandle = filehandle.read()
+                filehandle = filehandle.replace(","," ")
+                filehandle =filehandle.strip("\n")
 
-        part_sections_arr = np.vstack(part_sections_arr)
+                input_data.append(filehandle)
+                input_data.append(request.form[sections[n]])
+                input_data.append(request.form[sections[n+1]])
 
-        if count == 1:
-            part_sections_arr = part_sections_arr
-        elif count >= 2:
-            part_sections_arr = np.tile(part_sections_arr,(count,1))
+                os.remove(file_path)
 
-        sections_array2=np.vstack((sections_array,part_sections_arr))
-
-######## Creates and array with the same size as the sections_array2 but each field is "0"
-
-        init_array = np.zeros((7+3*(count-1)), dtype=object)
-        init_array = np.vstack(init_array)
-
-######## Joins sections_array2 and init_array to form an array where the input will be stored
-
-        total_array = np.hstack((sections_array2, init_array))
-
-######## Saves the fields input (except matrices) to the array
-
-        for i in range (4):
-            total_array[i,1] = request.form[sections[i]]
-        for i in range(5,len(total_array),3):
-            total_array[i,1] = request.form[sections[i]]
-            total_array[i+1,1] = request.form[sections[i+1]]
-
-######## Saves the matrices to the array
-        for i in range(4,len(total_array),3):
-            if request.method =="POST":
-                file = request.files[sections[i]]
-                if file:
-                    filename = secure_filename(file.filename)
-                    file.save(os.path.join(UPLOAD_FOLDER, filename))
-
-            file_path = ("/home/carolina/flask_app/flask_app/uploads/" + str(filename))
-            filehandle = open(file_path,"r")
-            filehandle = filehandle.read()
-            filehandle=filehandle.replace(","," ")
-            print type(filehandle)
-            print filehandle
-
-
-            #matrix =[]
-            #for line in filehandle:
-            #    line = line.replace(",", " ")
-            #    matrix.append(line)
-            #matr_array = np.asarray(matrix)
-
-            #total_array[i,1] = matrix
-            total_array[i,1] = filehandle
-            print total_array
-
-
-
-            os.remove(file_path)
-
-######## Saves info from array to file
-
-        with open (total_array[0,1], "w") as f:
-            for n in range(1,len(total_array)):
-                f.write("# " + total_array[n,0])
+######## Saves info to file
+        with open(input_data[0],"w") as f:
+            for n in range(1,len(sections)):
+                f.write("# " + str(sections_list[n]))
                 f.write("\n")
-                f.write(total_array[n,1])
+                f.write(input_data[n])
                 f.write("\n\n")
 
 ######## To reset the count variable to 1
         global count
         count = 1
-
 
 ######## Message to let the user know the info has been saved
         flash ("File saved!")
