@@ -14,7 +14,10 @@ app.config["SECRET_KEY"] = "verysecret"
 def homepage():
     return render_template("main.html")
 
-UPLOAD_FOLDER = 'uploads/'
+######## The Upload folder will be the current folder
+current_folder_path, current_folder_name = os.path.split(os.getcwd())
+UPLOAD_FOLDER = os.path.join(current_folder_path,current_folder_name)
+print UPLOAD_FOLDER
 app.config["UPLOADFOLDER"] = UPLOAD_FOLDER
 
 global count
@@ -68,7 +71,8 @@ def handle_input():
                     if file:
                         filename = secure_filename(file.filename)
                         file.save(os.path.join(UPLOAD_FOLDER, filename))
-                file_path = ("/home/carolina/flask_app/flask_app/uploads/" + str(filename))
+
+                file_path = (UPLOAD_FOLDER+"/"+str(filename))
                 filehandle = open(file_path,"r")
                 filehandle = filehandle.read()
                 filehandle = filehandle.replace(","," ")

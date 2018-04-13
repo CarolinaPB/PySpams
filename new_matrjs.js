@@ -18,15 +18,15 @@ $(document).ready(function(){
     var makelabel = document.createElement("label");
 
     //create spans
-    var spans0 = document.createElement("span");
+    //var spans0 = document.createElement("span");
     var sect_labels0 = document.createTextNode(sections_label[0]);
-    spans0.appendChild(sect_labels0);
-    var spans1 = document.createElement("span");
+    //spans0.appendChild(sect_labels0);
+    //var spans1 = document.createElement("span");
     var sect_labels1 = document.createTextNode(sections_label[1]);
-    spans1.appendChild(sect_labels1);
-    var spans2 = document.createElement("span");
+    //spans1.appendChild(sect_labels1);
+    //var spans2 = document.createElement("span");
     var sect_labels2 = document.createTextNode(sections_label[2]);
-    spans2.appendChild(sect_labels2);
+    //spans2.appendChild(sect_labels2);
 
     //create input elements type="file"
     var makeinput_file = document.createElement("input");
@@ -55,13 +55,30 @@ $(document).ready(function(){
 
     //create line break
     var br = document.createElement("br");
+    var br2 = document.createElement("br");
+    var br3 = document.createElement("br");
+    var br4 = document.createElement("br");
+    var br5 = document.createElement("br");
+    var br6 = document.createElement("br");
 
     //append to parent div
-    makelabel.appendChild(spans0);
-    makelabel.appendChild(makeinput_file);
-    makelabel.appendChild(spans1);
+   // makelabel.appendChild(spans0);
+    //makelabel.appendChild(makeinput_file);
+    //makelabel.appendChild(spans1);
+    //makelabel.appendChild(makeinput1);
+    //makelabel.appendChild(spans2);
+    //makelabel.appendChild(makeinput2);
+    makelabel.appendChild(sect_labels0);
+    makelabel.appendChild(br);
+    makelabel.appendChild(makeinput_file)
+    makelabel.appendChild(br2);
+    makelabel.appendChild(br3);
+    makelabel.appendChild(br4);
+    makelabel.appendChild(sect_labels1);
     makelabel.appendChild(makeinput1);
-    makelabel.appendChild(spans2);
+    makelabel.appendChild(br5);
+    makelabel.appendChild(br6);
+    makelabel.appendChild(sect_labels2);
     makelabel.appendChild(makeinput2);
 
     $("#fields_to_repeat").append(makelabel);

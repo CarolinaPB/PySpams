@@ -1,29 +1,20 @@
 <head lang="en">
   <meta charset="UTF-8">
-  <link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/vue/1.0.14/vue.js"></script>
+
   <style>
-    span {
-      display: block;
-      margin: 3px 0;
-      overflow: auto;
-      padding: 0 3%;
-      width: 98%;
-    }
 
-    fieldset{
-      display: block;
-      margin: 0;
-      padding: 1%;
-      width: calc(98% - 4px);
-      border: 1px groove #bbb;
-    }
-
-    input[type='submit'] {
+    input[type='submit', type="reset"] {
       float: left;
       margin: 10px 0;
       padding: 0px 30px;
+    }
+    input[type='file'] {
+      float: left;
+      margin: 10px 0;
+      padding: 0px 0px;
+    }
+    input[type="text"]{
+      width: 100%
     }
   </style>
 
@@ -46,43 +37,30 @@
 
   <form action="" method="POST" enctype="multipart/form-data" >
     <div class="border">
-      <label>
-          <span >Number of loci</span><br>
-          <input id="numloci0" name="numloci0" type="text"/> <br>
-      </label><br>
-      <label>
-          <span >Sampling vector</span><br>
-          <input id="sampvector0" name="sampvector0" type="text"/> <br>
-      </label><br>
-      <label>
-          <span >Initial deme sizes</span><br>
-          <input id="inideme0" name="inideme0" type="text"/> <br>
-      </label><br>
+      <label>Number of loci</label>
+          <input type="text" id="numloci0" name="numloci0" type="text"/> <br><br>
+
+      <label>Sampling vector</label>
+          <input id="sampvector0" name="sampvector0" type="text"/> <br><br>
+      <label>Initial deme sizes</label>
+          <input id="inideme0" name="inideme0" type="text"/> <br><br>
 
       <div class="fields_to_repeat" id="fields_to_repeat">
-        <label>
-            <span >Initial migration matrix</span><br>
-            <input id="file0"name="file0" type="file"/> <br>
-        </label><br>
-        <label>
-            <span >Time of change</span><br>
-            <input id="timechange0"name="timechange0" type="text"/> <br>
-        </label><br>
-        <label>
-            <span >Deme sizes</span><br>
-            <input id="demesizes0"name="demesizes0" type="text"/> <br>
-        </label><br>
+        <label>Initial migration matrix</label><br>
+            <input id="file0"name="file0" type="file"/> <br><br><br>
+        <label>Time of change</label>
+            <input id="timechange0"name="timechange0" type="text"/> <br><br>
+        <label>Deme sizes</label>
+            <input id="demesizes0"name="demesizes0" type="text"/> <br><br>
 
       </div>
-      <br><br>
-      <input type = "submit" name = "button" value ="Add matrix" id='btn_repeat'> <br><br><br><br>
+      <br>
+      <input type = "submit" name = "button" value ="Add matrix" id='btn_repeat'> <br><br><br>
 
-      <label id="filename_field">
-          <span >File name</span>
-          <input id="filename" name="filename" type="text"/> <br>
-      </label><br><br>
+      <label id="filename_field">File name</label>
+          <input id="filename" name="filename" type="text"/> <br><br><br>
 
-      <input type="submit" name="button" value ="Save to file"><br><br><br>
+      <input type="submit" name="button" value ="Save to file" >
       <input type="reset" name="button" value = "Reset form" id = "btn_reset">
 
      </div>
