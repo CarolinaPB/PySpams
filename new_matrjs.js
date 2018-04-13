@@ -6,11 +6,10 @@ sections_label=["Initial migration matrix","Time of change","Deme sizes"];
 $(document).ready(function(){
   var button = document.getElementById('btn_repeat');
     count=0;
-    //button.innerHTML = 0;
   button.onclick = function(){
     count += 1;
-    //button.innerHTML++;
   };
+
   $("#btn_repeat").click(function(){
     console.log("count is "+count)
 
@@ -57,8 +56,6 @@ $(document).ready(function(){
     //create line break
     var br = document.createElement("br");
 
-
-
     //append to parent div
     makelabel.appendChild(spans0);
     makelabel.appendChild(makeinput_file);
@@ -71,6 +68,8 @@ $(document).ready(function(){
 
   });
 
-
+  $("#btn_reset").click(function(){
+    window.top.location = window.top.location
+  });
 
 });
