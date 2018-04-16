@@ -16,6 +16,11 @@
     input[type="text"]{
       width: 100%
     }
+
+    .fields_to_repeat{
+      width: 100%
+    }
+
   </style>
 
 </head>
@@ -35,7 +40,7 @@
   {% endwith %}
   {% block body %}{% endblock %}
 
-  <form action="" method="POST" enctype="multipart/form-data" >
+  <form action="" method="POST" enctype="multipart/form-data">
     <div class="border">
       <label>Number of loci</label>
           <input type="text" id="numloci0" name="numloci0" type="text"/> <br><br>
@@ -54,6 +59,8 @@
             <input id="demesizes0"name="demesizes0" type="text"/> <br><br>
 
       </div>
+      <div id="repeated_fields" class="repeated_fields">
+      </div>
       <br>
       <input type = "submit" name = "button" value ="Add matrix" id='btn_repeat'> <br><br><br>
 
@@ -61,7 +68,7 @@
           <input id="filename" name="filename" type="text"/> <br><br><br>
 
       <input type="submit" name="button" value ="Save to file" >
-      <input type="reset" name="button" value = "Reset form" id = "btn_reset">
+      <input type = "submit" name = "button" value = "Reset form" id = "btn_reset" class="btn_reset">
 
      </div>
   </form>
@@ -71,5 +78,6 @@
 </footer>
 
 <script src="static/js/jquery-3.3.1.min.js"></script>
-<script type="text/javascript" src="static/js/new_matrjs.js"></script>
+<script type="text/javascript" src="static/js/new_matrjs_alt.js"></script>
+<!--<script type="text/javascript" src="static/js/new_matrjs.js"></script>-->
 <script type="text/javascript" src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>

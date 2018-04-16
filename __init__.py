@@ -17,7 +17,7 @@ def homepage():
 ######## The Upload folder will be the current folder
 current_folder_path, current_folder_name = os.path.split(os.getcwd())
 UPLOAD_FOLDER = os.path.join(current_folder_path,current_folder_name)
-print UPLOAD_FOLDER
+
 app.config["UPLOADFOLDER"] = UPLOAD_FOLDER
 
 global count
@@ -36,6 +36,20 @@ def handle_input():
         counter()
         print "count is " + str(count)
         return (str(count), 204)
+    # decreases "count" by 1 each time "Remove" is clicked
+    # doesn't change "count" if count=1 (only the main matrix remains on the form)
+    if request.form["button"] == "Remove":
+        if count !=1:
+            count = count-1
+            print "minus count " + str(count)
+        else:
+            pass
+        return (str(count), 204)
+    # resets "count" if "Reset form" is clicked
+    elif request.form["button"] == "Reset form":
+        count = 1
+        print "reset" +str(counter)
+        return (str(count),204)
     elif request.form["button"] == "Save to file":
 
 ######## Creates a list ("sections") with the names/id from each field. For each new matr it adds a new group of unique names for the new fields.

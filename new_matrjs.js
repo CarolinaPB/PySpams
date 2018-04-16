@@ -13,20 +13,13 @@ $(document).ready(function(){
   $("#btn_repeat").click(function(){
     console.log("count is "+count)
 
-
     //create labels
     var makelabel = document.createElement("label");
 
     //create spans
-    //var spans0 = document.createElement("span");
     var sect_labels0 = document.createTextNode(sections_label[0]);
-    //spans0.appendChild(sect_labels0);
-    //var spans1 = document.createElement("span");
     var sect_labels1 = document.createTextNode(sections_label[1]);
-    //spans1.appendChild(sect_labels1);
-    //var spans2 = document.createElement("span");
     var sect_labels2 = document.createTextNode(sections_label[2]);
-    //spans2.appendChild(sect_labels2);
 
     //create input elements type="file"
     var makeinput_file = document.createElement("input");
@@ -43,7 +36,6 @@ $(document).ready(function(){
     makeinput1.setAttribute("id", section_names[1]+count);
     makeinput1.setAttribute("name", section_names[1]+count);
     makeinput1.setAttribute("type", "text");
-    //makeinput1.setAttribute("placeholder", section_names[1]+count);
 
     var makeinput2 = document.createElement("input");
     makeinput2.className="fields_to_repeat";
@@ -51,7 +43,6 @@ $(document).ready(function(){
     makeinput2.setAttribute("id", section_names[2]+count);
     makeinput2.setAttribute("name", section_names[2]+count);
     makeinput2.setAttribute("type", "text");
-    //makeinput2.setAttribute("placeholder", section_names[2]+count);
 
     //create line break
     var br = document.createElement("br");
@@ -62,12 +53,7 @@ $(document).ready(function(){
     var br6 = document.createElement("br");
 
     //append to parent div
-   // makelabel.appendChild(spans0);
-    //makelabel.appendChild(makeinput_file);
-    //makelabel.appendChild(spans1);
-    //makelabel.appendChild(makeinput1);
-    //makelabel.appendChild(spans2);
-    //makelabel.appendChild(makeinput2);
+
     makelabel.appendChild(sect_labels0);
     makelabel.appendChild(br);
     makelabel.appendChild(makeinput_file)
@@ -81,12 +67,14 @@ $(document).ready(function(){
     makelabel.appendChild(sect_labels2);
     makelabel.appendChild(makeinput2);
 
-    $("#fields_to_repeat").append(makelabel);
-
+    $(".repeated_fields").append(makelabel);
   });
 
-  $("#btn_reset").click(function(){
-    window.top.location = window.top.location
-  });
+  $("#btn_reset").on("click",removeFields);
+
+  function removeFields(){
+    var id= $(this).data("id");
+    $("#repeated_fields").remove();
+  };
 
 });
