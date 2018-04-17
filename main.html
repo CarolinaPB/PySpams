@@ -5,12 +5,37 @@
 	<title>Spams Alternative</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+	<script src="static/js/jquery-3.3.1.min.js"></script>
+	<script type="text/javascript" src="static/js/new_matrjs_alt.js"></script>
+	<!--<script type="text/javascript" src="static/js/new_matrjs.js"></script>-->
+	<script type="text/javascript" src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
+
+	<style>
+
+		input[type='submit', type="reset"] {
+			float: left;
+			margin: 10px 0;
+			padding: 0px 30px;
+		}
+		input[type='file'] {
+			float: left;
+			margin: 10px 0;
+			padding: 0px 0px;
+		}
+		input[type="text"]{
+			width: 100%
+		}
+
+		.fields_to_repeat{
+			width: 100%
+		}
+
+	</style>
 </head>
 
 
 <body>
 	<div class="container-fluid">
-
 
 		 <div id="content">
 				 <ul id="tabs" class="nav nav-tabs" data-tabs="tabs">
@@ -40,11 +65,6 @@
     </div>
   </div>
 </div>
-
-		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 </body>
-
-
-
 
 </html>

@@ -56,7 +56,7 @@ $(document).ready(function(){
 
     makelabel.appendChild(sect_labels0);
     makelabel.appendChild(br);
-    makelabel.appendChild(makeinput_file)
+    makelabel.appendChild(makeinput_file);
     makelabel.appendChild(br2);
     makelabel.appendChild(br3);
     makelabel.appendChild(br4);
@@ -69,12 +69,5 @@ $(document).ready(function(){
 
     $(".repeated_fields").append(makelabel);
   });
-
-  $("#btn_reset").on("click",removeFields);
-
-  function removeFields(){
-    var id= $(this).data("id");
-    $("#repeated_fields").remove();
-  };
 
 });
