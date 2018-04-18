@@ -36,15 +36,15 @@ def handle_input():
         counter()
         print "count is " + str(count)
         return (str(count), 204)
-    # decreases "count" by 1 each time "Remove" is clicked
-    # doesn't change "count" if count=1 (only the main matrix remains on the form)
-    if request.form["button"] == "Remove":
-        if count !=1:
-            count = count-1
-            print "minus count " + str(count)
-        else:
-            pass
-        return (str(count), 204)
+
+#### decreases "count" by 1 each time "Remove" is clicked
+#### doesn't change "count" if count=1 (only the main matrix remains on the form)
+    elif request.form["button"] == "Remove":
+        if count > 1:
+            count=count-1
+            print "minus count is " + str(count)
+        return ("", 204)
+
     # resets "count" if "Reset form" is clicked
     elif request.form["button"] == "Reset form":
         count = 1
