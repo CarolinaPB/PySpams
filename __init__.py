@@ -29,21 +29,21 @@ def counter ():
     count += 1
     return ('', 204)
 
+
+
 @app.route("/", methods=["POST"])
 def handle_input():
+
+    #if request.form["group_id"] == "hidden":
+     #   print "maybe"
+      #  return ("", 204)
+
     if request.form["button"] == "Add matrix":
     #creates a counter for the "add matrix" button
         counter()
         print "count is " + str(count)
-        return (str(count), 204)
 
-#### decreases "count" by 1 each time "Remove" is clicked
-#### doesn't change "count" if count=1 (only the main matrix remains on the form)
-    elif request.form["button"] == "Remove":
-        if count > 1:
-            count=count-1
-            print "minus count is " + str(count)
-        return ("", 204)
+        return (str(count), 204)
 
     # resets "count" if "Reset form" is clicked
     elif request.form["button"] == "Reset form":
@@ -116,6 +116,7 @@ def handle_input():
         return render_template("main.html")
     else:
         return "not working"
+
 
 if __name__ == "__main__":
     app.run(debug=True)

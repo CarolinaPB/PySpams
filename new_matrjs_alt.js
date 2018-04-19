@@ -1,6 +1,7 @@
 section_names=["file", "timechange", "demesizes"];
 
 var count = 0;
+
 $(document).ready(function(){
 
   $("#btn_repeat").on("click", function(){
@@ -17,21 +18,22 @@ $(document).ready(function(){
 
     '<label>' + 'Deme sizes' + '</label>' + "<br>"+
     '<input type="text" name= '+ section_names[2] +'' + count + ' id='+ section_names[2] +'' + count + ' >' + '<br>'+"<br>" +
-
-    '<input id ="btn_remove" class = "btn_remove" type="submit" value = "Remove" name="button">'+"<br><br>" +
-
-    '</div>';
+    '</div>'+
+    '<input type="checkbox" id="chk_remove" name="chk_remove" value="Remove" checked>'+'Use this input'+
+    '<label>'+ '**name of the chosen file**' +'<br>'  ;
 
     $("#fields_to_repeat").append(content);
 
 
-    element = $(".btn_remove");
-    for (var i in element) {
-      element.on('click', function() {
-        $(this).parent().remove();
-      });
-    };
-
+    $("#chk_remove").change(function(){
+      if (this.checked){
+        $("#repeated_fields"+count).show();
+      } else {
+        $("#repeated_fields"+count).hide();
+      }
+    });
 
   });
+
+
 });
