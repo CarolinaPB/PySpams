@@ -24,37 +24,43 @@ global count
 count = 1
 
 
+global input_array
+input_array=np.array((["group1"],[1]), dtype=object)
+input_array=np.hstack(input_array)
+
 def counter ():
     global count
     count += 1
     return ('', 204)
 
-
 @app.route("/", methods=["POST"])
 def handle_input():
-
     if request.form["button"] == "Add matrix":
     #creates a counter for the "add matrix" button
         counter()
         print "count is " + str(count)
+    # Adds a new row with the name of the checkbox and state "1" (corresponds to checked)
+        new_input=np.array((["chk_remove"+str(count-1)],[1]), dtype=object)
+        global input_array
+        new_input=np.hstack(new_input)
+        input_array=np.vstack((input_array, new_input))
         return (str(count), 204)
 
-    # resets "count" if "Reset form" is clicked
     elif request.form["button"] == "Reset form":
         count = 1
         print "reset" +str(counter)
         return (str(count),204)
+
     elif request.form["button"] == "Save to file":
-######## For each unchecked checkbox, it does count-1 because there will be count-1 new inputs (matrices) used
-        chk_list=[]
-        for i in range(1,count):
-            chk_list.append("chk_remove"+str(i))
-        for name in range(0,len(chk_list)):
-            if request.form[chk_list[name]] == "Remove":
-                print chk_list[name]
-            elif request.form[chk_list[name]] == "unchecked":
-                count = count-1
-                print "This input will not count"
+######## The state of an uncheked checkbox is changed to "0"
+        chk_list =[]
+        for i in range(count-1):
+            chk_list.append(input_array[i+1,0])
+            if request.form[chk_list[i]]== "Remove":
+                input_array[i+1,1]=1
+            else:
+                input_array[i+1,1]=0
+
 
 ######## Creates a list ("sections") with the names/id from each field. For each new matr it adds a new group of unique names for the new fields.
 ######## Creates a list with the section names which will be in the final doc
@@ -68,14 +74,17 @@ def handle_input():
             sections_list = ["File name", "Number of loci", "Sampling Vector", "Initial deme sizes", "Initial migration matrix", "Time of change", "Deme sizes"]
             part_sections_list=[]
 
+####### The names are only added if the checkbox is cheked (value = 1)
             for i in range(1,count):
-                sections.append("file"+str(i))
-                sections.append("timechange"+str(i))
-                sections.append("demesizes"+str(i))
+                if input_array[i,1]==1:
+                    sections.append("file"+str(i))
+                    sections.append("timechange"+str(i))
+                    sections.append("demesizes"+str(i))
 
-                sections_list.append("Initial migration matrix")
-                sections_list.append("Time of change")
-                sections_list.append("Deme sizes")
+                    sections_list.append("Initial migration matrix")
+                    sections_list.append("Time of change")
+                    sections_list.append("Deme sizes")
+
 
 ######## Creates a list with the input from the web form
         input_data = []
@@ -83,9 +92,10 @@ def handle_input():
             input_data.append(request.form[sections[i]])
 
         for n in range(5,len(sections),3):
-            for i in range(4,len(sections),3):
+            #for i in range(4,len(sections),3):
+
                 if request.method =="POST":
-                    file = request.files[sections[i]]
+                    file = request.files[sections[n-1]]
                     if file:
                         filename = secure_filename(file.filename)
                         file.save(os.path.join(UPLOAD_FOLDER, filename))
@@ -94,13 +104,14 @@ def handle_input():
                 filehandle = open(file_path,"r")
                 filehandle = filehandle.read()
                 filehandle = filehandle.replace(","," ")
-                filehandle =filehandle.strip("\n")
+                filehandle = filehandle.strip("\n")
 
                 input_data.append(filehandle)
                 input_data.append(request.form[sections[n]])
                 input_data.append(request.form[sections[n+1]])
-
                 os.remove(file_path)
+
+        print input_data
 
 ######## Saves info to file
         with open(input_data[0],"w") as f:
@@ -113,6 +124,10 @@ def handle_input():
 ######## To reset the count variable to 1
         global count
         count = 1
+######## To reset input_array
+        global input_array
+        input_array=np.array((["group1"],[1]), dtype=object)
+        input_array=np.hstack(input_array)
 
 ######## Message to let the user know the info has been saved
         flash ("File saved!")

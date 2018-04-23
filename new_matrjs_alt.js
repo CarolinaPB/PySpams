@@ -43,7 +43,7 @@ $(document).ready(function(){
     '</div>'+
 
     '<input type="checkbox" id="chk_remove' + count + '" name="chk_remove' + count + '" value="Remove" checked onclick="Checkbox(this)"class="myclass' + count + '">'+
-    '<label for"chk_remove">   Use</label>'+
+    '<label for"chk_remove' + count + '">   Use</label>'+
     '<input type="hidden" name="chk_remove' + count + '" value="unchecked">'+
     '<br>'+'<br>' +'<br>' ;
 
