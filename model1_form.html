@@ -23,16 +23,21 @@
       <label>Initial deme sizes</label>
           <input id="inideme0" name="inideme0" type="text"/> <br><br>
 
+      <input type="checkbox" id="chk_remove0" name="chk_remove0" value="Remove" checked onclick="Checkbox0(this)" class="myclass0">
+      <label id="label0" class="label0" for"chk_remove0"></label> <br><br>
+
       <div class="fields_to_repeat" id="fields_to_repeat">
         <label>Initial migration matrix</label><br>
-            <input id="file0"name="file0" type="file"/> <br><br><br>
+            <input id="file0"name="file0" type="file" onchange="show_filename0()"/> <br><br><br>
         <label>Time of change</label>
             <input id="timechange0"name="timechange0" type="text"/> <br><br>
         <label>Deme sizes</label>
             <input id="demesizes0"name="demesizes0" type="text"/> <br><br>
       </div>
+      <div id="div_to_append"></div>
       <br>
-      <input type = "submit" name = "button" value ="Add matrix" id='btn_repeat'> <br><br><br>
+      <input type = "submit" name = "button" value ="Add matrix" id='btn_repeat'>
+      <br><br><br>
 
       <label id="filename_field">File name</label>
           <input id="filename" name="filename" type="text"/> <br><br><br>
@@ -46,6 +51,21 @@
      </div>
   </form>
 </div>
+<script>
+function Checkbox0(e){
+  if (e.checked == false){
+    $("#fields_to_repeat").hide();
+  } else {
+    $("#fields_to_repeat").show();
+    };
+  };
+function show_filename0(){
+      filepath = document.getElementById("file0").files[0].name;
+      $("#label0").html("<h4>" + filepath + "</h4>");
+};
+</script>
+
+
 <footer>
   <br><br>
 </footer>

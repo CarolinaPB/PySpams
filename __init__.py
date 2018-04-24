@@ -70,12 +70,12 @@ def handle_input():
             sections_list = ["File name", "Number of loci", "Sampling Vector", "Initial deme sizes", "Initial migration matrix", "Time of change", "Deme sizes"]
 
         elif count >= 2:
-            sections = ["filename", "numloci0", "sampvector0", "inideme0", "file0", "timechange0", "demesizes0"]
+            sections = ["filename", "numloci0", "sampvector0", "inideme0"]
             sections_list = ["File name", "Number of loci", "Sampling Vector", "Initial deme sizes", "Initial migration matrix", "Time of change", "Deme sizes"]
             part_sections_list=[]
 
 ####### The names are only added if the checkbox is cheked (value = 1)
-            for i in range(1,count):
+            for i in range(count):
                 if input_array[i,1]==1:
                     sections.append("file"+str(i))
                     sections.append("timechange"+str(i))
@@ -85,33 +85,31 @@ def handle_input():
                     sections_list.append("Time of change")
                     sections_list.append("Deme sizes")
 
-
 ######## Creates a list with the input from the web form
+
         input_data = []
         for i in range(4):
             input_data.append(request.form[sections[i]])
 
         for n in range(5,len(sections),3):
-            #for i in range(4,len(sections),3):
+            if request.method =="POST":
+                file = request.files[sections[n-1]]
+                if file:
+                    filename = secure_filename(file.filename)
+                    file.save(os.path.join(UPLOAD_FOLDER, filename))
 
-                if request.method =="POST":
-                    file = request.files[sections[n-1]]
-                    if file:
-                        filename = secure_filename(file.filename)
-                        file.save(os.path.join(UPLOAD_FOLDER, filename))
+            file_path = (UPLOAD_FOLDER+"/"+str(filename))
+            filehandle = open(file_path,"r")
+            filehandle = filehandle.read()
+            filehandle = filehandle.replace(","," ")
+            filehandle = filehandle.strip("\n")
 
-                file_path = (UPLOAD_FOLDER+"/"+str(filename))
-                filehandle = open(file_path,"r")
-                filehandle = filehandle.read()
-                filehandle = filehandle.replace(","," ")
-                filehandle = filehandle.strip("\n")
+            input_data.append(filehandle)
+            input_data.append(request.form[sections[n]])
+            input_data.append(request.form[sections[n+1]])
+            os.remove(file_path)
 
-                input_data.append(filehandle)
-                input_data.append(request.form[sections[n]])
-                input_data.append(request.form[sections[n+1]])
-                os.remove(file_path)
-
-        print input_data
+        #print input_data
 
 ######## Saves info to file
         with open(input_data[0],"w") as f:
