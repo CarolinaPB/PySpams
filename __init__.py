@@ -54,10 +54,6 @@ def handle_input():
         return render_template("main.html", count=count)
 
     elif request.form["button"] == "Save to file":
-######## The state of an uncheked checkbox is changed to "0"
-
-
-
 
 ######## Creates a list ("sections") with the names/id from each field. For each new matr it adds a new group of unique names for the new fields.
 ######## Creates a list with the section names which will be in the final doc
@@ -70,7 +66,7 @@ def handle_input():
             sections = ["filename", "numloci0", "sampvector0", "inideme0"]
             sections_list = ["File name", "Number of loci", "Sampling Vector", "Initial deme sizes", "Initial migration matrix", "Time of change", "Deme sizes"]
             part_sections_list=[]
-
+######## The state of an uncheked checkbox is changed to "0"
             for i in range(count):
                 if request.form[input_array[i,0]] == "Remove":
                     input_array[i,1]=1
