@@ -3,7 +3,6 @@ section_names=["file", "timechange", "demesizes"];
 var count = 0;
 var div_ids = [];
 
-
 function Checkbox(e){
   for (var id in div_ids){
     classname_div = document.getElementById(div_ids[id]).className;
@@ -38,6 +37,7 @@ function show_filename(){
 };
 
 $(document).ready(function(){
+
 
   $("#btn_repeat").on("click", function(){
     count++;

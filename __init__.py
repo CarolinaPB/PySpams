@@ -48,8 +48,7 @@ def handle_input():
 
     elif request.form["button"] == "Reset form":
         count = 1
-        print "reset" +str(counter)
-        return (str(count),204)
+        return render_template("main.html", count=count)
 
     elif request.form["button"] == "Save to file":
 ######## The state of an uncheked checkbox is changed to "0"
@@ -136,4 +135,5 @@ def handle_input():
 
 
 if __name__ == "__main__":
+    #change to app.run()
     app.run(debug=True)
