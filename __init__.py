@@ -25,7 +25,8 @@ count = 1
 
 
 global input_array
-input_array=np.array((["group1"],[1]), dtype=object)
+input_array=np.array((["chk_remove0"],[1]), dtype=object)
+
 input_array=np.hstack(input_array)
 
 def counter ():
@@ -48,18 +49,19 @@ def handle_input():
 
     elif request.form["button"] == "Reset form":
         count = 1
+        input_array=np.array((["chk_remove0"],[1]), dtype=object)
+        input_array=np.hstack(input_array)
         return render_template("main.html", count=count)
 
     elif request.form["button"] == "Save to file":
 ######## The state of an uncheked checkbox is changed to "0"
-        chk_list =[]
-        for i in range(count-1):
-            chk_list.append(input_array[i+1,0])
-            if request.form[chk_list[i]]== "Remove":
-                input_array[i+1,1]=1
-            else:
-                input_array[i+1,1]=0
+        print "chk count " + str(count)
 
+        for i in range(count):
+            if request.form[input_array[i,0]] == "Remove":
+                input_array[i,1]=1
+            else:
+                input_array[i,1]=0
 
 ######## Creates a list ("sections") with the names/id from each field. For each new matr it adds a new group of unique names for the new fields.
 ######## Creates a list with the section names which will be in the final doc
@@ -108,7 +110,7 @@ def handle_input():
             input_data.append(request.form[sections[n+1]])
             os.remove(file_path)
 
-        #print input_data
+        print input_data
 
 ######## Saves info to file
         with open(input_data[0],"w") as f:
@@ -123,7 +125,7 @@ def handle_input():
         count = 1
 ######## To reset input_array
         global input_array
-        input_array=np.array((["group1"],[1]), dtype=object)
+        input_array=np.array((["chk_remove0"],[1]), dtype=object)
         input_array=np.hstack(input_array)
 
 ######## Message to let the user know the info has been saved
