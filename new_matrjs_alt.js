@@ -37,14 +37,11 @@ function show_filename(){
 };
 
 $(document).ready(function(){
-
-
   $("#btn_repeat").on("click", function(){
     count++;
     div_ids.push("repeated_fields"+count); //creates list with the ids of all the new div (new group of input)
     file_id.push("file"+count);
     label_id.push("label"+count);
-
     var content =
     //content related to the checkboxes
     '<input type="checkbox" id="chk_remove' + count + '" name="chk_remove' + count + '" value="Remove" checked onclick="Checkbox(this)" class="myclass' + count + '">'+
@@ -55,19 +52,53 @@ $(document).ready(function(){
     //content related to the new input fields
     '<div class="myclass' + count + '" id="repeated_fields' + count + '">'+
 
-      '<label>' + 'Initial migration matrix' + '</label>' + "<br>"+
-      '<input type="file" name= '+ section_names[0] +'' + count + ' id='+ section_names[0] +'' + count + ' onchange="show_filename()" class="label' + count + '">' + '<br>'+"<br>"+'<br>'+
-
       '<label>' + 'Time of change' + '</label>' + "<br>"+
       '<input type="text" name= '+ section_names[1] +'' + count + ' id='+ section_names[1] +'' + count + ' >' + '<br>'+"<br>"+
 
       '<label>' + 'Deme sizes' + '</label>' + "<br>"+
       '<input type="text" name= '+ section_names[2] +'' + count + ' id='+ section_names[2] +'' + count + ' >' + '<br>'+"<br>" +
 
+      '<label>' + 'Initial migration matrix' + '</label>' + "<br>"+
+      '<input type="file" name= '+ section_names[0] +'' + count + ' id='+ section_names[0] +'' + count + ' onchange="show_filename()" class="label' + count + '">' + '<br>'+"<br>"+'<br>'+
+
+
     '</div>'+ '<br>' ;
 
     //$("#fields_to_repeat").append(content);
     $("#div_to_append").append(content);
+
+  });
+  var tnum =0
+  $("#btn_table").on("click", function(){
+
+    var myEle = document.getElementsByClassName("table");
+    if(myEle){
+        $("#table"+(tnum-1)).remove();
+    }
+
+    var numdemes = document.getElementById("numdemes0").value;
+    var num = []
+    for (i=1;i<=(numdemes); i++){
+      num.push(i);
+    };
+    var table = document.createElement("TABLE");
+    table.setAttribute("id", "table"+tnum);
+    table.setAttribute("class", "table-striped table-bordered table-hover");
+    //table.border="1";
+
+    var columnCount = num.length;
+
+    for (var i=0; i<columnCount;i++){
+      row=table.insertRow();
+      for (var j = 0; j<columnCount; j++){
+        var cell=row.insertCell();
+        cell.innerHTML = "0.";
+      }
+    }
+
+   $("#fields_to_repeat").append(table);
+
+   tnum++
 
   });
 });

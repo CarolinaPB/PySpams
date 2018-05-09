@@ -52,6 +52,8 @@ def handle_input():
         input_array=np.array((["chk_remove0"],[1]), dtype=object)
         input_array=np.hstack(input_array)
         return render_template("main.html", count=count)
+    elif request.form["button"] == "Create matrix":
+        return ("", 204)
 
     elif request.form["button"] == "Save to file":
 
@@ -105,9 +107,8 @@ def handle_input():
             input_data.append(filehandle)
             input_data.append(request.form[sections[n]])
             input_data.append(request.form[sections[n+1]])
-            os.remove(file_path)
 
-        print input_data
+            os.remove(file_path)
 
 ######## Saves info to file
         with open(input_data[0],"w") as f:

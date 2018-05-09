@@ -1,5 +1,5 @@
 <div id="repeatfields">
-  <h1>Admixture model</h1>
+  <h1>NSCC model</h1>
   {% with messages = get_flashed_messages() %}
     {% if messages %}
       {% for message in messages %}
@@ -7,7 +7,6 @@
         <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
         {{message}}
       </div>
-        <!--<h4>{{ message }}</h4>-->
       {% endfor %}
     {% endif %}
   {% endwith %}
@@ -17,25 +16,27 @@
     <div class="border">
       <label>Number of loci</label>
           <input type="text" id="numloci0" name="numloci0" type="text"/> <br><br>
-
+      <label>Number of demes</label><br>
+          <input type="text" id="numdemes0" name="numdemes0" type="text"/> <br><br>
       <label>Sampling vector</label>
           <input id="sampvector0" name="sampvector0" type="text"/> <br><br>
-      <label>Initial deme sizes</label>
+      <hr> 
+      <label>Time of change</label>
+          <input id="timechange0" name="timechange0" type="text" value="0" disabled="disabled"/> <br><br>
+      <label>Deme sizes</label>
           <input id="inideme0" name="inideme0" type="text"/> <br><br>
 
-      <input type="checkbox" id="chk_remove0" name="chk_remove0" value="Remove" checked onclick="Checkbox0(this)" class="myclass0"/>
-      <label id="label0" class="label0" for"chk_remove0"></label> <br><br>
-      <input type="hidden" name="chk_remove0" value="unchecked">
+
 
       <div class="fields_to_repeat" id="fields_to_repeat">
         <label>Initial migration matrix</label><br>
-            <input id="file0"name="file0" type="file" onchange="show_filename0()"/> <br><br><br>
-        <label>Time of change</label>
-            <input id="timechange0"name="timechange0" type="text"/> <br><br>
-        <label>Deme sizes</label>
-            <input id="demesizes0"name="demesizes0" type="text"/> <br><br>
+            <input id="file0"name="file0" type="file" onchange="show_filename0()"/>
+            <input type="submit" name="button" value="Create matrix" id="btn_table" ><br><br><br>
+
       </div>
+
       <div id="div_to_append"></div>
+
       <br>
       <input type = "submit" name = "button" value ="Add matrix" id='btn_repeat'>
       <br><br><br>
@@ -53,13 +54,6 @@
   </form>
 </div>
 <script>
-function Checkbox0(e){
-  if (e.checked == false){
-    $("#fields_to_repeat").hide();
-  } else {
-    $("#fields_to_repeat").show();
-    };
-  };
 function show_filename0(){
       filepath = document.getElementById("file0").files[0].name;
       $("#label0").html("<h4>" + filepath + "</h4>");
