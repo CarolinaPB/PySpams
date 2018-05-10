@@ -17,23 +17,25 @@
       <label>Number of loci</label>
           <input type="text" id="numloci0" name="numloci0" type="text"/> <br><br>
       <label>Number of demes</label><br>
-          <input type="text" id="numdemes0" name="numdemes0" type="text"/> <br><br>
-      <label>Sampling vector</label>
-          <input id="sampvector0" name="sampvector0" type="text"/> <br><br>
-      <hr> 
+          <input type="text" id="numdemes0" name="numdemes0" type="text"/><br><br>
+
+          <input type="submit" name="button" value="Ok" id="btn_ndemes">
+      <br><br>
+
+      <div id="sampvector_div"></div>
+      <hr>
+
+
       <label>Time of change</label>
           <input id="timechange0" name="timechange0" type="text" value="0" disabled="disabled"/> <br><br>
-      <label>Deme sizes</label>
-          <input id="inideme0" name="inideme0" type="text"/> <br><br>
+      <div id="demesizes_div"></div>
 
+      <br>
+      <label>Initial migration matrix</label><br>
+          <input id="file0"name="file0" type="file" onchange="show_filename0()"/><br><br><br><br>
 
-
-      <div class="fields_to_repeat" id="fields_to_repeat">
-        <label>Initial migration matrix</label><br>
-            <input id="file0"name="file0" type="file" onchange="show_filename0()"/>
-            <input type="submit" name="button" value="Create matrix" id="btn_table" ><br><br><br>
-
-      </div>
+      <div id="new_matr"></div>
+      <br><br><br>
 
       <div id="div_to_append"></div>
 

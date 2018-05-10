@@ -52,7 +52,7 @@ def handle_input():
         input_array=np.array((["chk_remove0"],[1]), dtype=object)
         input_array=np.hstack(input_array)
         return render_template("main.html", count=count)
-    elif request.form["button"] == "Create matrix":
+    elif request.form["button"] == "Ok":
         return ("", 204)
 
     elif request.form["button"] == "Save to file":

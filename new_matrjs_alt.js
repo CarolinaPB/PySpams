@@ -36,6 +36,8 @@ function show_filename(){
   };
 };
 
+
+
 $(document).ready(function(){
   $("#btn_repeat").on("click", function(){
     count++;
@@ -63,17 +65,20 @@ $(document).ready(function(){
 
 
     '</div>'+ '<br>' ;
-
-    //$("#fields_to_repeat").append(content);
     $("#div_to_append").append(content);
 
   });
+  //Creates matrix with number of rows and columns = number of demes
   var tnum =0
-  $("#btn_table").on("click", function(){
+  $("#btn_ndemes").on("click", function(){
 
     var myEle = document.getElementsByClassName("table");
     if(myEle){
         $("#table"+(tnum-1)).remove();
+        $("#sampvector_table"+(tnum-1)).remove();
+        $("#demesizes_table"+(tnum-1)).remove();
+        $("#sampvector_label").remove();
+        $("#demesizes_label").remove();
     }
 
     var numdemes = document.getElementById("numdemes0").value;
@@ -96,9 +101,30 @@ $(document).ready(function(){
       }
     }
 
-   $("#fields_to_repeat").append(table);
+    var str_t1 = '<table id="sampvector_table' + tnum + '"class="table-striped table-bordered table-hover"><tr>';
+    str_t2=""
+    for (var i=0;i<columnCount;i++){
+      var str_t2 = str_t2+"<td>0</td>";
+    }
+    var str_t3 = str_t1 + str_t2 + "</tr></table>";
 
-   tnum++
+    var str_t4 = '<table id="demesizes_table' + tnum + '" class="table-striped table-bordered table-hover"><tr>';
+    str_t5=""
+    for (var i=0;i<columnCount;i++){
+      var str_t5 = str_t5+"<td>1</td>";
+    }
+    var str_t6 = str_t4 + str_t5 + "</tr></table>";
+
+    $("#sampvector_div").append("<label id='sampvector_label'>Sampling vector</label>");
+    $("#sampvector_div").append(str_t3);
+
+    $("#demesizes_div").append("<label id='demesizes_label'>Deme sizes</label>");
+    $("#demesizes_div").append(str_t6);
+
+    $("#new_matr").append(table);
+
+    tnum++
 
   });
+
 });
