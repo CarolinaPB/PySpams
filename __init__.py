@@ -3,6 +3,7 @@ import numpy as np
 from werkzeug import secure_filename
 import os, sys
 
+
 reload(sys)
 sys.setdefaultencoding('utf-8')
 
@@ -36,6 +37,7 @@ def counter ():
 
 @app.route("/", methods=["POST"])
 def handle_input():
+
     if request.form["button"] == "Add matrix":
     #creates a counter for the "add matrix" button
         counter()
@@ -45,6 +47,7 @@ def handle_input():
         global input_array
         new_input=np.hstack(new_input)
         input_array=np.vstack((input_array, new_input))
+
         return (str(count), 204)
 
     elif request.form["button"] == "Reset form":
@@ -111,12 +114,12 @@ def handle_input():
             os.remove(file_path)
 
 ######## Saves info to file
-        with open(input_data[0],"w") as f:
-            for n in range(1,len(sections)):
-                f.write("# " + str(sections_list[n]))
-                f.write("\n")
-                f.write(input_data[n])
-                f.write("\n\n")
+        #with open(input_data[0],"w") as f:
+         #   for n in range(1,len(sections)):
+          #      f.write("# " + str(sections_list[n]))
+           #     f.write("\n")
+            #    f.write(input_data[n])
+             #   f.write("\n\n")
 
 ######## To reset the count variable to 1
         global count

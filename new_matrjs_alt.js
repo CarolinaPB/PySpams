@@ -36,6 +36,10 @@ function show_filename(){
   };
 };
 
+$(document).on('click', 'td', function () {
+      this.contentEditable = 'true';
+});
+
 
 
 $(document).ready(function(){
@@ -68,15 +72,17 @@ $(document).ready(function(){
     $("#div_to_append").append(content);
 
   });
+
   //Creates matrix with number of rows and columns = number of demes
-  var tnum =0
+  //Creates a row for samp vector and time of change with number of cells = number of demes
+
   $("#btn_ndemes").on("click", function(){
 
     var myEle = document.getElementsByClassName("table");
     if(myEle){
-        $("#table"+(tnum-1)).remove();
-        $("#sampvector_table"+(tnum-1)).remove();
-        $("#demesizes_table"+(tnum-1)).remove();
+        $("#table").remove();
+        $("#sampvector_table").remove();
+        $("#demesizes_table").remove();
         $("#sampvector_label").remove();
         $("#demesizes_label").remove();
     }
@@ -87,7 +93,7 @@ $(document).ready(function(){
       num.push(i);
     };
     var table = document.createElement("TABLE");
-    table.setAttribute("id", "table"+tnum);
+    table.setAttribute("id", "table");
     table.setAttribute("class", "table-striped table-bordered table-hover");
     //table.border="1";
 
@@ -101,17 +107,18 @@ $(document).ready(function(){
       }
     }
 
-    var str_t1 = '<table id="sampvector_table' + tnum + '"class="table-striped table-bordered table-hover"><tr>';
+    var str_t1 = '<table id="sampvector_table"class="table-striped table-bordered table-hover"><tr>';
     str_t2=""
     for (var i=0;i<columnCount;i++){
-      var str_t2 = str_t2+"<td>0</td>";
+      var str_t2 = str_t2+"<td id='samp_cell" + i + "'></td>";
     }
     var str_t3 = str_t1 + str_t2 + "</tr></table>";
 
-    var str_t4 = '<table id="demesizes_table' + tnum + '" class="table-striped table-bordered table-hover"><tr>';
+
+    var str_t4 = '<table id="demesizes_table" class="table-striped table-bordered table-hover"><tr>';
     str_t5=""
     for (var i=0;i<columnCount;i++){
-      var str_t5 = str_t5+"<td>1</td>";
+      var str_t5 = str_t5+"<td id='deme_cell" + i + "'></td>";
     }
     var str_t6 = str_t4 + str_t5 + "</tr></table>";
 
@@ -123,7 +130,13 @@ $(document).ready(function(){
 
     $("#new_matr").append(table);
 
-    tnum++
+
+    for (var i=0;i<columnCount;i++){
+      $("#samp_cell"+i).append("<input type='text' value='0' id='sampvector_cell" + i + "' >")
+      $("#deme_cell"+i).append("<input type='text' value='1' id='demesizes_cell" + i + "' >")
+    }
+
+
 
   });
 
