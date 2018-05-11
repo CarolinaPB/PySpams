@@ -37,7 +37,6 @@ def counter ():
 
 @app.route("/", methods=["POST"])
 def handle_input():
-
     if request.form["button"] == "Add matrix":
     #creates a counter for the "add matrix" button
         counter()
@@ -90,28 +89,28 @@ def handle_input():
 
 ######## Creates a list with the input from the web form
 
-        input_data = []
-        for i in range(4):
-            input_data.append(request.form[sections[i]])
+        #input_data = []
+        #for i in range(4):
+         #   input_data.append(request.form[sections[i]])
 
-        for n in range(5,len(sections),3):
-            if request.method =="POST":
-                file = request.files[sections[n-1]]
-                if file:
-                    filename = secure_filename(file.filename)
-                    file.save(os.path.join(UPLOAD_FOLDER, filename))
+        #for n in range(5,len(sections),3):
+         #   if request.method =="POST":
+          #      file = request.files[sections[n-1]]
+           #     if file:
+            #        filename = secure_filename(file.filename)
+             #       file.save(os.path.join(UPLOAD_FOLDER, filename))
 
-            file_path = (UPLOAD_FOLDER+"/"+str(filename))
-            filehandle = open(file_path,"r")
-            filehandle = filehandle.read()
-            filehandle = filehandle.replace(","," ")
-            filehandle = filehandle.strip("\n")
+            #file_path = (UPLOAD_FOLDER+"/"+str(filename))
+            #filehandle = open(file_path,"r")
+            #filehandle = filehandle.read()
+            #filehandle = filehandle.replace(","," ")
+            #filehandle = filehandle.strip("\n")
 
-            input_data.append(filehandle)
-            input_data.append(request.form[sections[n]])
-            input_data.append(request.form[sections[n+1]])
+            #input_data.append(filehandle)
+            #input_data.append(request.form[sections[n]])
+            #input_data.append(request.form[sections[n+1]])
 
-            os.remove(file_path)
+            #os.remove(file_path)
 
 ######## Saves info to file
         #with open(input_data[0],"w") as f:
