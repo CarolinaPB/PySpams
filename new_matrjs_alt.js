@@ -125,7 +125,7 @@ $(document).ready(function(){
 
 
   $("#btn_ndemes").on("click", function(){
-    if (count == 0){
+    if ($("#chk_remove0").length === 0){
       Add_checkbox(count);
     }
     var numdemes = document.getElementById("numdemes0").value;
