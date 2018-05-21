@@ -38,6 +38,7 @@ def counter ():
 @app.route("/", methods=["POST"])
 def handle_input():
     if request.form["button"] == "Add matrix":
+
     #creates a counter for the "add matrix" button
         counter()
         print "count is " + str(count)
