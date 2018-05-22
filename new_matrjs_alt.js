@@ -38,33 +38,34 @@ function show_filename(){
   };
 };
 
-//$(document).on('click', 'td', function () {
-  //    this.contentEditable = 'true';
-//});
-
-//adds the checkbox and the "time of change" field
 function Add_checkbox(count){
-  // this function will work when the add_matrix button is clicked
-  div_ids.push("repeated_fields"+count); //list with ids of all the new div
+
+  div_ids.push("div_chk"+count); //list with ids of all the new div
+
   //needed for the show_filename function
   file_id.push("file"+count);
   label_id.push("label"+count);
   //
+
   //creates a checkbox
   var chk_content =
-  '<input type="checkbox" id="chk_remove' + count + '" name="chk_remove' + count + '" value="Remove" checked onclick="Checkbox(this)" class="myclass' + count + '">'+
+  '<br><input type="checkbox" id="chk_remove' + count + '" name="chk_remove' + count + '" value="Remove" checked onclick="Checkbox(this)" class="myclass' + count + '">'+
   '   '+
   '<label id="label' + count + '" class="label' + count + '" for"chk_remove' + count + '"></label>'+
   '<input type="hidden" name="chk_remove' + count + '" value="unchecked">'+'<br>' +'<br>'
 
-  //created a div inside the checkbox to append the other fields
-  var repeated_fields_div = '<div class="myclass' + count + '" id="repeated_fields' + count + '">'
 
-  //creates time of change field
+  var div_chk = "<div class='myclass"+count+"' id='div_chk"+count+"'></div>"
   var timechange_content =
   '<label>' + 'Time of change' + '</label>' + "<br>"+
-  '<input type="text" name="timechange'+count+'" id="timechange'+count+'" >' + '<br>'+"<br>"
+  '<input type="text" name="timechange'+count+'" id="timechange'+count+'" ><br><br>'
 
+  $("#div_to_append").append(chk_content);
+  $("#div_to_append").append(div_chk);
+  $("#div_chk"+count).append(timechange_content);
+}
+
+function Add_fields(count){
   var numdemes = document.getElementById("numdemes0").value;
   var num = []
   for (i=1;i<=numdemes; i++){
@@ -72,6 +73,8 @@ function Add_checkbox(count){
   };
 
   var columnCount = num.length;
+  //created a div inside the checkbox to append the other fields
+  var repeated_fields_div = '<div class="myclass' + count + '" id="repeated_fields' + count + '">'
 
   //creates table with num of cells = num of demes
   var deme = '<label id="demesizes_label1">Deme sizes</label><table id="demesizes_table'+count+'" class="table-striped table-hover"><tr>';
@@ -80,19 +83,15 @@ function Add_checkbox(count){
   for (var i=0;i<columnCount;i++){
     var deme1 = deme1+"<td id='deme_cell"+count+"" + i + "'></td>";
   }
-  var deme_content = deme + deme1 + "</tr></table>";
+  var deme_content = deme + deme1 + "</tr></table><br>";
 
   var matr = '<table id="matr_table'+count+'" class="table-striped table-hover"><tr>'
-  var matr_upload='<label>Initial migration matrix</label><br><input id="file'+count+'" name="file'+count+'" type="file">'
+  var matr_upload='<label id="matr_label">Initial migration matrix</label><br><input id="file'+count+'" name="file'+count+'" type="file"><br><br><br>'
 
 
-  $("#div_to_append").append(chk_content);
-  $("#div_to_append").append(repeated_fields_div);
-  $("#repeated_fields"+count).append(timechange_content);
+  $("#div_chk"+count).append(repeated_fields_div);
   $("#repeated_fields"+count).append(deme_content);
-  $("#repeated_fields"+count).append("<br>");
   $("#repeated_fields"+count).append(matr_upload);
-  $("#repeated_fields"+count).append("<br><br><br>")
   $("#repeated_fields"+count).append(matr);
 
 
@@ -109,7 +108,18 @@ function Add_checkbox(count){
       cell.innerHTML = "<input type='text' value='0' id='matr_cell"+ i +""+ j +"' name='matr_cell"+ i +""+ j +"'>";
     }
   }
+}
 
+
+
+function Remove_fields(){
+
+  $("#sampvector_table").remove();
+  $("#sampvector_label").remove();
+
+  for (var i=0; i<count+1; i++){
+    $("#repeated_fields"+i).remove();
+  }
 }
 
 
@@ -117,17 +127,29 @@ function Add_checkbox(count){
 
 $(document).ready(function(){
   $("#btn_repeat").on("click", function(){
-    count++;
 
-    Add_checkbox(count)
+    var chk0_name = document.getElementById("chk_remove0")
+    if (chk0_name!=null){
+      count++;
+      Add_checkbox(count);
+      Add_fields(count);
+    }
 
   });
 
 
   $("#btn_ndemes").on("click", function(){
-    if ($("#chk_remove0").length === 0){
+    var chk0_name = document.getElementById("chk_remove0")
+    if (chk0_name==null){
       Add_checkbox(count);
+      Add_fields(count);
+    } else {
+      Remove_fields();
+      for (var n=0; n<count+1;n++){
+        Add_fields(n);
+      }
     }
+
     var numdemes = document.getElementById("numdemes0").value;
     var num = []
     for (i=1;i<=numdemes; i++){
@@ -135,25 +157,6 @@ $(document).ready(function(){
     };
 
     var columnCount = num.length;
-
-    numdemes_value.push(numdemes)
-
-
-      //$("#table").remove();
-      //  $("#matr_table").remove();
-
-      //$("#sampvector_table").remove();
-      //$("#demesizes_table"+count).remove();
-        //$("#sampvector_label").remove();
-        //$("#demesizes_label1").remove();
-
-        //giving wrong results each time "OK" is clicked, the counter "i" starts from zero.
-        //for (var i=0; i<columnCount; i++){
-          //$("#demesizes_table"+i).remove();
-          //$("#matr_table"+i).remove();
-        //}
-
-    //}
 
 //Sampling vector
     var samp= '<label id="sampvector_label">Sampling vector</label><table id="sampvector_table"class="table-striped  table-hover"><tr>';
@@ -163,8 +166,6 @@ $(document).ready(function(){
     }
     var samp_content = samp + samp1 + "</tr></table>";
 
-
-    //$("#sampvector_div").append("<label id='sampvector_label'>Sampling vector</label>");
     $("#sampvector_div").append(samp_content);
 
     for (var i=0;i<columnCount;i++){
