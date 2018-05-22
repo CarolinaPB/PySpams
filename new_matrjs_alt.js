@@ -98,14 +98,15 @@ function Add_fields(count){
 
   //adds the input fields to the demesizes_table
   for (var i=0;i<columnCount;i++){
-    $("#deme_cell"+count+i).append("<input type='text' value='1' id='demesizes_cell"+ count +"" + i + "' name='demesizes_cell"+ count +"" + i + "' >")
+    $("#deme_cell"+count+i).append("<input type='text' value='1' id='demesizes_cell"+ count +""+'_'+"" + i + "' name='demesizes_cell"+ count +""+'_'+"" + i + "' >")
   }
+
   table = document.getElementById("matr_table"+count)
   for (var i=0; i<columnCount;i++){
     row=table.insertRow();
     for (var j = 0; j<columnCount; j++){
       var cell=row.insertCell();
-      cell.innerHTML = "<input type='text' value='0' id='matr_cell"+ i +""+ j +"' name='matr_cell"+ i +""+ j +"'>";
+      cell.innerHTML = "<input type='text' value='0' id='matr_cell"+count+""+'_'+""+ i +""+'_'+""+ j +"' name='matr_cell"+count+""+'_'+""+ i +""+'_'+""+ j +"'>";
     }
   }
 }
@@ -139,6 +140,7 @@ $(document).ready(function(){
 
 
   $("#btn_ndemes").on("click", function(){
+    $("#chk_hidden").remove()
     var chk0_name = document.getElementById("chk_remove0")
     if (chk0_name==null){
       Add_checkbox(count);

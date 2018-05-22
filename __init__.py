@@ -23,7 +23,8 @@ app.config["UPLOADFOLDER"] = UPLOAD_FOLDER
 
 global count
 count = 1
-
+global btn_OK
+btn_OK= "not pressed"
 
 global input_array
 input_array=np.array((["chk_remove0"],[1]), dtype=object)
@@ -38,88 +39,84 @@ def counter ():
 @app.route("/", methods=["POST"])
 def handle_input():
     if request.form["button"] == "Add matrix":
-
-    #creates a counter for the "add matrix" button
-        counter()
-        print "count is " + str(count)
-    # Adds a new row with the name of the checkbox and state "1" (corresponds to checked)
-        new_input=np.array((["chk_remove"+str(count-1)],[1]), dtype=object)
-        global input_array
-        new_input=np.hstack(new_input)
-        input_array=np.vstack((input_array, new_input))
+        global btn_OK
+        if btn_OK == "pressed":
+            counter()
+            print "count is " + str(count)
+        # Adds a new row with the name of the checkbox and state "1" (corresponds to checked)
+            new_input=np.array((["chk_remove"+str(count-1)],[1]), dtype=object)
+            global input_array
+            new_input=np.hstack(new_input)
+            input_array=np.vstack((input_array, new_input))
 
         return (str(count), 204)
 
     elif request.form["button"] == "Reset form":
         count = 1
+        btn_OK = "not pressed"
         input_array=np.array((["chk_remove0"],[1]), dtype=object)
         input_array=np.hstack(input_array)
-        return render_template("main.html", count=count)
+        return render_template("main.html", count=count, btn_OK=btn_OK)
     elif request.form["button"] == "Ok":
+        global btn_OK
+        btn_OK = "pressed"
         return ("", 204)
 
     elif request.form["button"] == "Save to file":
+        print "count is "+str(count)
+        mainDoc_names = ["timechange0"]
+        numdemes = int(request.form["numdemes"])
 
-######## Creates a list ("sections") with the names/id from each field. For each new matr it adds a new group of unique names for the new fields.
-######## Creates a list with the section names which will be in the final doc
+        secondDoc_names = ["numloci", "numdemes"]
+        for i in range(numdemes):
+            secondDoc_names.append("sampcell"+str(i))
+        #print secondDoc_names
 
         if count == 1:
-            sections = ["filename", "numloci0", "sampvector0", "inideme0", "file0", "timechange0", "demesizes0"]
-            sections_list = ["File name", "Number of loci", "Sampling Vector", "Initial deme sizes", "Initial migration matrix", "Time of change", "Deme sizes"]
+
+            for i in range(numdemes):
+                mainDoc_names.append("demesizes_cell0_"+str(i))
+            for i in range(numdemes):
+                for n in range(numdemes):
+                    mainDoc_names.append("matr_cell0_"+str(i)+"_"+str(n))
+            #print mainDoc_names
+
 
         elif count >= 2:
-            sections = ["filename", "numloci0", "sampvector0", "inideme0"]
-            sections_list = ["File name", "Number of loci", "Sampling Vector", "Initial deme sizes", "Initial migration matrix", "Time of change", "Deme sizes"]
-            part_sections_list=[]
-######## The state of an uncheked checkbox is changed to "0"
+            mainDoc_names = []
             for i in range(count):
                 if request.form[input_array[i,0]] == "Remove":
                     input_array[i,1]=1
                 else:
                     input_array[i,1]=0
-####### The names are only added if the checkbox is cheked (value = 1)
-            for i in range(count):
-                if input_array[i,1]==1:
-                    sections.append("file"+str(i))
-                    sections.append("timechange"+str(i))
-                    sections.append("demesizes"+str(i))
 
-                    sections_list.append("Initial migration matrix")
-                    sections_list.append("Time of change")
-                    sections_list.append("Deme sizes")
+            for c in range(count):
+                if input_array[c,1] == 1:
+                    mainDoc_names.append("timechange"+str(c))
+                    for i in range(numdemes):
+                        mainDoc_names.append("demesizes_cell"+str(c)+"_"+str(i))
+                    for i in range(numdemes):
+                        for n in range(numdemes):
+                            mainDoc_names.append("matr_cell"+str(c)+"_"+str(i)+"_"+str(n))
 
-######## Creates a list with the input from the web form
+        print mainDoc_names
 
-        #input_data = []
-        #for i in range(4):
-         #   input_data.append(request.form[sections[i]])
 
-        #for n in range(5,len(sections),3):
-         #   if request.method =="POST":
-          #      file = request.files[sections[n-1]]
-           #     if file:
-            #        filename = secure_filename(file.filename)
-             #       file.save(os.path.join(UPLOAD_FOLDER, filename))
 
-            #file_path = (UPLOAD_FOLDER+"/"+str(filename))
-            #filehandle = open(file_path,"r")
-            #filehandle = filehandle.read()
-            #filehandle = filehandle.replace(","," ")
-            #filehandle = filehandle.strip("\n")
 
-            #input_data.append(filehandle)
-            #input_data.append(request.form[sections[n]])
-            #input_data.append(request.form[sections[n+1]])
+        data_to_save = []
+        headers = ["Time", "Deme sizes", "Migration matrix"]
 
-            #os.remove(file_path)
+        data_to_save.append(request.form[mainDoc_names[0]])
 
-######## Saves info to file
-        #with open(input_data[0],"w") as f:
-         #   for n in range(1,len(sections)):
-          #      f.write("# " + str(sections_list[n]))
-           #     f.write("\n")
-            #    f.write(input_data[n])
-             #   f.write("\n\n")
+        for i in range(1,numdemes+1):
+            data_to_save.append(request.form[mainDoc_names[i]])
+
+        print data_to_save
+
+
+
+
 
 ######## To reset the count variable to 1
         global count
