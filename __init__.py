@@ -57,6 +57,7 @@ def handle_input():
         input_array=np.array((["chk_remove0"],[1]), dtype=object)
         input_array=np.hstack(input_array)
         return render_template("main.html", count=count, btn_OK=btn_OK)
+
     elif request.form["button"] == "Ok":
         global btn_OK
         btn_OK = "pressed"
@@ -64,25 +65,29 @@ def handle_input():
 
     elif request.form["button"] == "Save to file":
         print "count is "+str(count)
-        mainDoc_names = ["timechange0"]
         numdemes = int(request.form["numdemes"])
 
         secondDoc_names = ["numloci", "numdemes"]
         for i in range(numdemes):
             secondDoc_names.append("sampcell"+str(i))
-        #print secondDoc_names
 
+        headers = []
         if count == 1:
-
+            mainDoc_names = ["timechange0"]
+            final_array = np.zeros((numdemes+numdemes**2+1), dtype="object")
+            final_array[0] = "timechange0"
             for i in range(numdemes):
                 mainDoc_names.append("demesizes_cell0_"+str(i))
+                final_array[i+1] = ("demesizes_cell0_"+str(i))
             for i in range(numdemes):
                 for n in range(numdemes):
                     mainDoc_names.append("matr_cell0_"+str(i)+"_"+str(n))
-            #print mainDoc_names
-
-
+                    #for f in range(1,numdemes**2+1):
+                     #   final_array[f+2] = ("matr_cell0_"+str(i)+"_"+str(n))
+            no_zeros=1
+            print final_array
         elif count >= 2:
+
             mainDoc_names = []
             for i in range(count):
                 if request.form[input_array[i,0]] == "Remove":
@@ -92,31 +97,46 @@ def handle_input():
 
             for c in range(count):
                 if input_array[c,1] == 1:
+                    #mainDoc_names.append("Time")
                     mainDoc_names.append("timechange"+str(c))
+                    #mainDoc_names.append("Deme sizes")
                     for i in range(numdemes):
                         mainDoc_names.append("demesizes_cell"+str(c)+"_"+str(i))
+                    #mainDoc_names.append("Migration Matrix")
                     for i in range(numdemes):
                         for n in range(numdemes):
                             mainDoc_names.append("matr_cell"+str(c)+"_"+str(i)+"_"+str(n))
 
+            no_zeros = np.count_nonzero(input_array[:,1])
+
+
         print mainDoc_names
 
 
+        #data_to_save = []
 
 
-        data_to_save = []
-        headers = ["Time", "Deme sizes", "Migration matrix"]
+        #data_to_save.append(request.form["filename"]) #name of file to be saved
+        #for i in range(len(mainDoc_names)):
+         #   data_to_save.append(request.form[mainDoc_names[i]])
 
-        data_to_save.append(request.form[mainDoc_names[0]])
-
-        for i in range(1,numdemes+1):
-            data_to_save.append(request.form[mainDoc_names[i]])
-
-        print data_to_save
-
+        #print "\n"
+        #print data_to_save
 
 
 
+        #with open(data_to_save[0],"w") as f:
+        #for n in range (no_zeros):
+         #   for i in range(0,len(data_to_save)):
+
+          #      print i
+
+         #   for i in range(1,len(data_to_save)):
+          #      for h in range(len(headers)):
+           #         f.write("# "+ headers[h])
+            #        f.write("\n")
+             #       f.write(data_to_save[i])
+              #      f.write("\n")
 
 ######## To reset the count variable to 1
         global count

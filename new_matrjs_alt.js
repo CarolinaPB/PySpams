@@ -23,20 +23,20 @@ function Checkbox(e){
 var file_id =[]
 var label_id=[]
 //shows the name of the chosen matrix file next to the checkbox
-function show_filename(){
-  for (var id in div_ids){
-    classname_file = document.getElementById(file_id[id]).className;
-    classname_label = document.getElementById(label_id[id]).className;
+//function show_filename(){
+  //for (var id in div_ids){
+    //classname_file = document.getElementById(file_id[id]).className;
+    //classname_label = document.getElementById(label_id[id]).className;
 
-    if (classname_file == classname_label){
+    //if (classname_file == classname_label){
       //filepath = document.getElementById(file_id[id]).value
-      filepath = document.getElementById(file_id[id]).files[0].name;
-      $("."+classname_label).html("<h4>" + filepath + "</h4>");
-    } else {
-      alert("show_filename not working");
-    };
-  };
-};
+      //filepath = document.getElementById(file_id[id]).files[0].name;
+      //$("."+classname_label).html("<h4>" + filepath + "</h4>");
+    //} else {
+      //alert("show_filename not working");
+    //};
+  //};
+//};
 
 function Add_checkbox(count){
 
@@ -85,13 +85,14 @@ function Add_fields(count){
   }
   var deme_content = deme + deme1 + "</tr></table><br>";
 
-  var matr = '<table id="matr_table'+count+'" class="table-striped table-hover"><tr>'
-  var matr_upload='<label id="matr_label">Initial migration matrix</label><br><input id="file'+count+'" name="file'+count+'" type="file"><br><br><br>'
+  var matr = '<label id="matr_label">Initial migration matrix</label><br><table id="matr_table'+count+'" class="table-striped table-hover"><tr>'
+
+  //var matr_upload='<label id="matr_label">Initial migration matrix</label><br><input id="file'+count+'" name="file'+count+'" type="file"><input type="hidden" name ="file'+count+'" value = "hidden" id="file'+count+'"> <br><br><br>'
 
 
   $("#div_chk"+count).append(repeated_fields_div);
   $("#repeated_fields"+count).append(deme_content);
-  $("#repeated_fields"+count).append(matr_upload);
+  //$("#repeated_fields"+count).append(matr_upload);
   $("#repeated_fields"+count).append(matr);
 
 
