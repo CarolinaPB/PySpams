@@ -1,6 +1,6 @@
 <div id="repeatfields">
   <h1>NSCC model</h1>
-  {% with messages = get_flashed_messages() %}
+  {% with messages = get_flashed_messages(category_filter=["info"]) %}
     {% if messages %}
       {% for message in messages %}
       <div class="alert alert-info alert-dismissible" role="alert">
@@ -17,7 +17,7 @@
       <label>Number of loci</label>
           <input type="text" id="numloci0" name="numloci" type="text"/> <br><br>
       <label>Number of demes</label><br>
-          <input type="text" id="numdemes0" name="numdemes" type="text"/><br><br>
+          <input type="text" id="numdemes0" name="numdemes" type="text" /><br><br>
 
           <input type="submit" name="button" value="Ok" id="btn_ndemes">
       <br><br>
@@ -36,7 +36,7 @@
 
 
 
-      <input type="submit" name="button" value ="Save to file" >
+      <input type="submit" name="button" id="btn_save" value ="Save to file" >
       <input type = "submit" name = "button" value = "Reset form" id = "btn_reset" class="btn_reset">
 
 

@@ -4,6 +4,7 @@ var count = 0;
 var div_ids = [];
 numdemes_value=[]
 
+
 //controls the checkboxes. if checked the content is showed.
 function Checkbox(e){
   for (var id in div_ids){
@@ -20,32 +21,10 @@ function Checkbox(e){
   };
 };
 
-var file_id =[]
-var label_id=[]
-//shows the name of the chosen matrix file next to the checkbox
-//function show_filename(){
-  //for (var id in div_ids){
-    //classname_file = document.getElementById(file_id[id]).className;
-    //classname_label = document.getElementById(label_id[id]).className;
-
-    //if (classname_file == classname_label){
-      //filepath = document.getElementById(file_id[id]).value
-      //filepath = document.getElementById(file_id[id]).files[0].name;
-      //$("."+classname_label).html("<h4>" + filepath + "</h4>");
-    //} else {
-      //alert("show_filename not working");
-    //};
-  //};
-//};
-
 function Add_checkbox(count){
 
   div_ids.push("div_chk"+count); //list with ids of all the new div
 
-  //needed for the show_filename function
-  file_id.push("file"+count);
-  label_id.push("label"+count);
-  //
 
   //creates a checkbox
   var chk_content =
@@ -86,9 +65,6 @@ function Add_fields(count){
   var deme_content = deme + deme1 + "</tr></table><br>";
 
   var matr = '<label id="matr_label">Initial migration matrix</label><br><table id="matr_table'+count+'" class="table-striped table-hover"><tr>'
-
-  //var matr_upload='<label id="matr_label">Initial migration matrix</label><br><input id="file'+count+'" name="file'+count+'" type="file"><input type="hidden" name ="file'+count+'" value = "hidden" id="file'+count+'"> <br><br><br>'
-
 
   $("#div_chk"+count).append(repeated_fields_div);
   $("#repeated_fields"+count).append(deme_content);
@@ -131,6 +107,7 @@ $(document).ready(function(){
   $("#btn_repeat").on("click", function(){
 
     var chk0_name = document.getElementById("chk_remove0")
+
     if (chk0_name!=null){
       count++;
       Add_checkbox(count);
@@ -142,38 +119,47 @@ $(document).ready(function(){
 
   $("#btn_ndemes").on("click", function(){
     $("#chk_hidden").remove()
-    var chk0_name = document.getElementById("chk_remove0")
-    if (chk0_name==null){
-      Add_checkbox(count);
-      Add_fields(count);
+    var numdemes0 = document.getElementById("numdemes0").value
+    var numloci0 = document.getElementById("numloci0").value
+    if ((numdemes0 === "") || (numloci0 === "")){
+      alert("Fields missing")
     } else {
-      Remove_fields();
-      for (var n=0; n<count+1;n++){
-        Add_fields(n);
+      var chk0_name = document.getElementById("chk_remove0")
+      if (chk0_name==null){
+        Add_checkbox(count);
+        Add_fields(count);
+      } else {
+        Remove_fields();
+        for (var n=0; n<count+1;n++){
+          Add_fields(n);
+        }
       }
-    }
+      var numdemes = document.getElementById("numdemes0").value;
+      var num = []
+      for (i=1;i<=numdemes; i++){
+        num.push(i);
+      };
 
-    var numdemes = document.getElementById("numdemes0").value;
-    var num = []
-    for (i=1;i<=numdemes; i++){
-      num.push(i);
-    };
+      var columnCount = num.length;
 
-    var columnCount = num.length;
+      //Sampling vector
+      var samp= '<label id="sampvector_label">Sampling vector</label><table id="sampvector_table"class="table-striped  table-hover"><tr>';
+      samp1=""
+      for (var i=0;i<columnCount;i++){
+        var samp1 = samp1+"<td id='samp_cell" + i + "'></td>";
+        }
+        var samp_content = samp + samp1 + "</tr></table>";
 
-//Sampling vector
-    var samp= '<label id="sampvector_label">Sampling vector</label><table id="sampvector_table"class="table-striped  table-hover"><tr>';
-    samp1=""
-    for (var i=0;i<columnCount;i++){
-      var samp1 = samp1+"<td id='samp_cell" + i + "'></td>";
-    }
-    var samp_content = samp + samp1 + "</tr></table>";
+        $("#sampvector_div").append(samp_content);
 
-    $("#sampvector_div").append(samp_content);
+        for (var i=0;i<columnCount;i++){
+          $("#samp_cell"+i).append("<input type='text' value='0' id='samp_cell"+i+"' name='samp_cell"+i+"' >")
+        }
+      }
 
-    for (var i=0;i<columnCount;i++){
-      $("#samp_cell"+i).append("<input type='text' value='0' id='samp_cell"+i+"' name='samp_cell"+i+"' >")
-    }
-  });
+
+    });
+
+
 
 });

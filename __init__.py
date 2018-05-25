@@ -38,8 +38,10 @@ def counter ():
 
 @app.route("/", methods=["POST"])
 def handle_input():
+
     if request.form["button"] == "Add matrix":
         global btn_OK
+
         if btn_OK == "pressed":
             counter()
             print "count is " + str(count)
@@ -59,117 +61,128 @@ def handle_input():
         return render_template("main.html", count=count, btn_OK=btn_OK)
 
     elif request.form["button"] == "Ok":
-        global btn_OK
-        btn_OK = "pressed"
+        if request.form["numdemes"] != "":
+            global btn_OK
+            btn_OK = "pressed"
         return ("", 204)
 
     elif request.form["button"] == "Save to file":
-        print "count is "+str(count)
-        numdemes = int(request.form["numdemes"])
+        if request.form["numdemes"] == "":
+            return ("", 204)
+        else:
+            print "count is "+str(count)
+            numdemes = int(request.form["numdemes"])
 
-        secondDoc_names = ["numloci", "numdemes"]
-        for i in range(numdemes):
-            secondDoc_names.append("sampcell"+str(i))
-
-        if count == 1:
-            final_array = np.zeros((numdemes+numdemes**2+1), dtype="object")
-            final_array[0] = "timechange0"
+            secondDoc_names = ["numloci", "numdemes"]
             for i in range(numdemes):
-                final_array[i+1] = ("demesizes_cell0_"+str(i))
-            matr_names=[]
-            for i in range(numdemes):
-                for n in range(numdemes):
-                    matr_names.append("matr_cell0_"+str(i)+"_"+str(n))
+                secondDoc_names.append("sampcell"+str(i))
 
-            a = 0
-            while a < numdemes**2:
-                for f in range(numdemes +1,len(final_array)):
-                    final_array[f] = matr_names[a]
-                    a += 1
+            if count == 1:
+                final_array = np.zeros((numdemes+numdemes**2+1), dtype="object")
+                final_array[0] = "timechange0"
+                for i in range(numdemes):
+                    final_array[i+1] = ("demesizes_cell0_"+str(i))
+                matr_names=[]
+                for i in range(numdemes):
+                    for n in range(numdemes):
+                        matr_names.append("matr_cell0_"+str(i)+"_"+str(n))
 
-            no_zeros=1
-            print final_array
+                a = 0
+                while a < numdemes**2:
+                    for f in range(numdemes +1,len(final_array)):
+                        final_array[f] = matr_names[a]
+                        a += 1
 
-        elif count >= 2:
+                no_zeros=1
+                print final_array
 
-            for i in range(count):
-                if request.form[input_array[i,0]] == "Remove":
-                    input_array[i,1]=1
-                else:
-                    input_array[i,1]=0
+            elif count >= 2:
 
-            no_zeros = np.count_nonzero(input_array[:,1])
-            final_array = np.zeros((no_zeros,numdemes+numdemes**2+1), dtype="object")
+                for i in range(count):
+                    if request.form[input_array[i,0]] == "Remove":
+                        input_array[i,1]=1
+                    else:
+                        input_array[i,1]=0
 
-            a=0
-            for c in range(count):
-                if input_array[c,1] == 1:
-                    final_array[a,0] = ("timechange"+str(c))
-                    for i in range(numdemes):
-                        final_array[a,i+1] = ("demesizes_cell"+str(c)+"_"+str(i))
+                no_zeros = np.count_nonzero(input_array[:,1])
+                final_array = np.zeros((no_zeros,numdemes+numdemes**2+1), dtype="object")
 
-                    matr_names = []
-                    for i in range(numdemes):
-                        for n in range(numdemes):
-                            matr_names.append("matr_cell"+str(c)+"_"+str(i)+"_"+str(n))
-                    b = 0
-                    while b < numdemes**2:
-                        for f in range(numdemes+1,len(final_array[0])):
-                            final_array [a,f] = matr_names[b]
-                            b +=1
-                    a += 1
+                a=0
+                for c in range(count):
+                    if input_array[c,1] == 1:
+                        final_array[a,0] = ("timechange"+str(c))
+                        for i in range(numdemes):
+                            final_array[a,i+1] = ("demesizes_cell"+str(c)+"_"+str(i))
 
-
-            print final_array
-
-
-        data_to_save = np.zeros((no_zeros,numdemes+numdemes**2+1), dtype="object")
-
-        for row in range(no_zeros):
-            for col in range(len(final_array[0])):
-                data_to_save[row,col] = request.form[final_array[row,col]]
+                        matr_names = []
+                        for i in range(numdemes):
+                            for n in range(numdemes):
+                                matr_names.append("matr_cell"+str(c)+"_"+str(i)+"_"+str(n))
+                        b = 0
+                        while b < numdemes**2:
+                            for f in range(numdemes+1,len(final_array[0])):
+                                final_array [a,f] = matr_names[b]
+                                b +=1
+                        a += 1
 
 
+                print final_array
 
-        print "\n"
-        print data_to_save
+            data_to_save = np.zeros((no_zeros,numdemes+numdemes**2+1), dtype="object")
 
-        with open(request.form["filename"],"w") as f:
             for row in range(no_zeros):
-                f.write("# Time")
-                f.write("\n")
-                f.write(data_to_save[row,0])
-                f.write("\n\n")
-                f.write("# Deme sizes")
-                f.write("\n")
-                for col in range(1,numdemes+1):
-                    f.write(data_to_save[row,col])
-                    f.write(" ")
-                f.write("\n\n")
-                f.write("# Migration matrix")
-                f.write("\n")
-                #for r in range(numdemes):
-                num = numdemes
-                for col in range(1,num+1):
-                    f.write(data_to_save[0,col+num]+" ")
-                f.write("\n")
+                if count == 1:
+                    for col in range(len(final_array)):
+                        data_to_save[0,col] = request.form[final_array[col]]
+                elif count >= 2:
+                    for col in range(len(final_array[0])):
+                        data_to_save[row,col] = request.form[final_array[row,col]]
 
 
+            print "\n"
+            print data_to_save
+
+            filename = request.form["filename"]
+            if os.path.isfile(filename):
+                return ("", 204)
+            else:
+                with open(filename,"w") as f:
+                    for row in range(no_zeros):
+
+                        f.write("# Time")
+                        f.write("\n")
+                        f.write(data_to_save[row,0])
+                        f.write("\n\n")
+
+                        f.write("# Deme sizes")
+                        f.write("\n")
+                        for col in range(1,numdemes+1):
+                            f.write(data_to_save[row,col])
+                            f.write(" ")
+                        f.write("\n\n")
+
+                        f.write("# Migration matrix")
+                        f.write("\n")
+                        for k in range(1,numdemes+1):
+                            for i in range(k*numdemes+1,numdemes*(k+1)+1):
+                                f.write(data_to_save[row,i])
+                                f.write(" ")
+                            f.write("\n")
+                        f.write("\n")
 
 
+            ######## To reset the count variable to 1
+                global count
+                count = 1
+            ######## To reset input_array
+                global input_array
+                input_array=np.array((["chk_remove0"],[1]), dtype=object)
+                input_array=np.hstack(input_array)
 
-######## To reset the count variable to 1
-        global count
-        count = 1
-######## To reset input_array
-        global input_array
-        input_array=np.array((["chk_remove0"],[1]), dtype=object)
-        input_array=np.hstack(input_array)
+            ######## Message to let the user know the info has been saved
+                flash ("File saved!", "info")
 
-######## Message to let the user know the info has been saved
-        flash ("File saved!")
-
-        return render_template("main.html")
+                return render_template("main.html")
     else:
         return "not working"
 
