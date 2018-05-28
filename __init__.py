@@ -2,6 +2,7 @@ from flask import Flask, render_template, request, flash
 import numpy as np
 from werkzeug import secure_filename
 import os, sys
+import re
 
 
 reload(sys)
@@ -14,6 +15,7 @@ app.config["SECRET_KEY"] = "verysecret"
 @app.route('/')
 def homepage():
     return render_template("main.html")
+
 
 ######## The Upload folder will be the current folder
 current_folder_path, current_folder_name = os.path.split(os.getcwd())
@@ -126,8 +128,6 @@ def handle_input():
                         a += 1
 
 
-                print final_array
-
             data_to_save = np.zeros((no_zeros,numdemes+numdemes**2+1), dtype="object")
 
             for row in range(no_zeros):
@@ -138,14 +138,26 @@ def handle_input():
                     for col in range(len(final_array[0])):
                         data_to_save[row,col] = request.form[final_array[row,col]]
 
+            c=len(data_to_save)
+            r=len(data_to_save[0])
+            neg = 0
+            
+            for i in range (0,c):
+                for n in range(0,r):
+                    if int(data_to_save[i,n])<0:
+                        neg = "neg"
 
-            print "\n"
-            print data_to_save
 
             filename = request.form["filename"]
             if os.path.isfile(filename):
                 return ("", 204)
+            elif data_to_save[0,0] != "0":
+                return ("", 204)
+            elif neg == "neg":
+                return ("", 204)
+
             else:
+
                 with open(filename,"w") as f:
                     for row in range(no_zeros):
 
@@ -158,7 +170,8 @@ def handle_input():
                         f.write("\n")
                         for col in range(1,numdemes+1):
                             f.write(data_to_save[row,col])
-                            f.write(" ")
+                            if col < numdemes:
+                                f.write(" ")
                         f.write("\n\n")
 
                         f.write("# Migration matrix")
@@ -166,9 +179,11 @@ def handle_input():
                         for k in range(1,numdemes+1):
                             for i in range(k*numdemes+1,numdemes*(k+1)+1):
                                 f.write(data_to_save[row,i])
-                                f.write(" ")
+                                if i < numdemes*(k+1):
+                                    f.write(" ")
                             f.write("\n")
-                        f.write("\n")
+                        if row < no_zeros-1:
+                            f.write("\n")
 
 
             ######## To reset the count variable to 1

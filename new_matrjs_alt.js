@@ -1,8 +1,6 @@
-section_names=["file", "timechange", "demesizes"];
-
 var count = 0;
 var div_ids = [];
-numdemes_value=[]
+var list_ids =[]
 
 
 //controls the checkboxes. if checked the content is showed.
@@ -16,10 +14,35 @@ function Checkbox(e){
         $("#"+div_ids[id]).hide();
       } else {
         $("#"+div_ids[id]).show();
+
       };
     };
   };
 };
+
+function Makelist (count){
+  chk_list = []
+  var numdemes = document.getElementById("numdemes0").value;
+
+  for (i=0; i<=count; i++){
+    var matr_names =[]
+    chk_list.push("chk_remove"+i);
+    var chk_state = document.getElementById(chk_list[i]).checked;
+    if ( chk_state== true){
+
+      list_ids.push("timechange"+i)
+      for (n=0; n< numdemes; n++){
+        list_ids.push("demesizes_cell"+i+"_"+n)
+        for (k=0;k<numdemes;k++){
+          matr_names.push("matr_cell"+i+"_"+n+"_"+k)
+        }
+      }
+      for (b=0;b<matr_names.length;b++){
+        list_ids.push(matr_names[b])
+      }
+    }
+  }
+}
 
 function Add_checkbox(count){
 
@@ -101,8 +124,6 @@ function Remove_fields(){
 }
 
 
-// creates and adds "deme size" field
-
 $(document).ready(function(){
   $("#btn_repeat").on("click", function(){
 
@@ -158,8 +179,27 @@ $(document).ready(function(){
       }
 
 
-    });
-
+  });
+  $("#btn_save").on("click", function(){
+    Makelist(count);
+    if (document.getElementById(list_ids[0]).value != "0"){
+      alert("The first time change must be zero")
+    }
+    for (i=0; i<list_ids.length; i++){
+      if (document.getElementById(list_ids[i]).value < 0){
+        var negative = 0
+      }
+      //if document.getElementById(list_ids[i].value === ""){
+        //empty = 0
+      //}
+    }
+    if (negative != null){
+      alert("Make sure all values are ≥ 0")
+    }
+    //if (empty != null){
+      //alert("Make sure all fields are filled")
+    //}
+  });
 
 
 });
