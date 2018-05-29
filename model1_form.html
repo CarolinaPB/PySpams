@@ -17,7 +17,7 @@
       <label>Number of loci</label>
           <input type="text" id="numloci0" name="numloci" type="text"/> <br><br>
       <label>Number of demes</label><br>
-          <input type="text" id="numdemes0" name="numdemes" type="text" /><br><br>
+          <input type="text" id="numdemes0" name="numdemes" type="text" onchange="Ndemes()"/><br><br>
 
           <input type="submit" name="button" value="Ok" id="btn_ndemes">
       <br><br>
@@ -28,8 +28,9 @@
       <div id="div_to_append"></div>
 
       <br>
+
       <input type = "submit" name = "button" value ="Add matrix" id='btn_repeat'>
-      <br><br><br>
+      <br><br>
 
       <label id="filename_field">File name</label>
           <input id="filename" name="filename" type="text"/> <br><br><br>
@@ -43,12 +44,7 @@
      </div>
   </form>
 </div>
-<script>
-function show_filename0(){
-      filepath = document.getElementById("file0").files[0].name;
-      $("#label0").html("<h4>" + filepath + "</h4>");
-};
-</script>
+
 
 
 <footer>

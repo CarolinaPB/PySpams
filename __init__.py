@@ -141,7 +141,7 @@ def handle_input():
             c=len(data_to_save)
             r=len(data_to_save[0])
             neg = 0
-            
+
             for i in range (0,c):
                 for n in range(0,r):
                     if int(data_to_save[i,n])<0:

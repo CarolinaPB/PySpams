@@ -2,7 +2,6 @@ var count = 0;
 var div_ids = [];
 var list_ids =[]
 
-
 //controls the checkboxes. if checked the content is showed.
 function Checkbox(e){
   for (var id in div_ids){
@@ -48,8 +47,6 @@ function Add_checkbox(count){
 
   div_ids.push("div_chk"+count); //list with ids of all the new div
 
-
-  //creates a checkbox
   var chk_content =
   '<br><input type="checkbox" id="chk_remove' + count + '" name="chk_remove' + count + '" value="Remove" checked onclick="Checkbox(this)" class="myclass' + count + '">'+
   '   '+
@@ -65,6 +62,29 @@ function Add_checkbox(count){
   $("#div_to_append").append(chk_content);
   $("#div_to_append").append(div_chk);
   $("#div_chk"+count).append(timechange_content);
+}
+
+function Add_matr(count){
+  var numdemes = document.getElementById("numdemes0").value;
+  var num = []
+  for (i=1;i<=numdemes; i++){
+    num.push(i);
+  };
+
+  var columnCount = num.length;
+
+  var matr = '<label id="matr_label">Migration matrix</label><br><table id="matr_table'+count+'" class="table-striped table-hover"><tr>'
+
+  $("#repeated_fields"+count).append(matr);
+
+  table = document.getElementById("matr_table"+count)
+  for (var i=0; i<columnCount;i++){
+    row=table.insertRow();
+    for (var j = 0; j<columnCount; j++){
+      var cell=row.insertCell();
+      cell.innerHTML = "<input type='text' value='0' id='matr_cell"+count+""+'_'+""+ i +""+'_'+""+ j +"' name='matr_cell"+count+""+'_'+""+ i +""+'_'+""+ j +"'>";
+    }
+  }
 }
 
 function Add_fields(count){
@@ -87,30 +107,103 @@ function Add_fields(count){
   }
   var deme_content = deme + deme1 + "</tr></table><br>";
 
-  var matr = '<label id="matr_label">Initial migration matrix</label><br><table id="matr_table'+count+'" class="table-striped table-hover"><tr>'
+  var options ='<select id ="dd_menu'+count+'" onchange="Add_island(this)"><option value="Custom" id="opt_custom'+count+'">Custom</option><option value="N-island" id="opt_island'+count+'">N-island</option></select><br><br>'
 
   $("#div_chk"+count).append(repeated_fields_div);
   $("#repeated_fields"+count).append(deme_content);
-  //$("#repeated_fields"+count).append(matr_upload);
-  $("#repeated_fields"+count).append(matr);
-
+  $("#repeated_fields"+count).append(options);
 
 
   //adds the input fields to the demesizes_table
   for (var i=0;i<columnCount;i++){
     $("#deme_cell"+count+i).append("<input type='text' value='1' id='demesizes_cell"+ count +""+'_'+"" + i + "' name='demesizes_cell"+ count +""+'_'+"" + i + "' >")
   }
+  Add_matr(count)
 
-  table = document.getElementById("matr_table"+count)
-  for (var i=0; i<columnCount;i++){
-    row=table.insertRow();
-    for (var j = 0; j<columnCount; j++){
-      var cell=row.insertCell();
-      cell.innerHTML = "<input type='text' value='0' id='matr_cell"+count+""+'_'+""+ i +""+'_'+""+ j +"' name='matr_cell"+count+""+'_'+""+ i +""+'_'+""+ j +"'>";
-    }
-  }
 }
 
+function Populate_isl(e){
+  var numdemes = document.getElementById("numdemes0").value;
+  var num = []
+  for (i=1;i<=numdemes; i++){
+    num.push(i);
+  };
+  var columnCount = num.length;
+
+  mig_rate=$(e).attr("id")
+  this_count = Number(mig_rate.replace("mig_rate",''));
+
+  mig_rate_id= "mig_rate"+this_count
+
+  mig_rate_val = document.getElementById(mig_rate_id).value
+
+  var cell_val = mig_rate_val/(numdemes-1)
+
+  for (i=0; i<=count; i++){
+    cell_names=[]
+    for (n=0; n< numdemes; n++){
+      for (k=0;k<numdemes;k++){
+        cell_names.push("matr_cell"+i+"_"+n+"_"+k)
+      }
+    }
+  }
+
+  for (i=0; i<cell_names.length;i++){
+    document.getElementById(cell_names[i]).value = cell_val
+  }
+
+
+}
+
+
+function Add_island(e){
+  dd_menu=$(e).attr("id")
+
+  this_count = Number(dd_menu.replace("dd_menu",''));
+
+  var ddm = document.getElementById(dd_menu);
+  var ddm_value = ddm.options[ddm.selectedIndex].value;
+    if(ddm_value == "N-island"){
+
+      $("#matr_table"+this_count).remove()
+      $("#matr_label").remove();
+      $("<br>").remove()
+
+      var numdemes = document.getElementById("numdemes0").value;
+      var num = []
+      for (i=1;i<=numdemes; i++){
+        num.push(i);
+      };
+      var columnCount = num.length;
+
+      var isl_div = '<div id="isl_div'+this_count+'"></div>'
+
+      var mig_rate = '<label id= "mig_rate_label'+this_count+'">Migration rate</label><input type="text" name="mig_rate'+this_count+'" id="mig_rate'+this_count+'" onchange=Populate_isl(this) >'
+
+      var matr_isl = '<label id="matr_label">Migration matrix</label><br><table id="matr_isl_table'+count+'" class="table-striped table-hover"><tr>'
+
+      $("#repeated_fields"+this_count).append(isl_div)
+      $("#isl_div"+this_count).append(mig_rate)
+
+      $("#isl_div"+this_count).append(matr_isl);
+
+      table = document.getElementById("matr_isl_table"+count)
+      for (var i=0; i<columnCount;i++){
+        row=table.insertRow();
+        for (var j = 0; j<columnCount; j++){
+          var cell=row.insertCell();
+          cell.innerHTML = "<input type='text' value=0 id='matr_cell"+count+""+'_'+""+ i +""+'_'+""+ j +"' name='matr_cell"+count+""+'_'+""+ i +""+'_'+""+ j +"'>";
+        }
+      }
+
+
+    }else {
+      $("#isl_div"+this_count).remove();
+
+      Add_matr(this_count);
+    }
+
+}
 
 
 function Remove_fields(){
@@ -121,6 +214,46 @@ function Remove_fields(){
   for (var i=0; i<count+1; i++){
     $("#repeated_fields"+i).remove();
   }
+}
+function Ndemes(){
+  $("#chk_hidden").remove()
+  var numdemes0 = document.getElementById("numdemes0").value
+  var numloci0 = document.getElementById("numloci0").value
+  if ((numdemes0 === "") || (numloci0 === "")){
+    alert("Fields missing")
+  } else {
+    var chk0_name = document.getElementById("chk_remove0")
+    if (chk0_name==null){
+      Add_checkbox(count);
+      Add_fields(count);
+    } else {
+      Remove_fields();
+      for (var n=0; n<count+1;n++){
+        Add_fields(n);
+      }
+    }
+    var numdemes = document.getElementById("numdemes0").value;
+    var num = []
+    for (i=1;i<=numdemes; i++){
+      num.push(i);
+    };
+
+    var columnCount = num.length;
+
+    //Sampling vector
+    var samp= '<label id="sampvector_label">Sampling vector</label><table id="sampvector_table"class="table-striped  table-hover"><tr>';
+    samp1=""
+    for (var i=0;i<columnCount;i++){
+      var samp1 = samp1+"<td id='samp_cell" + i + "'></td>";
+      }
+      var samp_content = samp + samp1 + "</tr></table>";
+
+      $("#sampvector_div").append(samp_content);
+
+      for (var i=0;i<columnCount;i++){
+        $("#samp_cell"+i).append("<input type='text' value='0' id='samp_cell"+i+"' name='samp_cell"+i+"' >")
+      }
+    }
 }
 
 
@@ -139,47 +272,10 @@ $(document).ready(function(){
 
 
   $("#btn_ndemes").on("click", function(){
-    $("#chk_hidden").remove()
-    var numdemes0 = document.getElementById("numdemes0").value
-    var numloci0 = document.getElementById("numloci0").value
-    if ((numdemes0 === "") || (numloci0 === "")){
-      alert("Fields missing")
-    } else {
-      var chk0_name = document.getElementById("chk_remove0")
-      if (chk0_name==null){
-        Add_checkbox(count);
-        Add_fields(count);
-      } else {
-        Remove_fields();
-        for (var n=0; n<count+1;n++){
-          Add_fields(n);
-        }
-      }
-      var numdemes = document.getElementById("numdemes0").value;
-      var num = []
-      for (i=1;i<=numdemes; i++){
-        num.push(i);
-      };
-
-      var columnCount = num.length;
-
-      //Sampling vector
-      var samp= '<label id="sampvector_label">Sampling vector</label><table id="sampvector_table"class="table-striped  table-hover"><tr>';
-      samp1=""
-      for (var i=0;i<columnCount;i++){
-        var samp1 = samp1+"<td id='samp_cell" + i + "'></td>";
-        }
-        var samp_content = samp + samp1 + "</tr></table>";
-
-        $("#sampvector_div").append(samp_content);
-
-        for (var i=0;i<columnCount;i++){
-          $("#samp_cell"+i).append("<input type='text' value='0' id='samp_cell"+i+"' name='samp_cell"+i+"' >")
-        }
-      }
-
-
+    Ndemes()
   });
+
+
   $("#btn_save").on("click", function(){
     Makelist(count);
     if (document.getElementById(list_ids[0]).value != "0"){
@@ -200,6 +296,8 @@ $(document).ready(function(){
       //alert("Make sure all fields are filled")
     //}
   });
+
+
 
 
 });
