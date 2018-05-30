@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, flash
+from flask import Flask, render_template, request, flash, jsonify
 import numpy as np
 from werkzeug import secure_filename
 import os, sys
@@ -11,9 +11,12 @@ sys.setdefaultencoding('utf-8')
 app = Flask(__name__)
 app.config["SECRET_KEY"] = "verysecret"
 
+#@app.route('/')
+#def homepage():
+ #   return render_template("homepage.html")
 
 @app.route('/')
-def homepage():
+def NSCC():
     return render_template("main.html")
 
 
@@ -38,7 +41,7 @@ def counter ():
     count += 1
     return ('', 204)
 
-@app.route("/", methods=["POST"])
+@app.route("/NSCC", methods=["POST"])
 def handle_input():
 
     if request.form["button"] == "Add matrix":
@@ -149,15 +152,14 @@ def handle_input():
 
 
             filename = request.form["filename"]
-            if os.path.isfile(filename):
-                return ("", 204)
+            if os.path.isfile(filename): #if there is already a file with the chosen name
+                return jsonify({"result":'success'})
             elif data_to_save[0,0] != "0":
                 return ("", 204)
             elif neg == "neg":
                 return ("", 204)
 
             else:
-
                 with open(filename,"w") as f:
                     for row in range(no_zeros):
 

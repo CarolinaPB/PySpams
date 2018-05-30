@@ -65,22 +65,19 @@ function Add_checkbox(count){
 }
 
 function Add_matr(count){
-  var numdemes = document.getElementById("numdemes0").value;
-  var num = []
-  for (i=1;i<=numdemes; i++){
-    num.push(i);
-  };
+  var numdemes = Number(document.getElementById("numdemes0").value)
 
-  var columnCount = num.length;
+  var matr_div = '<div id="matr_div'+count+'"></div>'
 
-  var matr = '<label id="matr_label">Migration matrix</label><br><table id="matr_table'+count+'" class="table-striped table-hover"><tr>'
+  var matr = '<label id="matr_label'+count+'">Migration matrix</label><br><table id="matr_table'+count+'" class="table-striped table-hover"><tr>'
 
-  $("#repeated_fields"+count).append(matr);
+  $("#repeated_fields"+count).append(matr_div);
+  $("#matr_div"+count).append(matr)
 
   table = document.getElementById("matr_table"+count)
-  for (var i=0; i<columnCount;i++){
+  for (var i=0; i<numdemes;i++){
     row=table.insertRow();
-    for (var j = 0; j<columnCount; j++){
+    for (var j = 0; j<numdemes; j++){
       var cell=row.insertCell();
       cell.innerHTML = "<input type='text' value='0' id='matr_cell"+count+""+'_'+""+ i +""+'_'+""+ j +"' name='matr_cell"+count+""+'_'+""+ i +""+'_'+""+ j +"'>";
     }
@@ -88,13 +85,8 @@ function Add_matr(count){
 }
 
 function Add_fields(count){
-  var numdemes = document.getElementById("numdemes0").value;
-  var num = []
-  for (i=1;i<=numdemes; i++){
-    num.push(i);
-  };
+  var numdemes = Number(document.getElementById("numdemes0").value)
 
-  var columnCount = num.length;
   //created a div inside the checkbox to append the other fields
   var repeated_fields_div = '<div class="myclass' + count + '" id="repeated_fields' + count + '">'
 
@@ -102,12 +94,14 @@ function Add_fields(count){
   var deme = '<label id="demesizes_label1">Deme sizes</label><table id="demesizes_table'+count+'" class="table-striped table-hover"><tr>';
 
   deme1=""
-  for (var i=0;i<columnCount;i++){
+  for (var i=0;i<numdemes;i++){
     var deme1 = deme1+"<td id='deme_cell"+count+"" + i + "'></td>";
   }
   var deme_content = deme + deme1 + "</tr></table><br>";
 
   var options ='<select id ="dd_menu'+count+'" onchange="Add_island(this)"><option value="Custom" id="opt_custom'+count+'">Custom</option><option value="N-island" id="opt_island'+count+'">N-island</option></select><br><br>'
+
+
 
   $("#div_chk"+count).append(repeated_fields_div);
   $("#repeated_fields"+count).append(deme_content);
@@ -115,20 +109,18 @@ function Add_fields(count){
 
 
   //adds the input fields to the demesizes_table
-  for (var i=0;i<columnCount;i++){
+  for (var i=0;i<numdemes;i++){
     $("#deme_cell"+count+i).append("<input type='text' value='1' id='demesizes_cell"+ count +""+'_'+"" + i + "' name='demesizes_cell"+ count +""+'_'+"" + i + "' >")
   }
+
   Add_matr(count)
+
 
 }
 
 function Populate_isl(e){
-  var numdemes = document.getElementById("numdemes0").value;
-  var num = []
-  for (i=1;i<=numdemes; i++){
-    num.push(i);
-  };
-  var columnCount = num.length;
+  var numdemes = Number(document.getElementById("numdemes0").value)
+
 
   mig_rate=$(e).attr("id")
   this_count = Number(mig_rate.replace("mig_rate",''));
@@ -139,17 +131,25 @@ function Populate_isl(e){
 
   var cell_val = mig_rate_val/(numdemes-1)
 
-  for (i=0; i<=count; i++){
+  for (i=0; i<=this_count; i++){
     cell_names=[]
+    diagcell_names=[]
     for (n=0; n< numdemes; n++){
       for (k=0;k<numdemes;k++){
         cell_names.push("matr_cell"+i+"_"+n+"_"+k)
+        if (n==k){
+          diagcell_names.push("matr_cell"+i+"_"+n+"_"+k)
+        }
       }
     }
   }
 
+
   for (i=0; i<cell_names.length;i++){
     document.getElementById(cell_names[i]).value = cell_val
+  }
+  for (i=0; i<diagcell_names.length;i++){
+    document.getElementById(diagcell_names[i]).value = 0
   }
 
 
@@ -161,26 +161,20 @@ function Add_island(e){
 
   this_count = Number(dd_menu.replace("dd_menu",''));
 
+
   var ddm = document.getElementById(dd_menu);
   var ddm_value = ddm.options[ddm.selectedIndex].value;
     if(ddm_value == "N-island"){
 
-      $("#matr_table"+this_count).remove()
-      $("#matr_label").remove();
-      $("<br>").remove()
+      $("#matr_div"+this_count).remove()
 
-      var numdemes = document.getElementById("numdemes0").value;
-      var num = []
-      for (i=1;i<=numdemes; i++){
-        num.push(i);
-      };
-      var columnCount = num.length;
+      var numdemes = Number(document.getElementById("numdemes0").value)
 
       var isl_div = '<div id="isl_div'+this_count+'"></div>'
 
-      var mig_rate = '<label id= "mig_rate_label'+this_count+'">Migration rate</label><input type="text" name="mig_rate'+this_count+'" id="mig_rate'+this_count+'" onchange=Populate_isl(this) >'
+      var mig_rate = '<label id= "mig_rate_label'+this_count+'">Migration rate</label><input type="text" name="mig_rate'+this_count+'" id="mig_rate'+this_count+'" onchange=Populate_isl(this) ><br><br>'
 
-      var matr_isl = '<label id="matr_label">Migration matrix</label><br><table id="matr_isl_table'+count+'" class="table-striped table-hover"><tr>'
+      var matr_isl = '<label id="matr_label'+this_count+'">Migration matrix</label><br><table id="matr_isl_table'+count+'" class="table-striped table-hover"><tr>'
 
       $("#repeated_fields"+this_count).append(isl_div)
       $("#isl_div"+this_count).append(mig_rate)
@@ -188,9 +182,9 @@ function Add_island(e){
       $("#isl_div"+this_count).append(matr_isl);
 
       table = document.getElementById("matr_isl_table"+count)
-      for (var i=0; i<columnCount;i++){
+      for (var i=0; i<numdemes;i++){
         row=table.insertRow();
-        for (var j = 0; j<columnCount; j++){
+        for (var j = 0; j<numdemes; j++){
           var cell=row.insertCell();
           cell.innerHTML = "<input type='text' value=0 id='matr_cell"+count+""+'_'+""+ i +""+'_'+""+ j +"' name='matr_cell"+count+""+'_'+""+ i +""+'_'+""+ j +"'>";
         }
@@ -223,7 +217,7 @@ function Ndemes(){
     alert("Fields missing")
   } else {
     var chk0_name = document.getElementById("chk_remove0")
-    if (chk0_name==null){
+    if (chk0_name==null){ //if this will be the first input group added
       Add_checkbox(count);
       Add_fields(count);
     } else {
@@ -232,25 +226,20 @@ function Ndemes(){
         Add_fields(n);
       }
     }
-    var numdemes = document.getElementById("numdemes0").value;
-    var num = []
-    for (i=1;i<=numdemes; i++){
-      num.push(i);
-    };
+    var numdemes = Number(document.getElementById("numdemes0").value)
 
-    var columnCount = num.length;
 
     //Sampling vector
     var samp= '<label id="sampvector_label">Sampling vector</label><table id="sampvector_table"class="table-striped  table-hover"><tr>';
     samp1=""
-    for (var i=0;i<columnCount;i++){
+    for (var i=0;i<numdemes;i++){
       var samp1 = samp1+"<td id='samp_cell" + i + "'></td>";
       }
       var samp_content = samp + samp1 + "</tr></table>";
 
       $("#sampvector_div").append(samp_content);
 
-      for (var i=0;i<columnCount;i++){
+      for (var i=0;i<numdemes;i++){
         $("#samp_cell"+i).append("<input type='text' value='0' id='samp_cell"+i+"' name='samp_cell"+i+"' >")
       }
     }
@@ -273,6 +262,7 @@ $(document).ready(function(){
 
   $("#btn_ndemes").on("click", function(){
     Ndemes()
+
   });
 
 
@@ -285,17 +275,16 @@ $(document).ready(function(){
       if (document.getElementById(list_ids[i]).value < 0){
         var negative = 0
       }
-      //if document.getElementById(list_ids[i].value === ""){
-        //empty = 0
-      //}
+
     }
     if (negative != null){
       alert("Make sure all values are ≥ 0")
     }
-    //if (empty != null){
-      //alert("Make sure all fields are filled")
-    //}
+
   });
+
+
+
 
 
 
