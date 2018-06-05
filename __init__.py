@@ -1,8 +1,13 @@
 from flask import Flask, render_template, request, flash, jsonify
+#from flask_bootstrap import Bootstrap
 import numpy as np
 from werkzeug import secure_filename
 import os, sys
 import re
+import matplotlib.pyplot as plt
+from ms_IICR_functions import readScenario, createCmd, generate_MS_t2, compute_t_vector, compute_empirical_dist
+
+
 
 
 reload(sys)
@@ -11,14 +16,18 @@ sys.setdefaultencoding('utf-8')
 app = Flask(__name__)
 app.config["SECRET_KEY"] = "verysecret"
 
-#@app.route('/')
-#def homepage():
- #   return render_template("homepage.html")
 
 @app.route('/')
-def NSCC():
-    return render_template("main.html")
+def HOME():
+    return render_template("home.html")
 
+@app.route('/ms')
+def MS():
+    return render_template("ms.html")
+
+@app.route('/NSCC')
+def NSCC():
+    return render_template("model1_form.html")
 
 ######## The Upload folder will be the current folder
 current_folder_path, current_folder_name = os.path.split(os.getcwd())
@@ -31,6 +40,9 @@ count = 1
 global btn_OK
 btn_OK= "not pressed"
 
+global ms_count
+ms_count= 0
+
 global input_array
 input_array=np.array((["chk_remove0"],[1]), dtype=object)
 
@@ -40,8 +52,12 @@ def counter ():
     global count
     count += 1
     return ('', 204)
+def ms_counter():
+    global ms_count
+    ms_count+=1
+    return ('', 204)
 
-@app.route("/NSCC", methods=["POST"])
+@app.route("/", methods=["POST"])
 def handle_input():
 
     if request.form["button"] == "Add matrix":
@@ -147,13 +163,14 @@ def handle_input():
 
             for i in range (0,c):
                 for n in range(0,r):
-                    if int(data_to_save[i,n])<0:
+                    if int(
+                    data_to_save[i,n])<0:
                         neg = "neg"
 
 
             filename = request.form["filename"]
             if os.path.isfile(filename): #if there is already a file with the chosen name
-                return jsonify({"result":'success'})
+                return jsonify({"result":'file exists'})
             elif data_to_save[0,0] != "0":
                 return ("", 204)
             elif neg == "neg":
@@ -199,9 +216,60 @@ def handle_input():
             ######## Message to let the user know the info has been saved
                 flash ("File saved!", "info")
 
-                return render_template("main.html")
+                return render_template("model1_form.html")
     else:
         return "not working"
+
+
+@app.route("/ms", methods=["POST"])
+def handle_ms():
+    if request.form["button"] == "+":
+        ms_counter()
+        return ("", 204)
+    elif request.form["button"] == "-":
+        print ""
+        return ("", 204)
+    elif request.form["button"] == "Submit":
+        if request.method =="POST":
+            file = request.files["ms_file0"]
+            if file:
+                ms_filename = secure_filename(file.filename)
+                file.save(os.path.join(UPLOAD_FOLDER, ms_filename))
+
+        ms_filename="./"+ms_filename
+
+        #s = readScenario(ms_filename)
+        #cmd = createCmd(s)
+
+        # The variable cmd contains the relative path to the ms software
+        # and assumes that the ms software is inside the same folder as the script.
+
+        #T2 = generate_MS_t2(cmd)
+
+        # Generating the time vector
+        #start = 0.001
+        #end = 10
+        #number_of_values = 1000
+        #vector_type = 'log'
+
+        #t_vector = compute_t_vector(start, end, number_of_values, vector_type)
+        #obs = T2
+
+
+        #(F_x, f_x) = compute_empirical_dist(obs, t_vector)
+
+        #IICR = np.true_divide(len(obs)-F_x, f_x)
+
+        #fig = plt.figure()
+        #ax = fig.add_subplot(111)
+        #ax.step(t_vector, IICR, where='post', color="red", ls="-", label="IICR plot")
+        #ax.set_xscale("log")
+        #plt.legend(loc="best")
+        #plt.show()
+
+
+        os.remove(ms_filename)
+        return render_template("ms.html")
 
 
 if __name__ == "__main__":

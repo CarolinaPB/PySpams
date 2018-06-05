@@ -1,52 +1,50 @@
-<div id="repeatfields">
-  <h1>NSCC model</h1>
-  {% with messages = get_flashed_messages(category_filter=["info"]) %}
-    {% if messages %}
-      {% for message in messages %}
-      <div class="alert alert-info alert-dismissible" role="alert">
-        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
-        {{message}}
-      </div>
-      {% endfor %}
-    {% endif %}
-  {% endwith %}
-  {% block body %}{% endblock %}
+{% extends "main.html" %}
+{% block content %}
+  <div id="repeatfields">
 
-  <form action="" method="POST" enctype="multipart/form-data">
-    <div id ="first_fields"class="border">
-      <label>Number of loci</label>
-          <input type="text" id="numloci0" name="numloci" type="text"/> <br><br>
-      <label>Number of demes</label><br>
-          <input type="text" id="numdemes0" name="numdemes" type="text" onchange="Ndemes()"/><br><br>
+    <h1>NSCC model</h1>
+    <br><br>
+    {% with messages = get_flashed_messages(category_filter=["info"]) %}
+      {% if messages %}
+        {% for message in messages %}
+        <div class="alert alert-info alert-dismissible" role="alert">
+          <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
+          {{message}}
+        </div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
 
-          <input type="submit" name="button" value="Ok" id="btn_ndemes">
-      <br><br>
+    <form action="" method="POST" enctype="multipart/form-data">
+      <div id ="first_fields">
+        <label>Number of loci</label>
+            <input type="text" id="numloci0" name="numloci"/> <br><br>
+        <label>Number of demes</label><br>
+            <input type="text" id="numdemes0" name="numdemes" onchange="Ndemes()"/><br><br>
 
-      <div id="sampvector_div"></div>
-      <hr>
+            <input type="submit" name="button" value="Ok" id="btn_ndemes">
+        <br><br>
 
-      <div id="div_to_append"></div>
+        <div id="sampvector_div"></div>
+        <hr>
 
-      <br>
+        <div id="div_to_append"></div>
 
-      <input type = "submit" name = "button" value ="Add matrix" id='btn_repeat'>
-      <br><br>
+        <br>
 
-      <label id="filename_field">File name</label>
-          <input id="filename" name="filename" type="text"/> <br><br><br>
+        <input type = "submit" name = "button" value ="Add matrix" id='btn_repeat'>
+        <br><br>
 
-
-
-      <input type="submit" name="button" id="btn_save" value ="Save to file" >
-      <input type = "submit" name = "button" value = "Reset form" id = "btn_reset" class="btn_reset">
-
-
-     </div>
-  </form>
-</div>
+        <label id="filename_field">File name</label>
+            <input id="filename" name="filename" type="text"/> <br><br><br>
 
 
 
-<footer>
-  <br><br>
-</footer>
+        <input type="submit" name="button" id="btn_save" value ="Save to file" >
+        <input type = "submit" name = "button" value = "Reset form" id = "btn_reset" class="btn_reset">
+
+
+       </div>
+    </form>
+  </div>
+{% endblock %}
