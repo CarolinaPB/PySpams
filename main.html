@@ -21,9 +21,10 @@
 		}
 		input.btn[type='submit'] {
 
-			margin: 10px 0;
+			margin: 10px 5px;
 			padding: 0px 10px;
 		}
+
 		input[type='file'] {
 			float: left;
 			margin: 10px 0;
@@ -40,9 +41,7 @@
 		}
 
 </style>
-
 </head>
-
 
 <body>
 
@@ -51,7 +50,7 @@
 	    <div class="navbar-nav">
 	      <a class="nav-item nav-link" id="nav" href="{{ url_for('HOME') }}">Home</a>
 	      <a class="nav-item nav-link" id="nav" href="{{ url_for('NSCC') }}">NSCC</a>
-	      <a class="nav-item nav-link" id="nav" href="{{ url_for('MS') }}">ms</a>
+	      <a class="nav-item nav-link" id="nav" href="{{ url_for('IICR') }}">IICR</a>
 	    </div>
 	  </div>
 	</nav>
@@ -59,17 +58,14 @@
 	<div class="container-fluid">
 		<br><br>
 		{% block content %}{% endblock %}
-
-
-
   </div>
 
 
 
 </body>
+
+
 <footer>
   <br><br>
 </footer>
-
-
 </html>

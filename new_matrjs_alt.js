@@ -257,19 +257,6 @@ function Ndemes(){
     }
 }
 
-//////MS FUNCTIONS
-function Add_msfile(c){
-  alert(c)
-  var ms_div = "<div id='ms_div"+c+"'></div>"
-  var new_file = '<input type="file" id="ms_file'+c+'" name="ms_file'+c+'"/>'+
-  '<input type = "submit" name = "button" value ="+" id="btn_filerepeat'+c+'" class="btn btn-success">'+
-      '<input type="submit" name="button" value="-" class="btn btn-danger" id="btn_fileremove'+c+'"><br><br>'
-  $("#ms_append_div").append(ms_div)
-  $("#ms_div"+c).append(new_file)
-}
-function Remove_msfile(e){
-  alert("remove")
-}
 
 
 $(document).ready(function(){
@@ -308,15 +295,6 @@ $(document).ready(function(){
     }
 
   });
-  $("#btn_filerepeat").on("click", function(){
-    ms_count++;
-    Add_msfile(ms_count)
 
-
-  })
-  $("#btn_fileremove").on("click", function(){
-    ms_count=ms_count-1
-    Remove_msfile()
-  })
 
 });

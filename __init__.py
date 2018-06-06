@@ -21,8 +21,8 @@ app.config["SECRET_KEY"] = "verysecret"
 def HOME():
     return render_template("home.html")
 
-@app.route('/ms')
-def MS():
+@app.route('/IICR')
+def IICR():
     return render_template("ms.html")
 
 @app.route('/NSCC')
@@ -40,8 +40,6 @@ count = 1
 global btn_OK
 btn_OK= "not pressed"
 
-global ms_count
-ms_count= 0
 
 global input_array
 input_array=np.array((["chk_remove0"],[1]), dtype=object)
@@ -52,12 +50,8 @@ def counter ():
     global count
     count += 1
     return ('', 204)
-def ms_counter():
-    global ms_count
-    ms_count+=1
-    return ('', 204)
 
-@app.route("/", methods=["POST"])
+@app.route("/NSCC", methods=["POST"])
 def handle_input():
 
     if request.form["button"] == "Add matrix":
@@ -170,14 +164,14 @@ def handle_input():
 
             filename = request.form["filename"]
             if os.path.isfile(filename): #if there is already a file with the chosen name
-                return jsonify({"result":'file exists'})
+                return (filename + " already exists. Please choose another name")
             elif data_to_save[0,0] != "0":
                 return ("", 204)
             elif neg == "neg":
                 return ("", 204)
 
             else:
-                with open(filename,"w") as f:
+                with open(filename+".txt","w") as f:
                     for row in range(no_zeros):
 
                         f.write("# Time")
@@ -221,22 +215,23 @@ def handle_input():
         return "not working"
 
 
-@app.route("/ms", methods=["POST"])
+@app.route("/IICR", methods=["POST"])
 def handle_ms():
-    if request.form["button"] == "+":
-        ms_counter()
-        return ("", 204)
-    elif request.form["button"] == "-":
-        print ""
-        return ("", 204)
-    elif request.form["button"] == "Submit":
-        if request.method =="POST":
-            file = request.files["ms_file0"]
-            if file:
-                ms_filename = secure_filename(file.filename)
-                file.save(os.path.join(UPLOAD_FOLDER, ms_filename))
+    if request.form["button"] == "Submit":
 
-        ms_filename="./"+ms_filename
+        #if request.method =="POST":
+         #   file = request.files["ms_file0"]
+          #  if file:
+           #     ms_filename = secure_filename(file.filename)
+            #    file.save(os.path.join(UPLOAD_FOLDER, ms_filename))
+
+        #ms_filename="./"+ms_filename
+
+        #for i in range(ms_count+1):
+         #   var="ms_div"+str(i)
+          #  print var
+            #if not request.form[var]:
+             #   print "ok"
 
         #s = readScenario(ms_filename)
         #cmd = createCmd(s)
@@ -268,8 +263,9 @@ def handle_ms():
         #plt.show()
 
 
-        os.remove(ms_filename)
+        #os.remove(ms_filename)
         return render_template("ms.html")
+
 
 
 if __name__ == "__main__":
