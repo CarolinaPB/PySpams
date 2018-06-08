@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, flash, jsonify
+from flask import Flask, render_template, request, flash, jsonify, url_for, send_from_directory, send_file
 #from flask_bootstrap import Bootstrap
 import numpy as np
 from werkzeug import secure_filename
@@ -29,11 +29,12 @@ def IICR():
 def NSCC():
     return render_template("model1_form.html")
 
+
 ######## The Upload folder will be the current folder
 current_folder_path, current_folder_name = os.path.split(os.getcwd())
 UPLOAD_FOLDER = os.path.join(current_folder_path,current_folder_name)
 
-app.config["UPLOADFOLDER"] = UPLOAD_FOLDER
+app.config["UPLOAD_FOLDER"] = UPLOAD_FOLDER
 
 global count
 count = 1
@@ -73,12 +74,13 @@ def handle_input():
         btn_OK = "not pressed"
         input_array=np.array((["chk_remove0"],[1]), dtype=object)
         input_array=np.hstack(input_array)
-        return render_template("main.html", count=count, btn_OK=btn_OK)
+        return render_template("model1_form.html", count=count, btn_OK=btn_OK)
 
     elif request.form["button"] == "Ok":
         if request.form["numdemes"] != "":
             global btn_OK
             btn_OK = "pressed"
+            print "ok pressed"
         return ("", 204)
 
     elif request.form["button"] == "Save to file":
@@ -109,7 +111,6 @@ def handle_input():
                         a += 1
 
                 no_zeros=1
-                print final_array
 
             elif count >= 2:
 
@@ -120,6 +121,7 @@ def handle_input():
                         input_array[i,1]=0
 
                 no_zeros = np.count_nonzero(input_array[:,1])
+
                 final_array = np.zeros((no_zeros,numdemes+numdemes**2+1), dtype="object")
 
                 a=0
@@ -155,23 +157,25 @@ def handle_input():
             r=len(data_to_save[0])
             neg = 0
 
+#if there is a negative number in the fields that will be saved, the variable "neg" will be given the value "neg". If neg = "neg", it means there's a negative number and the page will stay the same and the file won't save
             for i in range (0,c):
                 for n in range(0,r):
-                    if int(
-                    data_to_save[i,n])<0:
+                    if float(data_to_save[i,n])<0:
                         neg = "neg"
 
-
+            global filename
             filename = request.form["filename"]
-            if os.path.isfile(filename): #if there is already a file with the chosen name
-                return (filename + " already exists. Please choose another name")
-            elif data_to_save[0,0] != "0":
+            if os.path.isfile(filename+".txt"): #if there is already a file with the chosen name
+                return render_template("fileexists.html", filename=filename)
+            elif data_to_save[0,0] != "0": # if the first timechange if not zero, the page stays the same and the file won't save
                 return ("", 204)
             elif neg == "neg":
                 return ("", 204)
 
             else:
-                with open(filename+".txt","w") as f:
+                print no_zeros
+                file=filename+".txt"
+                with open(file,"w") as f:
                     for row in range(no_zeros):
 
                         f.write("# Time")
@@ -198,7 +202,6 @@ def handle_input():
                         if row < no_zeros-1:
                             f.write("\n")
 
-
             ######## To reset the count variable to 1
                 global count
                 count = 1
@@ -209,8 +212,10 @@ def handle_input():
 
             ######## Message to let the user know the info has been saved
                 flash ("File saved!", "info")
+                #return send_from_directory(UPLOAD_FOLDER, file, as_attachment=True)
 
                 return render_template("model1_form.html")
+
     else:
         return "not working"
 
@@ -219,19 +224,13 @@ def handle_input():
 def handle_ms():
     if request.form["button"] == "Submit":
 
-        #if request.method =="POST":
-         #   file = request.files["ms_file0"]
-          #  if file:
-           #     ms_filename = secure_filename(file.filename)
-            #    file.save(os.path.join(UPLOAD_FOLDER, ms_filename))
+        if request.method =="POST":
+            file = request.files["ms_file0"]
+            if file:
+                ms_filename = secure_filename(file.filename)
+                file.save(os.path.join(UPLOAD_FOLDER, ms_filename))
 
-        #ms_filename="./"+ms_filename
-
-        #for i in range(ms_count+1):
-         #   var="ms_div"+str(i)
-          #  print var
-            #if not request.form[var]:
-             #   print "ok"
+        ms_filename="./"+ms_filename
 
         #s = readScenario(ms_filename)
         #cmd = createCmd(s)
@@ -263,11 +262,11 @@ def handle_ms():
         #plt.show()
 
 
-        #os.remove(ms_filename)
+        os.remove(ms_filename)
         return render_template("ms.html")
 
 
 
 if __name__ == "__main__":
-    #change to app.run()
+    #app.run()
     app.run(debug=True)
