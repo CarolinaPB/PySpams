@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, flash, jsonify, url_for, send_from_directory, send_file
+from flask import Flask, render_template, request, flash, url_for, send_from_directory, send_file
 #from flask_bootstrap import Bootstrap
 import numpy as np
 from werkzeug import secure_filename
@@ -66,6 +66,8 @@ def handle_input():
             global input_array
             new_input=np.hstack(new_input)
             input_array=np.vstack((input_array, new_input))
+        else:
+            print "Add matrix not working"
 
         return (str(count), 204)
 
@@ -80,7 +82,9 @@ def handle_input():
         if request.form["numdemes"] != "":
             global btn_OK
             btn_OK = "pressed"
-            print "ok pressed"
+            print btn_OK
+        else:
+            print "btn ok not working"
         return ("", 204)
 
     elif request.form["button"] == "Save to file":
@@ -212,12 +216,15 @@ def handle_input():
 
             ######## Message to let the user know the info has been saved
                 flash ("File saved!", "info")
-                #return send_from_directory(UPLOAD_FOLDER, file, as_attachment=True)
 
-                return render_template("model1_form.html")
+                #use this in the final program.
+                return send_from_directory(UPLOAD_FOLDER, file, as_attachment=True)
+
+                #return render_template("model1_form.html")
 
     else:
         return "not working"
+
 
 
 @app.route("/IICR", methods=["POST"])

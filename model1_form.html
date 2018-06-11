@@ -15,12 +15,12 @@
       {% endif %}
     {% endwith %}
 
-    <form action="" method="POST" enctype="multipart/form-data">
+    <form action="" method="POST" id="form" enctype="multipart/form-data">
       <div id ="first_fields">
         <label>Number of loci</label>
             <input type="text" id="numloci0" name="numloci"/> <br><br>
         <label>Number of demes</label><br>
-            <input type="text" id="numdemes0" name="numdemes" onchange="Ndemes()"/><br><br>
+            <input type="text" id="numdemes0" name="numdemes" value="" onchange="Ndemes()"/><br><br>
 
             <input type="submit" name="button" value="Ok" id="btn_ndemes">
         <br><br>

@@ -1,7 +1,6 @@
 var count = 0;
 var div_ids = [];
 var list_ids =[]
-var ms_count = 0
 
 $(function(){
     $('a').each(function(){
@@ -208,6 +207,16 @@ function Add_island(e){
 
 }
 
+//function Reload (){
+  //var toreload = document.getElementById("save_hidden")
+  //if (toreload){
+    //alert("reload")
+    //window.location.reload()
+  //}
+
+//}
+
+
 
 function Remove_fields(){
 
@@ -240,8 +249,6 @@ function Ndemes(){
     }
     var numdemes = Number(document.getElementById("numdemes0").value)
 
-
-    //Sampling vector
     var samp= '<label id="sampvector_label">Sampling vector</label><table id="sampvector_table"class="table-striped  table-hover"><tr>';
     samp1=""
     for (var i=0;i<numdemes;i++){
@@ -254,6 +261,7 @@ function Ndemes(){
       for (var i=0;i<numdemes;i++){
         $("#samp_cell"+i).append("<input type='text' value='0' id='samp_cell"+i+"' name='samp_cell"+i+"' >")
       }
+      document.getElementById("btn_ndemes").click();
     }
 }
 
@@ -294,7 +302,7 @@ $(document).ready(function(){
       alert("Make sure all values are ≥ 0")
     }
 
+    //document.getElementById("form").reset()
+
   });
-
-
 });
