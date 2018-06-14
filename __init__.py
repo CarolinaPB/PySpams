@@ -1,9 +1,8 @@
-from flask import Flask, render_template, request, flash, url_for, send_from_directory, send_file
-#from flask_bootstrap import Bootstrap
+from flask import Flask, render_template, request, flash, url_for, send_from_directory, send_file, after_this_request
 import numpy as np
 from werkzeug import secure_filename
 import os, sys
-import re
+#import re
 import matplotlib.pyplot as plt
 from ms_IICR_functions import readScenario, createCmd, generate_MS_t2, compute_t_vector, compute_empirical_dist
 
@@ -29,6 +28,23 @@ def IICR():
 def NSCC():
     return render_template("model1_form.html")
 
+
+##########################################
+@app.route('/downloads/')
+def Download():
+    return render_template("downloads.html")
+
+@app.route('/return_files/')
+def Return_files():
+    #filename = request.form["filename"] +".txt"
+    #print filename
+    #return send_file('/home/carolina/flask_app/flask_app/'+filename,attachment_filename=filename )
+    @after_this_request
+    def remove_file(response):
+        os.remove("file.txt")
+        return response
+    return send_file('/home/carolina/flask_app/flask_app/file.txt', attachment_filename='file.txt' )
+################################################
 
 ######## The Upload folder will be the current folder
 current_folder_path, current_folder_name = os.path.split(os.getcwd())
@@ -214,10 +230,19 @@ def handle_input():
                 input_array=np.array((["chk_remove0"],[1]), dtype=object)
                 input_array=np.hstack(input_array)
 
+                @after_this_request
+                def remove_file(response):
+                    os.remove(file)
+                    return response
+                #@after_this_request
+                #def Refresh(response):
+                 #   return render_template("model1_form.html")
+
             ######## Message to let the user know the info has been saved
                 flash ("File saved!", "info")
 
                 #use this in the final program.
+
                 return send_from_directory(UPLOAD_FOLDER, file, as_attachment=True)
 
                 #return render_template("model1_form.html")
