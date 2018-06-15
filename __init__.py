@@ -28,24 +28,6 @@ def IICR():
 def NSCC():
     return render_template("model1_form.html")
 
-
-##########################################
-@app.route('/downloads/')
-def Download():
-    return render_template("downloads.html")
-
-@app.route('/return_files/')
-def Return_files():
-    #filename = request.form["filename"] +".txt"
-    #print filename
-    #return send_file('/home/carolina/flask_app/flask_app/'+filename,attachment_filename=filename )
-    @after_this_request
-    def remove_file(response):
-        os.remove("file.txt")
-        return response
-    return send_file('/home/carolina/flask_app/flask_app/file.txt', attachment_filename='file.txt' )
-################################################
-
 ######## The Upload folder will be the current folder
 current_folder_path, current_folder_name = os.path.split(os.getcwd())
 UPLOAD_FOLDER = os.path.join(current_folder_path,current_folder_name)
@@ -73,6 +55,7 @@ def handle_input():
 
     if request.form["button"] == "Add matrix":
         global btn_OK
+        global count
 
         if btn_OK == "pressed":
             counter()
@@ -82,8 +65,6 @@ def handle_input():
             global input_array
             new_input=np.hstack(new_input)
             input_array=np.vstack((input_array, new_input))
-        else:
-            print "Add matrix not working"
 
         return (str(count), 204)
 
@@ -92,13 +73,13 @@ def handle_input():
         btn_OK = "not pressed"
         input_array=np.array((["chk_remove0"],[1]), dtype=object)
         input_array=np.hstack(input_array)
+
         return render_template("model1_form.html", count=count, btn_OK=btn_OK)
 
     elif request.form["button"] == "Ok":
         if request.form["numdemes"] != "":
             global btn_OK
             btn_OK = "pressed"
-            print btn_OK
         else:
             print "btn ok not working"
         return ("", 204)
@@ -173,6 +154,11 @@ def handle_input():
                     for col in range(len(final_array[0])):
                         data_to_save[row,col] = request.form[final_array[row,col]]
 
+                if data_to_save[row,0] == "":
+                    return ("", 204)
+
+
+
             c=len(data_to_save)
             r=len(data_to_save[0])
             neg = 0
@@ -183,17 +169,17 @@ def handle_input():
                     if float(data_to_save[i,n])<0:
                         neg = "neg"
 
-            global filename
-            filename = request.form["filename"]
-            if os.path.isfile(filename+".txt"): #if there is already a file with the chosen name
-                return render_template("fileexists.html", filename=filename)
-            elif data_to_save[0,0] != "0": # if the first timechange if not zero, the page stays the same and the file won't save
+            #global filename
+            #filename = request.form["filename"]
+            #if os.path.isfile(filename+".txt"): #if there is already a file with the chosen name
+             #   return render_template("fileexists.html", filename=filename)
+            if data_to_save[0,0] != "0": # if the first timechange if not zero, the page stays the same and the file won't save
                 return ("", 204)
             elif neg == "neg":
                 return ("", 204)
 
             else:
-                print no_zeros
+                filename = request.form["filename"]
                 file=filename+".txt"
                 with open(file,"w") as f:
                     for row in range(no_zeros):

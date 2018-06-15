@@ -207,14 +207,6 @@ function Add_island(e){
 
 }
 
-//function Reload (){
-  //var toreload = document.getElementById("save_hidden")
-  //if (toreload){
-    //alert("reload")
-    //window.location.reload()
-  //}
-
-//}
 
 
 
@@ -300,6 +292,14 @@ $(document).ready(function(){
     }
     if (negative != null){
       alert("Make sure all values are ≥ 0")
+    }
+    for (i=0; i<list_ids.length; i++){
+      if (document.getElementById(list_ids[i]).value ==""){
+        empty = "empty"
+      }
+    }
+    if (empty != null){
+      alert ("Make sure all fields are filled")
     }
 
     //document.getElementById("form").reset()
