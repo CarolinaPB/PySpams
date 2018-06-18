@@ -2,6 +2,10 @@ var count = 0;
 var div_ids = [];
 var list_ids =[]
 
+function Back() {
+    window.history.back();
+}
+
 $(function(){
     $('a').each(function(){
         if ($(this).prop('href') == window.location.href) {
@@ -123,12 +127,10 @@ function Add_fields(count){
 
   Add_matr(count)
 
-
 }
 
 function Populate_isl(e){
   var numdemes = Number(document.getElementById("numdemes0").value)
-
 
   mig_rate=$(e).attr("id")
   this_count = Number(mig_rate.replace("mig_rate",''));
@@ -138,8 +140,9 @@ function Populate_isl(e){
   mig_rate_val = document.getElementById(mig_rate_id).value
 
   var cell_val = mig_rate_val/(numdemes-1)
-
+  alert("count" + this_count)
   for (i=0; i<=this_count; i++){
+    alert(i)
     cell_names=[]
     diagcell_names=[]
     for (n=0; n< numdemes; n++){
@@ -159,8 +162,6 @@ function Populate_isl(e){
   for (i=0; i<diagcell_names.length;i++){
     document.getElementById(diagcell_names[i]).value = 0
   }
-
-
 }
 
 
@@ -172,43 +173,38 @@ function Add_island(e){
 
   var ddm = document.getElementById(dd_menu);
   var ddm_value = ddm.options[ddm.selectedIndex].value;
-    if(ddm_value == "N-island"){
+  if(ddm_value == "N-island"){
 
-      $("#matr_div"+this_count).remove()
+    $("#matr_div"+this_count).remove()
 
-      var numdemes = Number(document.getElementById("numdemes0").value)
+    var numdemes = Number(document.getElementById("numdemes0").value)
 
-      var isl_div = '<div id="isl_div'+this_count+'"></div>'
+    var isl_div = '<div id="isl_div'+this_count+'"></div>'
 
-      var mig_rate = '<label id= "mig_rate_label'+this_count+'">Migration rate</label><input type="text" name="mig_rate'+this_count+'" id="mig_rate'+this_count+'" onchange=Populate_isl(this) ><br><br>'
+    var mig_rate = '<label id= "mig_rate_label'+this_count+'">Migration rate</label><input type="text" name="mig_rate'+this_count+'" id="mig_rate'+this_count+'" onchange=Populate_isl(this) ><br><br>'
 
-      var matr_isl = '<label id="matr_label'+this_count+'">Migration matrix</label><br><table id="matr_isl_table'+count+'" class="table-striped table-hover"><tr>'
+    var matr_isl = '<label id="matr_label'+this_count+'">Migration matrix</label><br><table id="matr_isl_table'+count+'" class="table-striped table-hover"><tr>'
 
-      $("#repeated_fields"+this_count).append(isl_div)
-      $("#isl_div"+this_count).append(mig_rate)
+    $("#repeated_fields"+this_count).append(isl_div)
+    $("#isl_div"+this_count).append(mig_rate)
 
-      $("#isl_div"+this_count).append(matr_isl);
+    $("#isl_div"+this_count).append(matr_isl);
 
-      table = document.getElementById("matr_isl_table"+count)
-      for (var i=0; i<numdemes;i++){
-        row=table.insertRow();
-        for (var j = 0; j<numdemes; j++){
-          var cell=row.insertCell();
-          cell.innerHTML = "<input type='text' value=0 id='matr_cell"+count+""+'_'+""+ i +""+'_'+""+ j +"' name='matr_cell"+count+""+'_'+""+ i +""+'_'+""+ j +"'>";
-        }
+    table = document.getElementById("matr_isl_table"+count)
+    for (var i=0; i<numdemes;i++){
+      row=table.insertRow();
+      for (var j = 0; j<numdemes; j++){
+        var cell=row.insertCell();
+        cell.innerHTML = "<input type='text' value=0 id='matr_cell"+count+""+'_'+""+ i +""+'_'+""+ j +"' name='matr_cell"+count+""+'_'+""+ i +""+'_'+""+ j +"'>";
       }
-
-
-    }else {
-      $("#isl_div"+this_count).remove();
-
-      Add_matr(this_count);
     }
 
+
+  } else {
+    $("#isl_div"+this_count).remove();
+    Add_matr(this_count);
+  }
 }
-
-
-
 
 function Remove_fields(){
 
@@ -275,7 +271,6 @@ $(document).ready(function(){
 
   $("#btn_ndemes").on("click", function(){
     Ndemes()
-
   });
 
 
@@ -294,15 +289,16 @@ $(document).ready(function(){
       alert("Make sure all values are ≥ 0")
     }
     for (i=0; i<list_ids.length; i++){
+
       if (document.getElementById(list_ids[i]).value ==""){
         empty = "empty"
       }
     }
-    if (empty != null){
+    if (empty == "empty"){
       alert ("Make sure all fields are filled")
+      empty="no"
     }
 
-    //document.getElementById("form").reset()
 
   });
 });

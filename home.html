@@ -1,11 +1,17 @@
 {% extends "main.html" %}
 {% block content %}
-<h1>About</h1><br><br>
+<h1><b>About</b></h1><br><br>
 <p>With this page you can:
   <ul>
-    <li>Create a file according to the NSCC model which can be used to perform IICR. </li>
+    <li>Create a file according to the NSSC model which can be used to perform IICR. </li>
+    <ul>
+      <li>
+        <a  href="{{ url_for('FileExample') }}">Example file</a>
+      </li>
+    </ul>
     <li>Perform a simple IICR.</li>
   </ul>
 
+Only files with the same structure as the <a  href="{{ url_for('FileExample') }}">example file</a> can be used to perform the IICR.
 </p>
 {% endblock %}

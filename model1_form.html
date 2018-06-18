@@ -2,7 +2,7 @@
 {% block content %}
   <div id="repeatfields">
 
-    <h1>NSCC model</h1>
+    <h1><b>NSSC model</b></h1>
     <br><br>
     {% with messages = get_flashed_messages(category_filter=["info"]) %}
       {% if messages %}
@@ -37,8 +37,6 @@
 
         <label id="filename_field">File name</label>
             <input id="filename" name="filename" type="text"/> <br><br><br>
-
-
 
         <input type="submit" name="button" id="btn_save" value ="Save to file" >
         <input type = "submit" name = "button" value = "Reset form" id = "btn_reset" >

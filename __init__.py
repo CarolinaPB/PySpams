@@ -2,7 +2,6 @@ from flask import Flask, render_template, request, flash, url_for, send_from_dir
 import numpy as np
 from werkzeug import secure_filename
 import os, sys
-#import re
 import matplotlib.pyplot as plt
 from ms_IICR_functions import readScenario, createCmd, generate_MS_t2, compute_t_vector, compute_empirical_dist
 
@@ -24,9 +23,15 @@ def HOME():
 def IICR():
     return render_template("ms.html")
 
-@app.route('/NSCC')
-def NSCC():
+@app.route('/NSSC')
+def NSSC():
     return render_template("model1_form.html")
+
+@app.route('/FileExample')
+def FileExample():
+    return render_template("fileexample.html")
+
+
 
 ######## The Upload folder will be the current folder
 current_folder_path, current_folder_name = os.path.split(os.getcwd())
@@ -42,7 +47,6 @@ btn_OK= "not pressed"
 
 global input_array
 input_array=np.array((["chk_remove0"],[1]), dtype=object)
-
 input_array=np.hstack(input_array)
 
 def counter ():
@@ -50,7 +54,7 @@ def counter ():
     count += 1
     return ('', 204)
 
-@app.route("/NSCC", methods=["POST"])
+@app.route("/NSSC", methods=["POST"])
 def handle_input():
 
     if request.form["button"] == "Add matrix":
@@ -220,21 +224,15 @@ def handle_input():
                 def remove_file(response):
                     os.remove(file)
                     return response
-                #@after_this_request
-                #def Refresh(response):
-                 #   return render_template("model1_form.html")
 
             ######## Message to let the user know the info has been saved
                 flash ("File saved!", "info")
 
-                #use this in the final program.
-
                 return send_from_directory(UPLOAD_FOLDER, file, as_attachment=True)
-
                 #return render_template("model1_form.html")
 
     else:
-        return "not working"
+        return "Python Save to File not working"
 
 
 
