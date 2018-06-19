@@ -175,9 +175,10 @@ function Ndemes(){
         $("#deme_div"+n).remove()
         Add_fields(n, numdemes)
       }
-      document.getElementById("btn_ndemes").click();
+
     }
   }
+  document.getElementById("btn_ndemes").click();
 }
 
 function Populate_isl(e){
