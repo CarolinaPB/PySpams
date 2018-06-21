@@ -11,6 +11,145 @@ $(function(){
     });
 });
 
+
+
+function Download(){
+  filename = document.getElementById("filename").value
+
+  numdemes = Number(document.getElementById("numdemes0").value)
+  var final_array= []
+
+  if (count == 0){
+    for ( i=0; i< (Math.pow(numdemes,2)+numdemes+1); i++){
+      final_array.push(0)
+    }
+    final_array[0]="timechange0"
+    for (i=0; i<numdemes; i++){
+      final_array[i+1] = ("demesizes_cell0_"+i)
+    }
+    matr_names=[]
+    for (i=0; i<numdemes; i++){
+      for (n=0; n<numdemes; n++){
+        matr_names.push("matr_cell0_"+i+"_"+n)
+      }
+    }
+    a=0
+    while (a< Math.pow(numdemes,2)){
+      for (f=numdemes+1; f< final_array.length; f++){
+        final_array[f] = matr_names[a]
+        a++
+      }
+    }
+    var num_check=1
+
+  } else if (count > 0){
+
+    final_array =[]
+    var num_check =0
+    for (i =0; i<count+1; i++){
+
+      a=0
+      if (document.getElementById("chk_remove"+i).checked){
+        num_check++
+
+        inter_array=[]
+        final_array.push("timechange"+i)
+        for (c=0; c<numdemes; c++){
+          final_array.push("demesizes_cell"+i+"_"+c)
+        }
+
+        matr_names = []
+        for (n=0; n<numdemes; n++){
+          for (f=0; f<numdemes; f++){
+            final_array.push("matr_cell"+i+"_"+n+"_"+f)
+          }
+        }
+
+        a++
+
+      }
+    }
+  }
+
+  data_to_save=[]
+  len = Math.pow(numdemes,2)+numdemes+1
+  group=0
+  while (group < num_check){
+    data_to_save.push("# Time")
+    data_to_save.push("\n")
+    if (group==0){
+      data_to_save.push(document.getElementById(final_array[group,0]).value)
+      data_to_save.push("\n\n")
+      data_to_save.push("# Deme sizes")
+      data_to_save.push("\n")
+      for (col = 1; col < numdemes+1; col++){
+        data_to_save.push(document.getElementById(final_array[group,col]).value)
+        data_to_save.push(" ")
+      }
+      data_to_save.push("\n\n")
+      data_to_save.push("# Migration matrix")
+      data_to_save.push("\n")
+      iter = 0
+      while (iter<(Math.pow(numdemes, 2))) {
+        for (i=1; i<numdemes+1; i++){
+          data_to_save.push(document.getElementById(final_array[group,iter+numdemes+i]).value)
+          data_to_save.push(" ")
+
+        }
+      data_to_save.push("\n")
+      iter=iter+numdemes
+      }
+      data_to_save.push("\n")
+
+
+    } else {
+
+      data_to_save.push(document.getElementById(final_array[group,group*len]).value)
+      data_to_save.push("\n\n")
+      data_to_save.push("# Deme sizes")
+      data_to_save.push("\n")
+      for (col = group*len+1; col < group*len+numdemes+1; col++){
+        data_to_save.push(document.getElementById(final_array[group,col]).value)
+        data_to_save.push(" ")
+      }
+      data_to_save.push("\n\n")
+      data_to_save.push("# Migration matrix")
+      data_to_save.push("\n")
+
+
+      //while (iter<Number((Math.pow(numdemes, 2)))) {
+      iter=0
+      for (n=0; n<numdemes;n++){
+        for (i=Number(group*len+numdemes+1); i<Number((group+1)*len-Math.pow(numdemes, 2)+numdemes); i++){
+          data_to_save.push(document.getElementById(final_array[group+1,i+iter]).value)
+          data_to_save.push(" ")
+        }
+        data_to_save.push("\n")
+        iter=Number(iter+numdemes)
+      }
+      data_to_save.push("\n")
+      }
+
+
+    group++
+
+  }
+
+  data_to_save = data_to_save.join('')
+  alert(data_to_save)
+
+  var element = document.createElement('a');
+  element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(data_to_save));
+  element.setAttribute('download', filename);
+
+  element.style.display = 'none';
+  document.body.appendChild(element);
+
+  element.click();
+
+  document.body.removeChild(element);
+}
+
 function Back() {
     window.history.back();
 }
@@ -255,7 +394,6 @@ $(document).ready(function(){
       alert ("Make sure all fields are filled")
       empty="no"
     }
-
 
   });
 

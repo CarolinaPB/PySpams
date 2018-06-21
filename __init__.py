@@ -60,7 +60,6 @@ def handle_input():
     if request.form["button"] == "Add matrix":
         global btn_OK
         global count
-
         if btn_OK == "pressed":
             counter()
             print "count is " + str(count)
@@ -228,8 +227,9 @@ def handle_input():
             ######## Message to let the user know the info has been saved
                 flash ("File saved!", "info")
 
-                return send_from_directory(UPLOAD_FOLDER, file, as_attachment=True)
-                #return render_template("model1_form.html")
+                #return send_from_directory(UPLOAD_FOLDER, file, as_attachment=True)
+                return render_template("model1_form.html")
+                #return ("", 204)
 
     else:
         return "Python Save to File not working"
