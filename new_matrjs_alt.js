@@ -10,7 +10,41 @@ $(function(){
         }
     });
 });
+function Reload(){
+ //location.reload()
+ //window.location.href = window.location.href
+ //document.location.reload(true)
+ //location.reload(true);
+ window.location.reload()
+}
+function Validate_form(){
+  var form=document.getElementById("myform");
+  inputs=form.getElementsByTagName("input");
+  var empty="no"
+  var negative ="no"
 
+  for (index=0; index<inputs.length; index++){
+    if (inputs[index].value==null || inputs[index].value==""){
+      empty="empty"
+    } else if (Number(inputs[index].value)<0 ){
+      negative ="negative"
+    }
+  }
+
+  if (empty=="no"&& negative=="no"){
+    Download();
+    Reload();
+
+  } else if (empty=="empty" || negative=="negative"){
+    if (empty=="empty"){
+      alert("There are empty fields")
+    }
+    if (negative=="negative"){
+      alert("Make sure all values are ≥ 0")
+    }
+  }
+
+}
 
 
 function Download(){
@@ -71,111 +105,99 @@ function Download(){
     }
   }
 
-  data_to_save=[]
-  len = Math.pow(numdemes,2)+numdemes+1
-  group=0
-  while (group < num_check){
-    data_to_save.push("# Time")
-    data_to_save.push("\n")
-    if (group==0){
-      data_to_save.push(document.getElementById(final_array[group,0]).value)
-      data_to_save.push("\n\n")
-      data_to_save.push("# Deme sizes")
-      data_to_save.push("\n")
-      for (col = 1; col < numdemes+1; col++){
-        data_to_save.push(document.getElementById(final_array[group,col]).value)
-        data_to_save.push(" ")
-      }
-      data_to_save.push("\n\n")
-      data_to_save.push("# Migration matrix")
-      data_to_save.push("\n")
-      iter = 0
-      while (iter<(Math.pow(numdemes, 2))) {
-        for (i=1; i<numdemes+1; i++){
-          data_to_save.push(document.getElementById(final_array[group,iter+numdemes+i]).value)
-          data_to_save.push(" ")
 
-        }
-      data_to_save.push("\n")
-      iter=iter+numdemes
-      }
-      data_to_save.push("\n")
+  if (document.getElementById(final_array[0,0]).value !=0){
+    alert("The first time change must be zero")
 
-
-    } else {
-
-      data_to_save.push(document.getElementById(final_array[group,group*len]).value)
-      data_to_save.push("\n\n")
-      data_to_save.push("# Deme sizes")
-      data_to_save.push("\n")
-      for (col = group*len+1; col < group*len+numdemes+1; col++){
-        data_to_save.push(document.getElementById(final_array[group,col]).value)
-        data_to_save.push(" ")
-      }
-      data_to_save.push("\n\n")
-      data_to_save.push("# Migration matrix")
-      data_to_save.push("\n")
-
-
-      //while (iter<Number((Math.pow(numdemes, 2)))) {
-      iter=0
-      for (n=0; n<numdemes;n++){
-        for (i=Number(group*len+numdemes+1); i<Number((group+1)*len-Math.pow(numdemes, 2)+numdemes); i++){
-          data_to_save.push(document.getElementById(final_array[group+1,i+iter]).value)
-          data_to_save.push(" ")
-        }
+  } else {
+    data_to_save=[]
+    len = Math.pow(numdemes,2)+numdemes+1
+    group=0
+    while (group < num_check){
+      if (group>0){
         data_to_save.push("\n")
-        iter=Number(iter+numdemes)
       }
+      data_to_save.push("# Time")
       data_to_save.push("\n")
+      if (group==0){
+        data_to_save.push(document.getElementById(final_array[group,0]).value)
+        data_to_save.push("\n\n")
+        data_to_save.push("# Deme sizes")
+        data_to_save.push("\n")
+        for (col = 1; col < numdemes+1; col++){
+          data_to_save.push(document.getElementById(final_array[group,col]).value)
+          if (col<numdemes){
+            data_to_save.push(" ")
+          }
+        }
+        data_to_save.push("\n\n")
+        data_to_save.push("# Migration matrix")
+        data_to_save.push("\n")
+        iter = 0
+        while (iter<(Math.pow(numdemes, 2))) {
+          for (i=1; i<numdemes+1; i++){
+            data_to_save.push(document.getElementById(final_array[group,iter+numdemes+i]).value)
+            if (i<numdemes){
+              data_to_save.push(" ")
+            }
+          }
+        data_to_save.push("\n")
+        iter=iter+numdemes
+        }
+
+      } else {
+
+        data_to_save.push(document.getElementById(final_array[group,group*len]).value)
+        data_to_save.push("\n\n")
+        data_to_save.push("# Deme sizes")
+        data_to_save.push("\n")
+        for (col = group*len+1; col < group*len+numdemes+1; col++){
+          data_to_save.push(document.getElementById(final_array[group,col]).value)
+          if (col<group*len+numdemes){
+            data_to_save.push(" ")
+          }
+        }
+        data_to_save.push("\n\n")
+        data_to_save.push("# Migration matrix")
+        data_to_save.push("\n")
+
+        iter=0
+        for (n=0; n<numdemes;n++){
+          for (i=Number(group*len+numdemes+1); i<Number((group+1)*len-Math.pow(numdemes, 2)+numdemes); i++){
+            data_to_save.push(document.getElementById(final_array[group+1,i+iter]).value)
+            if (i<Number((group+1)*len-Math.pow(numdemes, 2)+numdemes-1)){
+              data_to_save.push(" ")
+            }
+          }
+          data_to_save.push("\n")
+          iter=Number(iter+numdemes)
+        }
+
       }
 
+      group++
 
-    group++
+    }
 
+    data_to_save = data_to_save.join('')
+
+
+    var element = document.createElement('a');
+    element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(data_to_save));
+    element.setAttribute('download', filename);
+
+    element.style.display = 'none';
+    document.body.appendChild(element);
+
+    element.click();
+
+    document.body.removeChild(element);
   }
 
-  data_to_save = data_to_save.join('')
-  alert(data_to_save)
-
-  var element = document.createElement('a');
-  element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(data_to_save));
-  element.setAttribute('download', filename);
-
-  element.style.display = 'none';
-  document.body.appendChild(element);
-
-  element.click();
-
-  document.body.removeChild(element);
 }
 
 function Back() {
     window.history.back();
-}
-
-function Makelist (count){
-  chk_list = []
-  var numdemes = document.getElementById("numdemes0").value;
-
-  for (i=0; i<=count; i++){
-    var matr_names =[]
-    chk_list.push("chk_remove"+i);
-    var chk_state = document.getElementById(chk_list[i]).checked;
-    if ( chk_state== true){
-
-      list_ids.push("timechange"+i)
-      for (n=0; n< numdemes; n++){
-        list_ids.push("demesizes_cell"+i+"_"+n)
-        for (k=0;k<numdemes;k++){
-          matr_names.push("matr_cell"+i+"_"+n+"_"+k)
-        }
-      }
-      for (b=0;b<matr_names.length;b++){
-        list_ids.push(matr_names[b])
-      }
-    }
-  }
 }
 
 function Checkbox(e){
@@ -197,7 +219,7 @@ function Add_checkbox(c){
   var chk_hidden = '<input type="hidden" name="chk_remove' + c + '" value="unchecked">'+'<br>' +'<br>'
   var div_to_hide = '<div id="hide_div'+c+'"></div>'
   var chk_timechange ='<label>' + 'Time of change' + '</label>' + "<br>"+
-  '<input type="text" name="timechange'+c+'" id="timechange'+c+'" ><br><br>'
+  '<input type="number" min="0" name="timechange'+c+'" id="timechange'+c+'" ><br><br>'
 
   $("#div_to_append").append(chk_div)
   $("#div_chk"+c).append(chk)
@@ -220,7 +242,7 @@ function Add_demes (c, numdemes){
   $("#deme_div"+c).append(deme_content)
 
   for (var i=0;i<numdemes;i++){
-    $("#deme_cell"+c+i).append("<input type='text' value='1' id='demesizes_cell"+ c +""+'_'+"" + i + "' name='demesizes_cell"+ c +""+'_'+"" + i + "' >")
+    $("#deme_cell"+c+i).append("<input type='number' min='0' value='1' id='demesizes_cell"+ c +""+'_'+"" + i + "' name='demesizes_cell"+ c +""+'_'+"" + i + "' >")
   }
 }
 
@@ -243,7 +265,7 @@ function Add_matrix(c, numdemes){
     row=table.insertRow();
     for (var j = 0; j<numdemes; j++){
       var cell=row.insertCell();
-      cell.innerHTML = "<input type='text' value='0' id='matr_cell"+c+""+'_'+""+ i +""+'_'+""+ j +"' name='matr_cell"+c+""+'_'+""+ i +""+'_'+""+ j +"'>";
+      cell.innerHTML = "<input type='number' min='0' value='0' id='matr_cell"+c+""+'_'+""+ i +""+'_'+""+ j +"' name='matr_cell"+c+""+'_'+""+ i +""+'_'+""+ j +"'>";
     }
   }
 }
@@ -254,7 +276,7 @@ function Add_island(e, numdemes){
 
   var isl_div = '<div id="isl_div'+c+'"></div>'
 
-  var mig_rate = '<label>Migration rate</label><input type="text" name="mig_rate'+c+'" id="mig_rate'+c+'" onchange=Populate_isl(this) ><br><br>'
+  var mig_rate = '<label>Migration rate</label><input type="number" min="0" name="mig_rate'+c+'" id="mig_rate'+c+'" onchange=Populate_isl(this) ><br><br>'
 
   var matr_isl = '<label id="matr_label'+c+'">Migration matrix</label><br><table id="matr_isl_table'+c+'" class="table-striped table-hover"><tr>'
 
@@ -268,7 +290,7 @@ function Add_island(e, numdemes){
     row=table.insertRow();
     for (var j = 0; j<numdemes; j++){
       var cell=row.insertCell();
-      cell.innerHTML = "<input type='text' value=0 id='matr_cell"+c+""+'_'+""+ i +""+'_'+""+ j +"' name='matr_cell"+c+""+'_'+""+ i +""+'_'+""+ j +"'>";
+      cell.innerHTML = "<input type='number' min='0' value=0 id='matr_cell"+c+""+'_'+""+ i +""+'_'+""+ j +"' name='matr_cell"+c+""+'_'+""+ i +""+'_'+""+ j +"'>";
     }
   }
 
@@ -371,29 +393,7 @@ $(document).ready(function(){
   });
 
   $("#btn_save").on("click", function(){
-    Makelist(count);
-    if (document.getElementById(list_ids[0]).value != "0"){
-      alert("The first time change must be zero")
-    }
-    for (i=0; i<list_ids.length; i++){
-      if (document.getElementById(list_ids[i]).value < 0){
-        var negative = 0
-      }
-
-    }
-    if (negative != null){
-      alert("Make sure all values are ≥ 0")
-    }
-    for (i=0; i<list_ids.length; i++){
-      empty ="no"
-      if (document.getElementById(list_ids[i]).value ==""){
-        empty = "empty"
-      }
-    }
-    if (empty == "empty"){
-      alert ("Make sure all fields are filled")
-      empty="no"
-    }
+    Validate_form()
 
   });
 
