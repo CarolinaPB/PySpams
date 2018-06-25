@@ -10,13 +10,21 @@ $(function(){
         }
     });
 });
+
+
 function Reload(){
  //location.reload()
  //window.location.href = window.location.href
  //document.location.reload(true)
  //location.reload(true);
- window.location.reload()
+ //window.location.reload()
+ //alert()
+ hidden = document.getElementById("hidden_reload")
+ hidden.value="Reload"
 }
+
+// checks if there are empty fields or fields with negative numbers.
+// It will download the file and reload the page if all fields are filled correctly 
 function Validate_form(){
   var form=document.getElementById("myform");
   inputs=form.getElementsByTagName("input");
@@ -32,8 +40,13 @@ function Validate_form(){
   }
 
   if (empty=="no"&& negative=="no"){
-    Download();
-    Reload();
+
+    Download()
+    Reload()
+    //if (Download() ===undefined){
+    //  Reload()
+    //}
+
 
   } else if (empty=="empty" || negative=="negative"){
     if (empty=="empty"){
@@ -192,8 +205,8 @@ function Download(){
     element.click();
 
     document.body.removeChild(element);
-  }
 
+  }
 }
 
 function Back() {
@@ -219,7 +232,7 @@ function Add_checkbox(c){
   var chk_hidden = '<input type="hidden" name="chk_remove' + c + '" value="unchecked">'+'<br>' +'<br>'
   var div_to_hide = '<div id="hide_div'+c+'"></div>'
   var chk_timechange ='<label>' + 'Time of change' + '</label>' + "<br>"+
-  '<input type="number" min="0" name="timechange'+c+'" id="timechange'+c+'" ><br><br>'
+  '<input type="number" step="any" min="0" name="timechange'+c+'" id="timechange'+c+'" ><br><br>'
 
   $("#div_to_append").append(chk_div)
   $("#div_chk"+c).append(chk)
@@ -242,7 +255,7 @@ function Add_demes (c, numdemes){
   $("#deme_div"+c).append(deme_content)
 
   for (var i=0;i<numdemes;i++){
-    $("#deme_cell"+c+i).append("<input type='number' min='0' value='1' id='demesizes_cell"+ c +""+'_'+"" + i + "' name='demesizes_cell"+ c +""+'_'+"" + i + "' >")
+    $("#deme_cell"+c+i).append("<input type='number' step='any' min='0' value='1' id='demesizes_cell"+ c +""+'_'+"" + i + "' name='demesizes_cell"+ c +""+'_'+"" + i + "' >")
   }
 }
 
@@ -265,7 +278,7 @@ function Add_matrix(c, numdemes){
     row=table.insertRow();
     for (var j = 0; j<numdemes; j++){
       var cell=row.insertCell();
-      cell.innerHTML = "<input type='number' min='0' value='0' id='matr_cell"+c+""+'_'+""+ i +""+'_'+""+ j +"' name='matr_cell"+c+""+'_'+""+ i +""+'_'+""+ j +"'>";
+      cell.innerHTML = "<input type='number' step='any' min='0' value='0' id='matr_cell"+c+""+'_'+""+ i +""+'_'+""+ j +"' name='matr_cell"+c+""+'_'+""+ i +""+'_'+""+ j +"'>";
     }
   }
 }
@@ -276,7 +289,7 @@ function Add_island(e, numdemes){
 
   var isl_div = '<div id="isl_div'+c+'"></div>'
 
-  var mig_rate = '<label>Migration rate</label><input type="number" min="0" name="mig_rate'+c+'" id="mig_rate'+c+'" onchange=Populate_isl(this) ><br><br>'
+  var mig_rate = '<label>Migration rate</label><input type="number" step="any" min="0" name="mig_rate'+c+'" id="mig_rate'+c+'" onchange=Populate_isl(this) ><br><br>'
 
   var matr_isl = '<label id="matr_label'+c+'">Migration matrix</label><br><table id="matr_isl_table'+c+'" class="table-striped table-hover"><tr>'
 
@@ -290,7 +303,7 @@ function Add_island(e, numdemes){
     row=table.insertRow();
     for (var j = 0; j<numdemes; j++){
       var cell=row.insertCell();
-      cell.innerHTML = "<input type='number' min='0' value=0 id='matr_cell"+c+""+'_'+""+ i +""+'_'+""+ j +"' name='matr_cell"+c+""+'_'+""+ i +""+'_'+""+ j +"'>";
+      cell.innerHTML = "<input type='number' step='any' min='0' value=0 id='matr_cell"+c+""+'_'+""+ i +""+'_'+""+ j +"' name='matr_cell"+c+""+'_'+""+ i +""+'_'+""+ j +"'>";
     }
   }
 
@@ -394,7 +407,7 @@ $(document).ready(function(){
 
   $("#btn_save").on("click", function(){
     Validate_form()
-
+    //Reload()
   });
 
 

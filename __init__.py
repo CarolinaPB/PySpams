@@ -52,9 +52,11 @@ def handle_input():
         return ("", 204)
 
     elif request.form["button"] == "Save to file":
-        return ("", 204)
-            #return render_template("model1_form.html")
-
+        if request.form["hidden_reload"] == "Reload":
+            flash("File saved!", "info")
+            return render_template("model1_form.html")
+        else:
+            return ("", 204)
 
 
 @app.route("/IICR", methods=["POST"])
