@@ -71,34 +71,34 @@ def handle_ms():
 
         ms_filename="./"+ms_filename
 
-        #s = readScenario(ms_filename)
-        #cmd = createCmd(s)
+        s = readScenario(ms_filename)
+        cmd = createCmd(s)
 
         # The variable cmd contains the relative path to the ms software
         # and assumes that the ms software is inside the same folder as the script.
 
-        #T2 = generate_MS_t2(cmd)
+        T2 = generate_MS_t2(cmd)
 
         # Generating the time vector
-        #start = 0.001
-        #end = 10
-        #number_of_values = 1000
-        #vector_type = 'log'
+        start = 0.001
+        end = 10
+        number_of_values = 1000
+        vector_type = 'log'
 
-        #t_vector = compute_t_vector(start, end, number_of_values, vector_type)
-        #obs = T2
+        t_vector = compute_t_vector(start, end, number_of_values, vector_type)
+        obs = T2
 
 
-        #(F_x, f_x) = compute_empirical_dist(obs, t_vector)
+        (F_x, f_x) = compute_empirical_dist(obs, t_vector)
 
-        #IICR = np.true_divide(len(obs)-F_x, f_x)
+        IICR = np.true_divide(len(obs)-F_x, f_x)
 
-        #fig = plt.figure()
-        #ax = fig.add_subplot(111)
-        #ax.step(t_vector, IICR, where='post', color="red", ls="-", label="IICR plot")
-        #ax.set_xscale("log")
-        #plt.legend(loc="best")
-        #plt.show()
+        fig = plt.figure()
+        ax = fig.add_subplot(111)
+        ax.step(t_vector, IICR, where='post', color="red", ls="-", label="IICR plot")
+        ax.set_xscale("log")
+        plt.legend(loc="best")
+        plt.show()
 
 
         os.remove(ms_filename)
