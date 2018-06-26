@@ -1,6 +1,4 @@
 var count = 0
-var div_ids = [];
-var list_ids =[]
 
 $(function(){
 // show which tab is open in the navbar //
@@ -13,18 +11,12 @@ $(function(){
 
 
 function Reload(){
- //location.reload()
- //window.location.href = window.location.href
- //document.location.reload(true)
- //location.reload(true);
- //window.location.reload()
- //alert()
  hidden = document.getElementById("hidden_reload")
  hidden.value="Reload"
 }
 
 // checks if there are empty fields or fields with negative numbers.
-// It will download the file and reload the page if all fields are filled correctly 
+// It will download the file and reload the page if all fields are filled correctly
 function Validate_form(){
   var form=document.getElementById("myform");
   inputs=form.getElementsByTagName("input");
@@ -43,10 +35,6 @@ function Validate_form(){
 
     Download()
     Reload()
-    //if (Download() ===undefined){
-    //  Reload()
-    //}
-
 
   } else if (empty=="empty" || negative=="negative"){
     if (empty=="empty"){
@@ -58,7 +46,6 @@ function Validate_form(){
   }
 
 }
-
 
 function Download(){
   filename = document.getElementById("filename").value
@@ -197,7 +184,7 @@ function Download(){
 
     var element = document.createElement('a');
     element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(data_to_save));
-    element.setAttribute('download', filename);
+    element.setAttribute('download', filename+".txt");
 
     element.style.display = 'none';
     document.body.appendChild(element);
@@ -407,7 +394,6 @@ $(document).ready(function(){
 
   $("#btn_save").on("click", function(){
     Validate_form()
-    //Reload()
   });
 
 
