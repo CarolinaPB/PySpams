@@ -62,7 +62,7 @@ Your directory should be organized like this:
 #### Open PySpams in the browser
 
 
-To use the program, open the terminal on the same directory as the python scripts and run **______init______.py**. Open the link shown in the terminal.
+To use the program, open the terminal on the same directory as the python scripts and run **\__init__.py**. Open the link shown in the terminal.
 ```python
 python __init__.py
 ```
