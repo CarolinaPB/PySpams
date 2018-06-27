@@ -2,7 +2,7 @@
 
 ## Program Description
 
-**PySpams** is an alternative to [SPAms](http://compbio.igc.gulbenkian.pt/pcg/pcg_software.html) (Simulation Program for the Analysis of ms), which uses the ms program (Hudson, 2002).
+**PySpams** is an alternative to [SPAms](https://www.researchgate.net/publication/242607293_Simulation_Program_for_the_Analysis_of_ms) (Simulation Program for the Analysis of ms), which uses the ms program (Hudson, 2002).
 
 SPAms converts the inputted parameters into ms commands and automatically runs the ms
 program for the user. ([Readme PDF](http://compbio.igc.gulbenkian.pt/pcg/software/Readme.pdf))
