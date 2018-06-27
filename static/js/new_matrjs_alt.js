@@ -1,4 +1,5 @@
 var count = 0
+var div_ids=[]
 
 $(function(){
 // show which tab is open in the navbar //
