@@ -217,14 +217,12 @@ function Add_checkbox(c){
 
   var chk_div = "<div class='myclass"+ c +"' id='div_chk"+ c +"'></div>"
   var chk = '<br><input type="checkbox" id="chk_remove' + c + '" name="chk_remove' + c + '" value="Remove" checked onclick="Checkbox(this)" class="myclass' + c + '">'
-  var chk_hidden = '<input type="hidden" name="chk_remove' + c + '" value="unchecked">'+'<br>' +'<br>'
   var div_to_hide = '<div id="hide_div'+c+'"></div>'
   var chk_timechange ='<label>' + 'Time of change' + '</label>' + "<br>"+
   '<input type="number" step="any" min="0" name="timechange'+c+'" id="timechange'+c+'" ><br><br>'
 
   $("#div_to_append").append(chk_div)
   $("#div_chk"+c).append(chk)
-  $("#div_chk"+c).append(chk_hidden)
   $("#div_chk"+c).append(div_to_hide)
   $("#hide_div"+c).append(chk_timechange)
 };
@@ -319,27 +317,6 @@ function Add_fields(c, numdemes){
 };
 
 function Ndemes(){
-  var numdemes = Number(document.getElementById("numdemes0").value);
-  $("#chk_hidden").remove()
-  var numdemes0 = document.getElementById("numdemes0").value
-  var numloci0 = document.getElementById("numloci0").value
-
-  if ((numdemes0 === "") || (numloci0 === "")){
-    alert("Fields missing")
-  } else {
-    var chk0_name = document.getElementById("chk_remove0")
-
-    if (chk0_name==null){
-      Add_checkbox(count)
-      Add_fields(count, numdemes);
-    } else {
-      for (var n=0; n<count+1;n++){
-        $("#deme_div"+n).remove()
-        Add_fields(n, numdemes)
-      }
-
-    }
-  }
   document.getElementById("btn_ndemes").click();
 }
 
@@ -397,5 +374,28 @@ $(document).ready(function(){
     Validate_form()
   });
 
+  $("#btn_ndemes").on("click", function(){
+    var numdemes = Number(document.getElementById("numdemes0").value);
+    $("#chk_hidden").remove()
+    
+    var numdemes0 = document.getElementById("numdemes0").value
+    var numloci0 = document.getElementById("numloci0").value
 
+    if ((numdemes0 === "") || (numloci0 === "")){
+      alert("Fields missing")
+    } else {
+      var chk0_name = document.getElementById("chk_remove0")
+
+      if (chk0_name==null){
+        Add_checkbox(count)
+        Add_fields(count, numdemes);
+      } else {
+        for (var n=0; n<count+1;n++){
+          $("#deme_div"+n).remove()
+          Add_fields(n, numdemes)
+        }
+
+      }
+    }
+  })
 })
